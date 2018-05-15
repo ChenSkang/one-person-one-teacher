@@ -20,7 +20,7 @@
         <el-upload
           class="avatar-uploader"
           :show-file-list="false"
-          action="http://47.94.215.104:8080/OPOT1/servlet/pictureServlet"
+          action="http://192.168.199.162:8088/OPOT1/servlet/pictureServlet"
           :on-change="handleChange"
           :before-upload="handleBefore"
           :auto-upload="false">
@@ -163,9 +163,9 @@
           this.loading = false
           this.$message.success('推荐成功')
           sessionStorage.defaultSrc = this.cropImg
-          for (let i in response.data) {
+          /* for (let i in response.data) {
             console.log(response.data[i])
-          }
+          } */
           sessionStorage.subj = JSON.stringify(response.data)
           this.subject = JSON.parse(sessionStorage.subj)
         }, (response) => {
