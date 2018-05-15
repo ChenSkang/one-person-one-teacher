@@ -46,8 +46,8 @@
       </div>
       <div class="attentions" v-if="showSet[3]" title="注意事项">
         <span>注意事项：</span>
-        <p v-for="(attention, index) in attentions">
-          {{index + 1 + '.'+ '&nbsp' + attention}}
+        <p v-for="(attention, index) in attentions" :key="index">
+          {{index + 1 + '.'+ '&nbsp;' + attention}}
         </p>
       </div>
 

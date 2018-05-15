@@ -20,7 +20,7 @@
         <el-upload
           class="avatar-uploader"
           :show-file-list="false"
-          action="http://192.168.199.162:8088/OPOT1/servlet/pictureServlet"
+          action="http://47.94.215.104:8080/OPOT1/servlet/pictureServlet"
           :on-change="handleChange"
           :before-upload="handleBefore"
           :auto-upload="false">
@@ -43,7 +43,7 @@
             <ul>
               <li class="ques">
                 <div class="up">
-                  <span class="TH">原题：&nbsp</span>
+                  <span class="TH">原题：&nbsp;</span>
                   <span class="QUE">{{subject[0].que}}</span>
                 </div>
                 <div class="low">
@@ -55,10 +55,10 @@
             </ul>
             <span>$$	\cfrac{2}{c + \cfrac{2}{d + \cfrac{2}{4}}} =a$$</span>
 
-            <ul v-for="index in 5">
+            <ul v-for="index in 5" :key="index">
               <li class="ques">
                 <div class="up">
-                  <span class="TH">{{index + '.'}}&nbsp</span>
+                  <span class="TH">{{index + '.'}}&nbsp;</span>
                   <span class="QUE">{{subject[index].que}}</span>
                 </div>
                 <div class="low">
@@ -266,8 +266,5 @@
   }
   .TH{
     font-size: 16px;
-  }
-  .QUE{
-
   }
 </style>
