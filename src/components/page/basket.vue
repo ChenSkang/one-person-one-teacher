@@ -1,7 +1,7 @@
 <template>
   <div style="background-color: #ededed">
     <my-head style="background-color: #fff"></my-head>
-    <el-button @click="$router.push('/Home')">返回</el-button>
+    <el-button @click="$router.push('/')">返回</el-button>
     <div class="set_exam">
       <el-checkbox v-for="(city, index) in cities" v-model="showSet[index]" :key="city">{{city}}</el-checkbox>
     </div>
