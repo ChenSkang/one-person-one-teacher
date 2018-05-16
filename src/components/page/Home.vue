@@ -28,10 +28,10 @@
         </el-upload>
         <img :src="cropImg" class="pre-img">
       </div>
+      <h3 @click="run('/Basket')">试题篮</h3>
       <div class="block" v-if="subject[0].que">
         <el-container>
           <el-aside width="20%">
-            <h3 @click="run('/Basket')">试题篮</h3>
             <!--
             <ul class="textPaper">
               <li v-for="(myPaper, index) in myPapers">
