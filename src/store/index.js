@@ -10,10 +10,7 @@ export default new Vuex.Store({
     tests: '',
     TK: [],
     XZ: [],
-    JD: [],
-    tkt: [],
-    xzt: [],
-    jdt: []
+    JD: []
   },
   mutations: {
   }
