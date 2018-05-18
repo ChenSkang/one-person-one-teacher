@@ -175,7 +175,7 @@
         const obj = new Blob([u8arr], {type: mime})
         const fd = new FormData()
         fd.append('upfile', obj, 'image.png')
-        this.$http.post('http://47.94.215.104:8080/OPOT1/servlet/pictureServlet', fd, {emulateJSON: true}).then((response) => {
+        this.$http.post('http://10.14.4.133:8088/OPOT1/servlet/pictureServlet', fd, {emulateJSON: true}).then((response) => {
           this.loading = false
           this.$message.success('推荐成功')
           sessionStorage.setItem('defaultSrc', this.cropImg)
@@ -205,25 +205,25 @@
         switch (kind) {
           case '选择题':
             if (localStorage.xz) {
-              this.$store.state.xzt = JSON.parse(localStorage.xz)
+              this.$store.state.XZ = JSON.parse(localStorage.xz)
             }
-            let n1 = this.$store.state.xzt.length
+            let n1 = this.$store.state.XZ.length
             this.$store.state.XZ.splice(n1, 0, str)
             localStorage.xz = JSON.stringify(this.$store.state.XZ)
             break
           case '填空题':
             if (localStorage.tk) {
-              this.$store.state.tkt = JSON.parse(localStorage.tk)
+              this.$store.state.TK = JSON.parse(localStorage.tk)
             }
-            let n2 = this.$store.state.tkt.length
+            let n2 = this.$store.state.TK.length
             this.$store.state.TK.splice(n2, 0, str)
             localStorage.tk = JSON.stringify(this.$store.state.TK)
             break
           case '解答题':
             if (localStorage.jd) {
-              this.$store.state.jdt = JSON.parse(localStorage.jd)
+              this.$store.state.JD = JSON.parse(localStorage.jd)
             }
-            let n3 = this.$store.state.jdt.length
+            let n3 = this.$store.state.JD.length
             this.$store.state.JD.splice(n3, 0, str)
             localStorage.jd = JSON.stringify(this.$store.state.JD)
             break
@@ -234,16 +234,34 @@
         console.log(this.$store.state.tests)
       },
       deletePaper (x) {
-        localStorage.setItem('tests', this.$store.state.tests.replace(this.subject[x].id, ''))
+        let str = this.subject[x].que
+        let kind = this.subject[x].kind
+        let ida = this.subject[x].id
+        switch (kind) {
+          case '选择题':
+            let n1 = this.$store.state.XZ.indexOf(str)
+            this.$store.state.XZ.splice(n1, 1)
+            localStorage.xz = JSON.stringify(this.$store.state.XZ)
+            break
+          case '填空题':
+            let n2 = this.$store.state.TK.indexOf(str)
+            this.$store.state.TK.splice(n2, 1)
+            localStorage.tk = JSON.stringify(this.$store.state.TK)
+            break
+          case '解答题':
+            let n3 = this.$store.state.JD.indexOf(str)
+            this.$store.state.JD.splice(n3, 1)
+            localStorage.jd = JSON.stringify(this.$store.state.JD)
+            break
+        }
+        localStorage.setItem('tests', this.$store.state.tests.replace(ida, ''))
         this.$store.state.tests = localStorage.getItem('tests')
         console.log(this.$store.state.tests)
       }
     },
     created () {
       this.cropImg = sessionStorage.getItem('defaultSrc')
-      if (sessionStorage.getItem('subj')) {
-        this.subject = JSON.parse(sessionStorage.getItem('subj'))
-      }
+      if (sessionStorage.getItem('subj')) { this.subject = JSON.parse(sessionStorage.getItem('subj')) }
       if (localStorage.getItem('tests')) {
         this.$store.state.tests = localStorage.getItem('tests')
       } else {
