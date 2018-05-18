@@ -231,23 +231,34 @@
         console.log(this.$store.state.tests)
       },
       deletePaper (x) {
-        let str = this.subject[x].que
         let kind = this.subject[x].kind
         let ida = this.subject[x].id
         switch (kind) {
           case '选择题':
-            let n1 = this.$store.state.XZ.indexOf(str)
-            this.$store.state.XZ.splice(n1, 1)
+            for (let i = 0; i < this.$store.state.XZ.length; i++) {
+              if (ida === this.$store.state.XZ[i].id) {
+                this.$store.state.XZ.splice(i, 1)
+                break
+              }
+            }
             localStorage.xz = JSON.stringify(this.$store.state.XZ)
             break
           case '填空题':
-            let n2 = this.$store.state.TK.indexOf(str)
-            this.$store.state.TK.splice(n2, 1)
+            for (let i = 0; i < this.$store.state.TK.length; i++) {
+              if (ida === this.$store.state.TK[i].id) {
+                this.$store.state.TK.splice(i, 1)
+                break
+              }
+            }
             localStorage.tk = JSON.stringify(this.$store.state.TK)
             break
           case '解答题':
-            let n3 = this.$store.state.JD.indexOf(str)
-            this.$store.state.JD.splice(n3, 1)
+            for (let i = 0; i < this.$store.state.JD.length; i++) {
+              if (ida === this.$store.state.JD[i].id) {
+                this.$store.state.JD.splice(i, 1)
+                break
+              }
+            }
             localStorage.jd = JSON.stringify(this.$store.state.JD)
             break
         }
@@ -259,6 +270,9 @@
     created () {
       this.cropImg = sessionStorage.getItem('defaultSrc')
       if (sessionStorage.getItem('subj')) { this.subject = JSON.parse(sessionStorage.getItem('subj')) }
+      if (localStorage.getItem('xz')) { this.$store.state.XZ = JSON.parse(localStorage.getItem('xz')) }
+      if (localStorage.getItem('tk')) { this.$store.state.TK = JSON.parse(localStorage.getItem('tk')) }
+      if (localStorage.getItem('jd')) { this.$store.state.JD = JSON.parse(localStorage.getItem('jd')) }
       if (localStorage.getItem('tests')) {
         this.$store.state.tests = localStorage.getItem('tests')
       } else {

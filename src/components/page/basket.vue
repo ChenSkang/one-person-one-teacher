@@ -257,9 +257,9 @@
       bus.$on('STL', (str, kind) => {
         console.log('123')
       })
-      if (localStorage.xz) { this.$store.state.XZ = JSON.parse(localStorage.xz) }
-      if (localStorage.tk) { this.$store.state.TK = JSON.parse(localStorage.tk) }
-      if (localStorage.jd) { this.$store.state.JD = JSON.parse(localStorage.jd) }
+      if (localStorage.getItem('xz')) { this.$store.state.XZ = JSON.parse(localStorage.getItem('xz')) }
+      if (localStorage.getItem('tk')) { this.$store.state.TK = JSON.parse(localStorage.getItem('tk')) }
+      if (localStorage.getItem('jd')) { this.$store.state.JD = JSON.parse(localStorage.getItem('jd')) }
     },
     computed: {
       strjd: function () {
