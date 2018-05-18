@@ -57,7 +57,7 @@
           <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
             <div class="up">
               <span class="TH">{{index + 1}}</span>
-              <span>{{$store.state.XZ[index]}}</span>
+              <span>{{$store.state.XZ[index].que}}</span>
             </div>
             <div class="low">
               <div @click="deleteX(index)">删除</div>
@@ -74,7 +74,7 @@
           <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
             <div class="up">
               <span class="TH">{{$store.state.XZ.length + index + 1}}</span>
-              <span>{{value}}</span>
+              <span>{{$store.state.TK[index].que}}</span>
             </div>
             <div class="low">
               <div @click="deleteT(index)">删除</div>
@@ -91,7 +91,7 @@
           <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
             <div class="up">
               <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}</span>
-              <span>{{value}}</span>
+              <span>{{$store.state.JD[x].que}}</span>
             </div>
             <div class="low">
               <div @click="deleteJ(index)">删除</div>
@@ -165,16 +165,25 @@
         localStorage.jd = JSON.stringify(this.$store.state.JD)
       },
       deleteT (x) {
+        localStorage.setItem('tests', this.$store.state.tests.replace(this.$store.state.TK[x].id, ''))
+        this.$store.state.tests = localStorage.getItem('tests')
+        console.log(this.$store.state.tests)
         this.$store.state.TK.splice(x, 1)
         localStorage.tk = JSON.stringify(this.$store.state.TK)
       },
       deleteJ (x) {
+        localStorage.setItem('tests', this.$store.state.tests.replace(this.$store.state.JD[x].id, ''))
+        this.$store.state.tests = localStorage.getItem('tests')
+        console.log(this.$store.state.tests)
         this.$store.state.JD.splice(x, 1)
         localStorage.jd = JSON.stringify(this.$store.state.JD)
       },
       deleteX (x) {
+        localStorage.setItem('tests', this.$store.state.tests.replace(this.$store.state.XZ[x].id, ''))
+        this.$store.state.tests = localStorage.getItem('tests')
+        console.log(this.$store.state.tests)
         this.$store.state.XZ.splice(x, 1)
-        localStorage.xz = JSON.stringify(this.$store.state.TK)
+        localStorage.xz = JSON.stringify(this.$store.state.XZ)
       },
       upT (x) {
         if (x > 0) {
@@ -226,10 +235,7 @@
       },
       deleteAll () {
         this.deleteall = false
-        this.$store.state.tests = ''
-        this.$store.state.xzt = []
-        this.$store.state.tkt = []
-        this.$store.state.jdt = []
+        this.$store.state.tests = []
         this.$store.state.TK = []
         localStorage.tk = ''
         this.$store.state.XZ = []

@@ -20,7 +20,7 @@
         <el-upload
           class="avatar-uploader"
           :show-file-list="false"
-          action="http://192.168.199.162:8088/OPOT1/servlet/pictureServlet"
+          action="http://47.94.215.104:8080/OPOT1/servlet/pictureServlet"
           :on-change="handleChange"
           :before-upload="handleBefore"
           :auto-upload="false">
@@ -175,7 +175,7 @@
         const obj = new Blob([u8arr], {type: mime})
         const fd = new FormData()
         fd.append('upfile', obj, 'image.png')
-        this.$http.post('http://10.14.4.133:8088/OPOT1/servlet/pictureServlet', fd, {emulateJSON: true}).then((response) => {
+        this.$http.post('http://47.94.215.104:8080/OPOT1/servlet/pictureServlet', fd, {emulateJSON: true}).then((response) => {
           this.loading = false
           this.$message.success('推荐成功')
           sessionStorage.setItem('defaultSrc', this.cropImg)
@@ -207,24 +207,21 @@
             if (localStorage.xz) {
               this.$store.state.XZ = JSON.parse(localStorage.xz)
             }
-            let n1 = this.$store.state.XZ.length
-            this.$store.state.XZ.splice(n1, 0, str)
+            this.$store.state.XZ.push({que: str, id: ida})
             localStorage.xz = JSON.stringify(this.$store.state.XZ)
             break
           case '填空题':
             if (localStorage.tk) {
               this.$store.state.TK = JSON.parse(localStorage.tk)
             }
-            let n2 = this.$store.state.TK.length
-            this.$store.state.TK.splice(n2, 0, str)
+            this.$store.state.TK.push({que: str, id: ida})
             localStorage.tk = JSON.stringify(this.$store.state.TK)
             break
           case '解答题':
             if (localStorage.jd) {
               this.$store.state.JD = JSON.parse(localStorage.jd)
             }
-            let n3 = this.$store.state.JD.length
-            this.$store.state.JD.splice(n3, 0, str)
+            this.$store.state.JD.push({que: str, id: ida})
             localStorage.jd = JSON.stringify(this.$store.state.JD)
             break
         }
