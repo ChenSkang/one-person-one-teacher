@@ -51,13 +51,13 @@
         </p>
       </div>
 
-      <div v-if="XZ.length" class="TM">一.选择题（共{{XZ.length}}小题）</div>
-      <draggable v-model="XZ" @end="endMove" :options="dragOption1">
+      <div v-if="$store.state.XZ.length" class="TM">一.选择题（共{{$store.state.XZ.length}}小题）</div>
+      <draggable v-model="$store.state.XZ" @end="endMove" :options="dragOption1">
         <transition-group tag="div" class="item-ul">
-          <div v-for="(value, index) in XZ" class="ques" :key="index">
+          <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
             <div class="up">
               <span class="TH">{{index + 1}}</span>
-              <span>{{XZ[index]}}</span>
+              <span>{{$store.state.XZ[index]}}</span>
             </div>
             <div class="low">
               <div @click="deleteX(index)">删除</div>
@@ -68,12 +68,12 @@
         </transition-group>
       </draggable>
 
-      <div v-if="TK.length" class="TM">{{XZ.length ? '二' : '一'}}.填空题（共{{TK.length}}小题）</div>
-      <draggable v-model="TK" @end="endMove" :options="dragOption2">
+      <div v-if="$store.state.TK.length" class="TM">{{$store.state.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.TK.length}}小题）</div>
+      <draggable v-model="$store.state.TK" @end="endMove" :options="dragOption2">
         <transition-group tag="div" class="item-ul">
-          <div v-for="(value, index) in TK" class="ques" :key="index">
+          <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
             <div class="up">
-              <span class="TH">{{XZ.length + index + 1}}</span>
+              <span class="TH">{{$store.state.XZ.length + index + 1}}</span>
               <span>{{value}}</span>
             </div>
             <div class="low">
@@ -85,12 +85,12 @@
         </transition-group>
       </draggable>
 
-      <div v-if="JD.length" class="TM">{{strjd}}.解答题（共{{JD.length}}小题）</div>
-      <draggable v-model="JD" @end="endMove" :options="dragOption3">
+      <div v-if="$store.state.JD.length" class="TM">{{strjd}}.解答题（共{{$store.state.JD.length}}小题）</div>
+      <draggable v-model="$store.state.JD" @end="endMove" :options="dragOption3">
         <transition-group tag="div" class="item-ul">
-          <div v-for="(value, index) in JD" class="ques" :key="index">
+          <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
             <div class="up">
-              <span class="TH">{{XZ.length + TK.length + index + 1}}</span>
+              <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}</span>
               <span>{{value}}</span>
             </div>
             <div class="low">
@@ -128,12 +128,6 @@
           '答题前填写好自己的姓名、班级、学号',
           '请将答案填写到答题卡上面'
         ],
-        TK: [],
-        XZ: [],
-        JD: [],
-        tkt: [],
-        xzt: [],
-        jdt: [],
         dragOption1: {
           animation: 120,
           scroll: true,
@@ -166,80 +160,81 @@
         localStorage.examname = this.examName
       },
       endMove () {
-        localStorage.xz = JSON.stringify(this.XZ)
-        localStorage.tk = JSON.stringify(this.TK)
-        localStorage.jd = JSON.stringify(this.JD)
+        localStorage.xz = JSON.stringify(this.$store.state.XZ)
+        localStorage.tk = JSON.stringify(this.$store.state.TK)
+        localStorage.jd = JSON.stringify(this.$store.state.JD)
       },
       deleteT (x) {
-        this.TK.splice(x, 1)
-        localStorage.tk = JSON.stringify(this.TK)
+        this.$store.state.TK.splice(x, 1)
+        localStorage.tk = JSON.stringify(this.$store.state.TK)
       },
       deleteJ (x) {
-        this.JD.splice(x, 1)
-        localStorage.jd = JSON.stringify(this.JD)
+        this.$store.state.JD.splice(x, 1)
+        localStorage.jd = JSON.stringify(this.$store.state.JD)
       },
       deleteX (x) {
-        this.XZ.splice(x, 1)
-        localStorage.xz = JSON.stringify(this.TK)
+        this.$store.state.XZ.splice(x, 1)
+        localStorage.xz = JSON.stringify(this.$store.state.TK)
       },
       upT (x) {
         if (x > 0) {
-          let temp = this.TK[x]
-          this.TK.splice(x, 1)
-          this.TK.splice(x - 1, 0, temp)
-          localStorage.tk = JSON.stringify(this.TK)
+          let temp = this.$store.state.TK[x]
+          this.$store.state.TK.splice(x, 1)
+          this.$store.state.TK.splice(x - 1, 0, temp)
+          localStorage.tk = JSON.stringify(this.$store.state.TK)
         }
       },
       upX (x) {
         if (x > 0) {
-          let temp = this.XZ[x]
-          this.XZ.splice(x, 1)
-          this.XZ.splice(x - 1, 0, temp)
-          localStorage.xz = JSON.stringify(this.XZ)
+          let temp = this.$store.state.XZ[x]
+          this.$store.state.XZ.splice(x, 1)
+          this.$store.state.XZ.splice(x - 1, 0, temp)
+          localStorage.xz = JSON.stringify(this.$store.state.XZ)
         }
       },
       upJ (x) {
         if (x > 0) {
-          let temp = this.JD[x]
-          this.JD.splice(x, 1)
-          this.JD.splice(x - 1, 0, temp)
-          localStorage.jd = JSON.stringify(this.JD)
+          let temp = this.$store.state.JD[x]
+          this.$store.state.JD.splice(x, 1)
+          this.$store.state.JD.splice(x - 1, 0, temp)
+          localStorage.jd = JSON.stringify(this.$store.state.JD)
         }
       },
       downT (x) {
-        if (x < this.TK.length) {
-          let temp = this.TK[x]
-          this.TK.splice(x, 1)
-          this.TK.splice(x + 1, 0, temp)
-          localStorage.tk = JSON.stringify(this.TK)
+        if (x < this.$store.state.TK.length) {
+          let temp = this.$store.state.TK[x]
+          this.$store.state.TK.splice(x, 1)
+          this.$store.state.TK.splice(x + 1, 0, temp)
+          localStorage.getItem('tk', JSON.stringify(this.$store.state.TK))
         }
       },
       downX (x) {
-        if (x < this.XZ.length) {
-          let temp = this.XZ[x]
-          this.XZ.splice(x, 1)
-          this.XZ.splice(x + 1, 0, temp)
-          localStorage.xz = JSON.stringify(this.XZ)
+        if (x < this.$store.state.XZ.length) {
+          let temp = this.$store.state.XZ[x]
+          this.$store.state.XZ.splice(x, 1)
+          this.$store.state.XZ.splice(x + 1, 0, temp)
+          localStorage.getItem('xz', JSON.stringify(this.$store.state.XZ))
         }
       },
       downJ (x) {
-        if (x < this.JD.length) {
-          let temp = this.JD[x]
-          this.JD.splice(x, 1)
-          this.JD.splice(x + 1, 0, temp)
-          localStorage.jd = JSON.stringify(this.JD)
+        if (x < this.$store.state.JD.length) {
+          let temp = this.$store.state.JD[x]
+          this.$store.state.JD.splice(x, 1)
+          this.$store.state.JD.splice(x + 1, 0, temp)
+          localStorage.getItem('jd', JSON.stringify(this.$store.state.JD))
         }
       },
       deleteAll () {
         this.deleteall = false
-        this.xzt = []
-        this.tkt = []
-        this.jdt = []
-        this.TK = []
+        this.$store.state.tests = ''
+        this.$store.state.xzt = []
+        this.$store.state.tkt = []
+        this.$store.state.jdt = []
+        this.$store.state.TK = []
         localStorage.tk = ''
-        this.XZ = []
+        this.$store.state.XZ = []
         localStorage.xz = ''
-        this.JD = []
+        this.$store.state.JD = []
         localStorage.jd = ''
         this.$notify({
           title: '提示',
@@ -254,51 +249,14 @@
     },
     created () {
       bus.$on('STL', (str, kind) => {
-        switch (kind) {
-          case '选择题':
-            if (localStorage.xz) {
-              this.xzt = JSON.parse(localStorage.xz)
-            }
-            let n1 = this.xzt.length
-            this.XZ.splice(n1, 0, str)
-            localStorage.xz = JSON.stringify(this.XZ)
-            break
-          case '填空题':
-            if (localStorage.tk) {
-              this.tkt = JSON.parse(localStorage.tk)
-            }
-            let n2 = this.tkt.length
-            this.TK.splice(n2, 0, str)
-            localStorage.tk = JSON.stringify(this.TK)
-            break
-          case '解答题':
-            if (localStorage.jd) {
-              this.jdt = JSON.parse(localStorage.jd)
-            }
-            let n3 = this.jdt.length
-            this.JD.splice(n3, 0, str)
-            localStorage.jd = JSON.stringify(this.JD)
-            break
-        }
+        console.log('123')
       })
-      if (localStorage.tk) {
-        this.TK = JSON.parse(localStorage.tk)
-      }
-      if (localStorage.xz) {
-        this.XZ = JSON.parse(localStorage.xz)
-      }
-      if (localStorage.jd) {
-        this.JD = JSON.parse(localStorage.jd)
-      }
-      if (localStorage.examname) {
-        this.examName = localStorage.examname
-      }
     },
     computed: {
       strjd: function () {
-        if (this.XZ.length && this.TK.length) {
+        if (this.$store.state.XZ.length && this.$store.state.TK.length) {
           return '三'
-        } else if (this.XZ.length || this.TK.length) {
+        } else if (this.$store.state.XZ.length || this.$store.state.TK.length) {
           return '二'
         } else {
           return '一'
