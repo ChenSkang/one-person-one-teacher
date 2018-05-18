@@ -29,6 +29,12 @@
         <img :src="cropImg" class="pre-img">
       </div>
       <h3 @click="run('/Basket')">试题篮</h3>
+
+      <div class="schart">
+        <div class="content-title">环形图</div>
+        <schart canvasId="ring" width="0" height="0" :data="data2" type="ring" :options="options2"></schart>
+      </div>
+
       <div class="block" v-if="subject[0].que">
         <el-container>
           <el-aside width="20%">
@@ -48,13 +54,12 @@
                 </div>
                 <div class="low">
                   <div @click="showJX(0)"><i class="el-icon-document"></i>解析</div>
-                  <div v-if="subject[0].unique"><el-button type="primary" size="mini" @click="addPaper(0)" icon="el-icon-plus" round>试题</el-button></div>
-                  <div v-else><el-button type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
+                  <div v-if="!($store.state.tests.indexOf(subject[0].id) + 1)"><el-button type="primary" size="mini" @click="addPaper(0)" icon="el-icon-plus" round>试题</el-button></div>
+                  <div v-else><el-button @click="deletePaper(0)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
                 </div>
               </li>
             </ul>
             <span>$$	\cfrac{2}{c + \cfrac{2}{d + \cfrac{2}{4}}} =a$$</span>
-
             <ul v-for="index in 5" :key="index">
               <li class="ques">
                 <div class="up">
@@ -63,8 +68,8 @@
                 </div>
                 <div class="low">
                   <div @click="showJX(index)"><i class="el-icon-document"></i>解析</div>
-                  <div v-if="subject[index].unique"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus" round>试题</el-button></div>
-                  <div v-else><el-button type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
+                  <div v-if="!($store.state.tests.indexOf(subject[index].id) + 1)"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus" round>试题</el-button></div>
+                  <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
                 </div>
               </li>
             </ul>
@@ -77,6 +82,7 @@
 </template>
 
 <script>
+  import Schart from 'vue-schart'
   import VueCropper from 'vue-cropperjs'
   import myHead from '../common/header.vue'
   import answer from '../common/anwer.vue'
@@ -85,16 +91,15 @@
     components: {
       VueCropper,
       myHead,
-      answer
+      answer,
+      Schart
     },
     data () {
       return {
-        defaultSrc: sessionStorage.defaultSrc,
         ifVisible: false,
         imageSrc: '',
         cropImg: '',
         visible: false,
-        subj: sessionStorage.subj,
         subject: [{
           que: ''
         }],
@@ -104,7 +109,18 @@
           {name: '填空题', value: 0},
           {name: '解答题', value: 0}
         ],
-        loading: false
+        loading: false,
+        data2: [
+          {name: '短袖', value: 1200},
+          {name: '休闲裤', value: 1222},
+          {name: '连衣裙', value: 1283}
+        ],
+        options2: {
+          title: '某商店各商品年度销量',
+          bgColor: '#fff',
+          titleColor: '#fff',
+          legendColor: '#fff'
+        }
       }
     },
     methods: {
@@ -124,7 +140,7 @@
       },
       cancelCrop () {
         this.visible = false
-        this.cropImg = sessionStorage.defaultSrc
+        this.cropImg = sessionStorage.getItem('defaultSrc')
       },
       handleBefore (file) {
         /*  const self = this
@@ -162,15 +178,15 @@
         this.$http.post('http://47.94.215.104:8080/OPOT1/servlet/pictureServlet', fd, {emulateJSON: true}).then((response) => {
           this.loading = false
           this.$message.success('推荐成功')
-          sessionStorage.defaultSrc = this.cropImg
+          sessionStorage.setItem('defaultSrc', this.cropImg)
           /* for (let i in response.data) {
             console.log(response.data[i])
           } */
-          sessionStorage.subj = JSON.stringify(response.data)
+          sessionStorage.setItem('subj', JSON.stringify(response.data))
           this.subject = JSON.parse(sessionStorage.subj)
         }, (response) => {
           this.loading = false
-          this.cropImg = sessionStorage.defaultSrc
+          this.cropImg = sessionStorage.getItem('defaultSrc')
           this.$message.error('请求服务端失败')
           console.log('上传失败')
         })
@@ -185,16 +201,53 @@
       addPaper (x) {
         let str = this.subject[x].que
         let kind = this.subject[x].kind
-        bus.$emit('STL', str, kind)
+        let ida = this.subject[x].id
+        switch (kind) {
+          case '选择题':
+            if (localStorage.xz) {
+              this.$store.state.xzt = JSON.parse(localStorage.xz)
+            }
+            let n1 = this.$store.state.xzt.length
+            this.$store.state.XZ.splice(n1, 0, str)
+            localStorage.xz = JSON.stringify(this.$store.state.XZ)
+            break
+          case '填空题':
+            if (localStorage.tk) {
+              this.$store.state.tkt = JSON.parse(localStorage.tk)
+            }
+            let n2 = this.$store.state.tkt.length
+            this.$store.state.TK.splice(n2, 0, str)
+            localStorage.tk = JSON.stringify(this.$store.state.TK)
+            break
+          case '解答题':
+            if (localStorage.jd) {
+              this.$store.state.jdt = JSON.parse(localStorage.jd)
+            }
+            let n3 = this.$store.state.jdt.length
+            this.$store.state.JD.splice(n3, 0, str)
+            localStorage.jd = JSON.stringify(this.$store.state.JD)
+            break
+        }
         this.$message.success('添加试题篮成功')
-        this.subject[x].unique = false
-        sessionStorage.subj = JSON.stringify(this.subject)
+        localStorage.setItem('tests', this.$store.state.tests.concat(ida))
+        this.$store.state.tests = localStorage.getItem('tests')
+        console.log(this.$store.state.tests)
+      },
+      deletePaper (x) {
+        localStorage.setItem('tests', this.$store.state.tests.replace(this.subject[x].id, ''))
+        this.$store.state.tests = localStorage.getItem('tests')
+        console.log(this.$store.state.tests)
       }
     },
     created () {
-      this.cropImg = sessionStorage.defaultSrc
-      if (sessionStorage.subj) {
-        this.subject = JSON.parse(sessionStorage.subj)
+      this.cropImg = sessionStorage.getItem('defaultSrc')
+      if (sessionStorage.getItem('subj')) {
+        this.subject = JSON.parse(sessionStorage.getItem('subj'))
+      }
+      if (localStorage.getItem('tests')) {
+        this.$store.state.tests = localStorage.getItem('tests')
+      } else {
+        localStorage.setItem('tests', 'tests')
       }
     },
     mounted () {
@@ -222,6 +275,18 @@
     max-height: 200px;
     border: 1px solid #eee;
     border-radius: 5px;
+  }
+  .schart{
+    width: 600px;
+    display: inline-block;
+  }
+  .content-title{
+    clear: both;
+    font-weight: 400;
+    line-height: 50px;
+    margin: 10px 0;
+    font-size: 22px;
+    color: #1f2f3d;
   }
   .block{
     width: 90%;
