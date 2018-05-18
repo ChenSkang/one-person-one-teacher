@@ -7,5 +7,14 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    tests: '',
+    TK: [],
+    XZ: [],
+    JD: [],
+    tkt: [],
+    xzt: [],
+    jdt: []
+  },
+  mutations: {
   }
 })
