@@ -28,12 +28,7 @@
         </el-upload>
         <img :src="cropImg" class="pre-img">
       </div>
-      <h3 @click="run('/Basket')">试题篮</h3>
-
-      <div class="schart">
-        <div class="content-title">环形图</div>
-        <schart canvasId="ring" width="0" height="0" :data="data2" type="ring" :options="options2"></schart>
-      </div>
+      <h3 @click="run('/basket')">试题篮</h3>
 
       <div class="block" v-if="subject[0].que">
         <el-container>
@@ -82,7 +77,6 @@
 </template>
 
 <script>
-  import Schart from 'vue-schart'
   import VueCropper from 'vue-cropperjs'
   import myHead from '../common/header.vue'
   import answer from '../common/anwer.vue'
@@ -91,8 +85,7 @@
     components: {
       VueCropper,
       myHead,
-      answer,
-      Schart
+      answer
     },
     data () {
       return {
