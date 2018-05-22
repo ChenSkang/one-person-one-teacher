@@ -13,6 +13,7 @@
 </script>
 
 <style>
+  @import "CSS/animate.css";
   *{
     margin:0;
     padding:0;
