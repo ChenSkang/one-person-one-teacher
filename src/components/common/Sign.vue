@@ -1,99 +1,96 @@
 <template>
-  <div id="back">
-    <div class="login-wrap">
-      <div class="ms-title">名字</div>
-      <div class="ms-login">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
-          <el-form-item prop="username">
-            <el-input v-model="ruleForm.username" placeholder="username"></el-input>
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
-          </el-form-item>
-          <div class="login-btn">
-            <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-          </div>
-          <p style="font-size:12px;line-height:30px;color:#999;">Tips : 用户名和密码随便填。</p>
-        </el-form>
+  <div class="back">
+    <myHead></myHead>
+    <div class="main">
+      <div class="concern">
+        <div class="hi">
+          <h1>This is a piece of text &amp; Please replace me</h1>
+        </div>
+        <div class="ipt">
+          <el-input suffix-icon="el-icon-search" v-model="input2">
+          </el-input>
+        </div>
+        <div class="btn">
+          <div class="search btn_text" @click="turn">文字说明</div>
+          <div class="basket btn_text" @click="$router.push('/basket')">试题篮</div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import myHead from './header.vue'
   export default {
     data () {
       return {
-        ruleForm: {
-          username: 'admin',
-          password: '123123'
-        },
-        rules: {
-          username: [
-            { required: true, message: '请输入用户名', trigger: 'blur' }
-          ],
-          password: [
-            { required: true, message: '请输入密码', trigger: 'blur' }
-          ]
-        }
       }
     },
     methods: {
-      submitForm (formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            localStorage.setItem('ms_username', this.ruleForm.username)
-            this.$router.push('/')
-          } else {
-            console.log('error submit!!')
-            return false
-          }
-        })
+      turn () {
+        this.$router.push('/index')
       }
+    },
+    components: {
+      myHead
     }
   }
 </script>
 
 <style scoped>
-  #back{
-    position: absolute;
-    background-color: #324157;
-    width:100%;
-    height:100%;
+  .back{
+    height: 100%;
   }
-  .login-wrap{
+  .main{
+    padding: auto 0;
+    width: 100%;
+    position: absolute;
+    top: 111px;
+    bottom: 0;
+    left: 0;
+  }
+  .concern{
+    width: 45%;
     position: relative;
-    width:100%;
-    height:100%;
-    background-color: #324157;
+    left: 27.5%;
+    top: 50%;
+    transform: translateY(-60%);
   }
-  .ms-title{
-    position: absolute;
-    top:50%;
-    width:100%;
-    margin-top: -230px;
+  .hi > h1{
+    margin-bottom: 20px;
+    font-size: 54px;
+    line-height: 1.3;
+    font-weight: 300;
+    font-family: sans-serif;
     text-align: center;
-    font-size:30px;
+    color: #000;
+  }
+  .btn {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+  .btn_text {
+    width: 160px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    border-radius: 30px;
+    font-size: 18px;
+    transition: 0.5s;
+  }
+  .btn_text:hover{
+    box-shadow: 0 10px 10px -3px #ccc;
+  }
+  .search{
+    background: #dd356e;
     color: #fff;
-    transform: translateX(-50px);
+    margin-left: 50%;
+    transform: translateX(-180px);
   }
-  .ms-login{
-    position: absolute;
-    left:50%;
-    top:50%;
-    width:300px;
-    height:160px;
-    margin:-150px 0 0 -190px;
-    padding:40px;
-    border-radius: 5px;
-    background: #fff;
-  }
-  .login-btn{
-    text-align: center;
-    margin-top: 30px;
-  }
-  .login-btn button{
-    width:100%;
-    height:36px;
+  .basket{
+    background: #fee856;
+    color: #000;
+    transform: translateX(-140px);
   }
 </style>
