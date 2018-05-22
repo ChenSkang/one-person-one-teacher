@@ -88,12 +88,12 @@
       </div>
 
       <div class="right">
-        <el-button @click="$router.push('/')">返回</el-button>
+        <div><el-button class="btn" @click="$router.push('/')" type="danger" round>返回</el-button></div>
+        <div><el-button class="btn" @click="getPdf()" type="danger" round>下载</el-button></div>
+        <div><el-button class="btn" @click="deleteall = true" type="danger" round>清空试题</el-button></div>
         <div class="set_exam">
           <el-checkbox v-for="(city, index) in cities" v-model="showSet[index]" :key="city">{{city}}</el-checkbox>
         </div>
-        <el-button @click="getPdf()" size="small" type="primary">下载</el-button>
-        <el-button @click="deleteall = true" size="small" type="primary">清空试题</el-button>
         <el-dialog
           title="提示"
           :visible.sync="deleteall"
@@ -117,7 +117,7 @@
   import bus from '../../bus'
   import myFoot from '../common/footer.vue'
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
-  const cityOptions = ['标题', '考生信息', '总分栏', '注意事项', '装订线', '副标题', '试卷信息']
+  const cityOptions = ['主标题', '考生信息', '总分栏', '注意事项', '装订线', '副标题', '试卷信息']
   export default {
     data () {
       return {
@@ -363,6 +363,7 @@
     clear: both;
     box-sizing: border-box;
     border: 1px solid #ffffff;
+    transition: 0.5s;
   }
   .ques:hover{
     border-radius: 10px;
@@ -403,5 +404,9 @@
     font-family: 新宋体;
     font-weight: bold;
     font-size: 17px;
+  }
+  .btn {
+    width: 120px;
+    margin-top: 20px;
   }
 </style>
