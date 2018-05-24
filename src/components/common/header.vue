@@ -4,7 +4,11 @@
       <div class="row">
         <div class="logo">OPOT<span>.</span></div>
       </div>
-      <div class="menu"></div>
+      <div class="menu">
+        <div class="menus" @click="$router.push('/')" :class="{now: $store.state.menu1}">首页<div :class="{under: $store.state.menu1}"></div></div>
+        <div class="menus" @click="$router.push('/index')" :class="{now: $store.state.menu2}">推题<div :class="{under: $store.state.menu2}"></div></div>
+        <div class="menus" @click="$router.push('/basket')" :class="{now: $store.state.menu3}">试题篮<div :class="{under: $store.state.menu3}"></div></div>
+      </div>
     </div>
   </div>
 </template>
@@ -31,14 +35,14 @@
     width: 100%;
     height: 55px;
     line-height: 55px;
+    display: flex;
+    flex-direction: row;
   }
   .row{
     position: relative;
     left: 12%;
-    min-height: 1px;
     padding-left: 15px;
     padding-right: 15px;
-    float: left;
     width: 16.66667%;
   }
   .logo{
@@ -51,5 +55,38 @@
   }
   .logo > span {
     color: #DD356E;
+  }
+  .menu{
+    position: absolute;
+    right: 12%;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 18px;
+    width: 33%;
+    display: flex;
+    flex-direction: row;
+  }
+  .menus{
+    transition: 0.5s;
+    padding: 0 15px;
+    position: relative;
+    text-align: center;
+  }
+  .menus div{
+    transition: 0.5s;
+  }
+  .menus:hover{
+    color: #000;
+  }
+  .now{
+    color: #000;
+  }
+  .under{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 13px;
+    width: 30px;
+    height: 2px;
+    background-color: #DD356E;
   }
 </style>
