@@ -88,9 +88,9 @@
       </div>
 
       <div class="right">
-        <div><el-button class="btn" @click="$router.push('/')" type="danger" round>返回</el-button></div>
-        <div><el-button class="btn" @click="getPdf()" type="danger" round>下载</el-button></div>
-        <div><el-button class="btn" @click="deleteall = true" type="danger" round>清空试题</el-button></div>
+        <div><el-button class="btn" @click="$router.push('/index')" icon="el-icon-back" type="primary">继续选题</el-button></div>
+        <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
+        <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
         <div class="set_exam">
           <el-checkbox v-for="(city, index) in cities" v-model="showSet[index]" :key="city">{{city}}</el-checkbox>
         </div>
