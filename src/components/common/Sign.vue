@@ -7,8 +7,7 @@
           <h1>This is a piece of text &amp; Please replace me</h1>
         </div>
         <div class="ipt">
-          <el-input suffix-icon="el-icon-search" v-model="input2">
-          </el-input>
+          <el-input suffix-icon="el-icon-search"></el-input>
         </div>
         <div class="btn">
           <div class="search btn_text" @click="turn">文字说明</div>
@@ -33,6 +32,8 @@
     },
     components: {
       myHead
+    },
+    created () {
     }
   }
 </script>
