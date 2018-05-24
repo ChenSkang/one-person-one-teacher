@@ -16,31 +16,10 @@
       </span>
     </el-dialog>
     <div class="main">
-      <div class="crop-demo">
-        <el-upload
-          class="avatar-uploader"
-          :show-file-list="false"
-          action="http://47.94.215.104:8080/OPOT1/servlet/pictureServlet"
-          :on-change="handleChange"
-          :before-upload="handleBefore"
-          :auto-upload="false">
-          <el-button icon="el-icon-edit" slot="trigger" size="small" type="primary" @click="ifVisible = false">选取</el-button>
-        </el-upload>
-        <img :src="cropImg" class="pre-img">
-      </div>
-      <h3 @click="run('/basket')">试题篮</h3>
-
-      <div class="block" v-if="subject[0].que">
+      <div class="block">
         <el-container>
-          <el-aside width="20%">
-            <!--
-            <ul class="textPaper">
-              <li v-for="(myPaper, index) in myPapers">
-                <span>{{myPapers[index].name + ':' + myPapers[index].value}}</span>
-              </li>
-            </ul> -->
-          </el-aside>
-          <el-main  v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
+          <el-main  v-if="subject[0].que" v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
+            <img :src="cropImg" class="pre-img">
             <ul>
               <li class="ques">
                 <div class="up">
@@ -69,6 +48,26 @@
               </li>
             </ul>
           </el-main>
+          <el-aside width="20%">
+            <div class="crop-demo">
+              <el-upload
+                class="avatar-uploader"
+                :show-file-list="false"
+                action="http://47.94.215.104:8080/OPOT1/servlet/pictureServlet"
+                :on-change="handleChange"
+                :before-upload="handleBefore"
+                :auto-upload="false">
+                <el-button class="btn" icon="el-icon-edit" slot="trigger" type="primary" @click="ifVisible = false">选取</el-button>
+              </el-upload>
+            </div>
+            <h3 @click="run('/basket')">试题篮</h3>
+            <!--
+            <ul class="textPaper">
+              <li v-for="(myPaper, index) in myPapers">
+                <span>{{myPapers[index].name + ':' + myPapers[index].value}}</span>
+              </li>
+            </ul> -->
+          </el-aside>
         </el-container>
         <answer></answer>
       </div>
@@ -292,23 +291,15 @@
     overflow: hidden;
   }
   .pre-img{
-    margin-left: 25%;
-    max-width: 70%;
+    max-width: 96%;
     max-height: 200px;
     border: 1px solid #eee;
     border-radius: 5px;
+    margin: 10px 2% 10px 2%;
   }
-  .schart{
-    width: 600px;
-    display: inline-block;
-  }
-  .content-title{
-    clear: both;
-    font-weight: 400;
-    line-height: 50px;
-    margin: 10px 0;
-    font-size: 22px;
-    color: #1f2f3d;
+  .btn {
+    width: 120px;
+    margin-top: 20px;
   }
   .block{
     width: 90%;
@@ -316,10 +307,10 @@
   }
   .ques{
     position: relative;
-    width: 100%;
+    width: 98%;
     zoom: 1;
     clear: both;
-    margin: 10px 20px 10px 20px;
+    margin: 10px 1% 10px 1%;
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px solid #DCDFE6;
