@@ -1,123 +1,123 @@
 <template>
-  <div style="background-color: #ededed">
-    <my-head style="background-color: #fff"></my-head>
-    <div class="middle">
-      <div class="exam" id="pdfDom">
-        <div class="exam_left" v-if="showSets[2]" title="装订线">
-          <img src="../../img/peal_line.png" alt="">
-        </div>
-        <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName" @change="sureName()"></div>
-        <div v-if="showSets[0]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
-        <div v-if="showSets[1]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
-        <div v-if="showSet[1]" title="点击设置考生信息"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
-        <div class="scores" v-if="showSet[2]" title="打分栏">
-          <table border="1" cellspacing="0" cellpadding="0" align="center">
-            <tr>
-              <td>题号</td>
-              <td>一</td>
-              <td>二</td>
-              <td>三</td>
-              <td>总分</td>
-            </tr>
-            <tr>
-              <td>得分</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </table>
-        </div>
-        <div class="attentions" v-if="showSet[3]" title="注意事项">
-          <span>注意事项：</span>
-          <p v-for="(attention, index) in attentions" :key="index">
-            {{index + 1 + '.'+ '&nbsp;' + attention}}
-          </p>
-        </div>
+  <div>
+    <my-head></my-head>
+    <div class="main">
+      <el-container>
+        <el-main><div class="exam" id="pdfDom">
+          <div class="exam_left" v-if="showSets[2]" title="装订线">
+            <img src="../../img/peal_line.png" alt="">
+          </div>
+          <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName" @change="sureName()"></div>
+          <div v-if="showSets[0]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
+          <div v-if="showSets[1]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
+          <div v-if="showSet[1]" title="点击设置考生信息"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
+          <div class="scores" v-if="showSet[2]" title="打分栏">
+            <table border="1" cellspacing="0" cellpadding="0" align="center">
+              <tr>
+                <td>题号</td>
+                <td>一</td>
+                <td>二</td>
+                <td>三</td>
+                <td>总分</td>
+              </tr>
+              <tr>
+                <td>得分</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
+          <div class="attentions" v-if="showSet[3]" title="注意事项">
+            <span>注意事项：</span>
+            <p v-for="(attention, index) in attentions" :key="index">
+              {{index + 1 + '.'+ '&nbsp;' + attention}}
+            </p>
+          </div>
 
-        <div v-if="$store.state.XZ.length" class="TM">一.选择题（共{{$store.state.XZ.length}}小题）</div>
-        <draggable v-model="$store.state.XZ" @end="endMove" :options="dragOption1">
-          <transition-group tag="div" class="item-ul">
-            <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
-              <div class="up">
-                <span class="TH">{{index + 1}}</span>
-                <span>{{$store.state.XZ[index].que}}</span>
+          <div v-if="$store.state.XZ.length" class="TM">一.选择题（共{{$store.state.XZ.length}}小题）</div>
+          <draggable v-model="$store.state.XZ" @end="endMove" :options="dragOption1">
+            <transition-group tag="div" class="item-ul">
+              <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
+                <div class="up">
+                  <span class="TH">{{index + 1}}</span>
+                  <span>{{$store.state.XZ[index].que}}</span>
+                </div>
+                <div class="low">
+                  <div @click="deleteX(index)">删除</div>
+                  <div @click="upX(index)">上移</div>
+                  <div @click="downX(index)">下移</div>
+                </div>
               </div>
-              <div class="low">
-                <div @click="deleteX(index)">删除</div>
-                <div @click="upX(index)">上移</div>
-                <div @click="downX(index)">下移</div>
-              </div>
-            </div>
-          </transition-group>
-        </draggable>
+            </transition-group>
+          </draggable>
 
-        <div v-if="$store.state.TK.length" class="TM">{{$store.state.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.TK.length}}小题）</div>
-        <draggable v-model="$store.state.TK" @end="endMove" :options="dragOption2">
-          <transition-group tag="div" class="item-ul">
-            <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
-              <div class="up">
-                <span class="TH">{{$store.state.XZ.length + index + 1}}</span>
-                <span>{{$store.state.TK[index].que}}</span>
+          <div v-if="$store.state.TK.length" class="TM">{{$store.state.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.TK.length}}小题）</div>
+          <draggable v-model="$store.state.TK" @end="endMove" :options="dragOption2">
+            <transition-group tag="div" class="item-ul">
+              <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
+                <div class="up">
+                  <span class="TH">{{$store.state.XZ.length + index + 1}}</span>
+                  <span>{{$store.state.TK[index].que}}</span>
+                </div>
+                <div class="low">
+                  <div @click="deleteT(index)">删除</div>
+                  <div @click="upT(index)">上移</div>
+                  <div @click="downT(index)">下移</div>
+                </div>
               </div>
-              <div class="low">
-                <div @click="deleteT(index)">删除</div>
-                <div @click="upT(index)">上移</div>
-                <div @click="downT(index)">下移</div>
-              </div>
-            </div>
-          </transition-group>
-        </draggable>
+            </transition-group>
+          </draggable>
 
-        <div v-if="$store.state.JD.length" class="TM">{{strjd}}.解答题（共{{$store.state.JD.length}}小题）</div>
-        <draggable v-model="$store.state.JD" @end="endMove" :options="dragOption3">
-          <transition-group tag="div" class="item-ul">
-            <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
-              <div class="up">
-                <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}</span>
-                <span>{{$store.state.JD[x].que}}</span>
+          <div v-if="$store.state.JD.length" class="TM">{{strjd}}.解答题（共{{$store.state.JD.length}}小题）</div>
+          <draggable v-model="$store.state.JD" @end="endMove" :options="dragOption3">
+            <transition-group tag="div" class="item-ul">
+              <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
+                <div class="up">
+                  <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}</span>
+                  <span>{{$store.state.JD[x].que}}</span>
+                </div>
+                <div class="low">
+                  <div @click="deleteJ(index)">删除</div>
+                  <div @click="upJ(index)">上移</div>
+                  <div @click="downJ(index)">下移</div>
+                </div>
               </div>
-              <div class="low">
-                <div @click="deleteJ(index)">删除</div>
-                <div @click="upJ(index)">上移</div>
-                <div @click="downJ(index)">下移</div>
-              </div>
-            </div>
-          </transition-group>
-        </draggable>
-      </div>
-
-      <div class="right">
-        <div><el-button class="btn" @click="$router.push('/index')" icon="el-icon-back" type="primary">继续选题</el-button></div>
-        <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
-        <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
-        <div class="set_exam">
-          <el-row>
-            <el-col :span="12">
-              <div v-for="(city, index) in cities">
-                <el-checkbox  v-model="showSet[index]" :key="city">{{city}}</el-checkbox>
-              </div>
-            </el-col>
-            <el-col :span="12">
-              <div v-for="(mation, index) in mations">
-                <el-checkbox  v-model="showSets[index]" :key="mation">{{mation}}</el-checkbox>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-        <el-dialog
-          title="提示"
-          :visible.sync="deleteall"
-          width="30%">
-          <span>清空后不可恢复，确认清空？</span>
-          <span slot="footer" class="dialog-footer">
+            </transition-group>
+          </draggable>
+        </div></el-main>
+        <el-aside width="20%">
+          <div><el-button class="btn" @click="$router.push('/index')" icon="el-icon-back" type="primary">继续选题</el-button></div>
+          <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
+          <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
+          <div class="set_exam">
+            <el-row>
+              <el-col :span="12">
+                <div v-for="(city, index) in cities">
+                  <el-checkbox  v-model="showSet[index]" :key="city">{{city}}</el-checkbox>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div v-for="(mation, index) in mations">
+                  <el-checkbox  v-model="showSets[index]" :key="mation">{{mation}}</el-checkbox>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+          <el-dialog
+            title="提示"
+            :visible.sync="deleteall"
+            width="30%">
+            <span>清空后不可恢复，确认清空？</span>
+            <span slot="footer" class="dialog-footer">
             <el-button @click="deleteall = false">取 消</el-button>
             <el-button type="primary" @click="deleteAll()">确 定</el-button>
           </span>
-        </el-dialog>
-      </div>
+          </el-dialog>
+        </el-aside>
+      </el-container>
     </div>
-    <myFoot></myFoot>
   </div>
 </template>
 
@@ -295,17 +295,15 @@
 
 <style scoped>
   /* @import "../../someJs/demo.css"; */
-  .middle {
-    margin: 30px 5% 30px 10%;
-    display: flex;
-    flex-direction: row;
-  }
-  .right{
-
+  .main {
+    width: 100%;
+    position: relative;
+    background-color: #F2F6FC;
   }
   .exam{
     background-color: #fff;
     position: relative;
+    width: 915px;
     min-width: 915px;
     padding: 40px 40px 40px 100px;
     min-height: 910px;

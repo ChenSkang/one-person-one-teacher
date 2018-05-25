@@ -1,5 +1,5 @@
 <template>
-  <div class="back">
+  <div>
     <myHead></myHead>
     <div class="main">
       <div class="concern">
@@ -15,11 +15,13 @@
         </div>
       </div>
     </div>
+    <myFoot></myFoot>
   </div>
 </template>
 
 <script>
   import myHead from './header.vue'
+  import myFoot from './footer.vue'
   export default {
     data () {
       return {
@@ -31,7 +33,8 @@
       }
     },
     components: {
-      myHead
+      myHead,
+      myFoot
     },
     created () {
     }
@@ -39,22 +42,14 @@
 </script>
 
 <style scoped>
-  .back{
-    height: 100%;
-  }
   .main{
-    padding: auto 0;
     width: 100%;
-    position: absolute;
-    top: 111px;
-    bottom: 0;
+    position: relative;
   }
   .concern{
     width: 45%;
-    position: relative;
-    left: 27.5%;
-    top: 50%;
-    transform: translateY(-60%);
+    margin-left: 27.5%;
+    margin-top: 100px;
   }
   .hi > h1{
     margin-bottom: 20px;

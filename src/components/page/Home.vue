@@ -92,13 +92,15 @@
 <script>
   import VueCropper from 'vue-cropperjs'
   import myHead from '../common/header.vue'
+  import myFoot from '../common/footer.vue'
   import answer from '../common/anwer.vue'
   import bus from '../../bus'
   export default {
     components: {
       VueCropper,
       myHead,
-      answer
+      answer,
+      myFoot
     },
     data () {
       return {
@@ -295,8 +297,7 @@
 <style scoped>
   .main{
     width: 100%;
-    position: absolute;
-    top: 111px;
+    position: relative;
   }
   .concern{
     width: 45%;

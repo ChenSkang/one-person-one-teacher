@@ -24,6 +24,9 @@
   padding-top: 10px;
   background: #fff;
   height: 91px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
   .about{
     font-size: 13px;
