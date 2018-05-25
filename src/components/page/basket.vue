@@ -2,7 +2,7 @@
   <div>
     <my-head></my-head>
     <div class="main">
-      <el-container>
+      <el-container style="width: 84%; margin-left: 8%">
         <el-main><div class="exam" id="pdfDom">
           <div class="exam_left" v-if="showSets[2]" title="装订线">
             <img src="../../img/peal_line.png" alt="">
@@ -87,23 +87,31 @@
             </transition-group>
           </draggable>
         </div></el-main>
-        <el-aside width="20%">
-          <div><el-button class="btn" @click="$router.push('/index')" icon="el-icon-back" type="primary">继续选题</el-button></div>
-          <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
-          <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
-          <div class="set_exam">
-            <el-row>
-              <el-col :span="12">
-                <div v-for="(city, index) in cities">
-                  <el-checkbox  v-model="showSet[index]" :key="city">{{city}}</el-checkbox>
-                </div>
-              </el-col>
-              <el-col :span="12">
-                <div v-for="(mation, index) in mations">
-                  <el-checkbox  v-model="showSets[index]" :key="mation">{{mation}}</el-checkbox>
-                </div>
-              </el-col>
-            </el-row>
+        <el-aside width="25%">
+          <div class="right">
+            <div class="right_up">
+              <div class="set_title">文字提示</div>
+              <div><el-button class="btn" @click="$router.push('/index')" icon="el-icon-back" type="primary">继续选题</el-button></div>
+              <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
+              <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
+            </div>
+            <div class="right_down">
+              <div class="set_title">试卷信息</div>
+              <div class="set_exam">
+                <el-row>
+                  <el-col :span="12">
+                    <div v-for="(city, index) in cities">
+                      <el-checkbox  v-model="showSet[index]" :key="city">{{city}}</el-checkbox>
+                    </div>
+                  </el-col>
+                  <el-col :span="12">
+                    <div v-for="(mation, index) in mations">
+                      <el-checkbox  v-model="showSets[index]" :key="mation">{{mation}}</el-checkbox>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
           </div>
           <el-dialog
             title="提示"
@@ -111,13 +119,14 @@
             width="30%">
             <span>清空后不可恢复，确认清空？</span>
             <span slot="footer" class="dialog-footer">
-            <el-button @click="deleteall = false">取 消</el-button>
-            <el-button type="primary" @click="deleteAll()">确 定</el-button>
-          </span>
+              <el-button @click="deleteall = false">取 消</el-button>
+              <el-button type="primary" @click="deleteAll()">确 定</el-button>
+            </span>
           </el-dialog>
         </el-aside>
       </el-container>
     </div>
+    <myFoot style="position: relative; bottom: 0"></myFoot>
   </div>
 </template>
 
@@ -308,6 +317,39 @@
     padding: 40px 40px 40px 100px;
     min-height: 910px;
   }
+  .right{
+    width: 90%;
+    margin-left: 5%;
+  }
+  .right_up{
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+    background-color: #fff;
+  }
+  .right_down{
+    margin-top: 20px;
+    width: 100%;
+    background-color: #fff;
+    padding-bottom: 20px;
+  }
+  .set_title{
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    font-size: 15px;
+    text-align: center;
+    background-color: #EBEEF5;
+    border-bottom: 1px solid #E4E7ED;
+    margin-bottom: 10px;
+  }
+  .set_exam{
+    width: 80%;
+    margin-left: 10%;
+  }
+  .set_exam div{
+    margin-top: 10px;
+  }
   .exam_left img{
     position: absolute;
     left: 7px;
@@ -419,6 +461,6 @@
   }
   .btn {
     width: 120px;
-    margin-top: 20px;
+    margin: 10px 0 10px 0;
   }
 </style>

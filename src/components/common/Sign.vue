@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <myFoot></myFoot>
+    <myFoot style="position: absolute; bottom: 0"></myFoot>
   </div>
 </template>
 
