@@ -14,27 +14,6 @@
       }
     },
     watch: {
-      '$route' (to, from) {
-        if (to.path === '/') {
-          this.$store.state.menu2 = false
-          this.$store.state.menu3 = false
-          this.$store.state.menu4 = false
-          this.$store.state.menu1 = true
-          console.log('sdada')
-        }
-        if (to.path === '/index') {
-          this.$store.state.menu2 = true
-          this.$store.state.menu3 = false
-          this.$store.state.menu4 = false
-          this.$store.state.menu1 = false
-        }
-        if (to.path === '/basket') {
-          this.$store.state.menu3 = true
-          this.$store.state.menu2 = false
-          this.$store.state.menu4 = false
-          this.$store.state.menu1 = false
-        }
-      }
     },
     methods: {
     }
