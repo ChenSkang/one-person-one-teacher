@@ -48,7 +48,6 @@
     position: absolute;
     top: 111px;
     bottom: 0;
-    left: 0;
   }
   .concern{
     width: 45%;
