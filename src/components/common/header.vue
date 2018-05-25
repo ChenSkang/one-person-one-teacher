@@ -5,9 +5,12 @@
         <div class="logo">OPOT<span>.</span></div>
       </div>
       <div class="menu">
-        <div class="menus" @click="$router.push('/')" :class="{now: $store.state.menu1}">首页<div :class="{under: $store.state.menu1}"></div></div>
-        <div class="menus" @click="$router.push('/index')" :class="{now: $store.state.menu2}">推题<div :class="{under: $store.state.menu2}"></div></div>
-        <div class="menus" @click="$router.push('/basket')" :class="{now: $store.state.menu3}">试题篮<div :class="{under: $store.state.menu3}"></div></div>
+        <el-menu :default-active="$route.path"
+                 active-text-color="#000" class="el-menu-demo" mode="horizontal" router>
+          <el-menu-item index="/">首页</el-menu-item>
+          <el-menu-item index="/index">推题</el-menu-item>
+          <el-menu-item index="/basket">试题篮</a></el-menu-item>
+        </el-menu>
       </div>
     </div>
   </div>
@@ -60,33 +63,15 @@
     position: absolute;
     right: 12%;
     color: rgba(0, 0, 0, 0.7);
-    font-size: 18px;
     width: 33%;
     display: flex;
     flex-direction: row;
   }
-  .menus{
-    transition: 0.5s;
-    padding: 0 15px;
-    position: relative;
-    text-align: center;
+  .el-menu-item{
+    font-size: 17px;
   }
-  .menus div{
-    transition: 0.5s;
-  }
-  .menus:hover{
-    color: #000;
-  }
-  .now{
-    color: #000;
-  }
-  .under{
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 13px;
-    width: 30px;
-    height: 2px;
-    background-color: #DD356E;
+  .el-menu--horizontal>.el-menu-item.is-active {
+    border-bottom: 2px solid #DD356E !important;
+    color: #303133;
   }
 </style>
