@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <myFoot style="position: absolute; bottom: 0"></myFoot>
+    <!--<myFoot style="position: absolute; bottom: 0"></myFoot>!-->
   </div>
 </template>
 
@@ -49,7 +49,7 @@
   .concern{
     width: 45%;
     margin-left: 27.5%;
-    margin-top: 100px;
+    margin-top: 150px;
   }
   .hi > h1{
     margin-bottom: 20px;

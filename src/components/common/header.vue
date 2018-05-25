@@ -63,7 +63,6 @@
     position: absolute;
     right: 12%;
     color: rgba(0, 0, 0, 0.7);
-    width: 33%;
     display: flex;
     flex-direction: row;
   }
