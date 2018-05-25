@@ -3,12 +3,12 @@
     <my-head style="background-color: #fff"></my-head>
     <div class="middle">
       <div class="exam" id="pdfDom">
-        <div class="exam_left" v-if="showSet[4]" title="装订线">
+        <div class="exam_left" v-if="showSets[2]" title="装订线">
           <img src="../../img/peal_line.png" alt="">
         </div>
         <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName" @change="sureName()"></div>
-        <div v-if="showSet[5]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
-        <div v-if="showSet[6]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
+        <div v-if="showSets[0]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
+        <div v-if="showSets[1]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
         <div v-if="showSet[1]" title="点击设置考生信息"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
         <div class="scores" v-if="showSet[2]" title="打分栏">
           <table border="1" cellspacing="0" cellpadding="0" align="center">
@@ -92,7 +92,18 @@
         <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
         <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
         <div class="set_exam">
-          <el-checkbox v-for="(city, index) in cities" v-model="showSet[index]" :key="city">{{city}}</el-checkbox>
+          <el-row>
+            <el-col :span="12">
+              <div v-for="(city, index) in cities">
+                <el-checkbox  v-model="showSet[index]" :key="city">{{city}}</el-checkbox>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div v-for="(mation, index) in mations">
+                <el-checkbox  v-model="showSets[index]" :key="mation">{{mation}}</el-checkbox>
+              </div>
+            </el-col>
+          </el-row>
         </div>
         <el-dialog
           title="提示"
@@ -117,13 +128,16 @@
   import bus from '../../bus'
   import myFoot from '../common/footer.vue'
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
-  const cityOptions = ['主标题', '考生信息', '总分栏', '注意事项', '装订线', '副标题', '试卷信息']
+  const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项']
+  const secondOptions = ['副标题', '试卷信息', '装订线']
   export default {
     data () {
       return {
         deleteall: false,
-        cities: cityOptions,
-        showSet: [true, true, true, true, true, true, true],
+        cities: firstOptions,
+        mations: secondOptions,
+        showSet: [true, true, true, true],
+        showSets: [true, true, true],
         examName: '初中数学测试试卷',
         examSecondName: '试卷副标题',
         examThirdName: '考试范围：xxx；考试时间：100分钟；命题人：xxx',
