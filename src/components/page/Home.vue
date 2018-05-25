@@ -48,7 +48,7 @@
               </li>
             </ul>
           </el-main>
-          <el-aside width="20%">
+          <el-aside width="15%">
             <div class="crop-demo">
               <el-upload
                 class="avatar-uploader"
@@ -204,7 +204,8 @@
         let kddp = this.subject[x].kddp
         let zsd = this.subject[x].zsd
         let answer = this.subject[x].answer
-        bus.$emit('JX', que, kddp, zsd, answer)
+        let jx = this.subject[x].jx
+        bus.$emit('JX', que, kddp, zsd, answer, jx)
       },
       addPaper (x) {
         let str = this.subject[x].que
@@ -347,8 +348,8 @@
     margin-top: 20px;
   }
   .block{
-    width: 90%;
-    margin: 20px 5% 20px 5%;
+    width: 84%;
+    margin: 20px 8% 20px 8%;
   }
   .ques{
     position: relative;

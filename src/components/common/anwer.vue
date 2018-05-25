@@ -4,7 +4,8 @@
       <div class="ST TI">{{myTest[0].que}}</div>
       <div class="KD TI">【考点】{{myTest[0].kddp}}</div>
       <div class="ZSD TI">【知识点】{{myTest[0].zsd}}</div>
-      <div class="JX TI">【解析】{{myTest[0].answer}}</div>
+      <div class="JX TI">【解析】{{myTest[0].jx}}</div>
+      <div class="JX TI">【解答】{{myTest[0].answer}}</div>
     </el-dialog>
   </div>
 </template>
@@ -19,17 +20,19 @@
           { que: '' },
           { kddp: '' },
           { zsd: '' },
-          { answer: '' }
+          { answer: '' },
+          { jx: '' }
         ]
       }
     },
     mounted () {
-      bus.$on('JX', (que, kddp, zsd, answer) => {
+      bus.$on('JX', (que, kddp, zsd, answer, jx) => {
         this.IFJX = true
         this.myTest[0].que = que
         this.myTest[0].kddp = kddp
         this.myTest[0].zsd = zsd
         this.myTest[0].answer = answer
+        this.myTest[0].jx = jx
       })
     }
   }
