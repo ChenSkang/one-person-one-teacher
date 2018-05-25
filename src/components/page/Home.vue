@@ -16,9 +16,9 @@
       </span>
     </el-dialog>
     <div class="main">
-      <div class="block">
+      <div class="block" v-if="subject[0].que">
         <el-container>
-          <el-main  v-if="subject[0].que" v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
+          <el-main v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
             <img :src="cropImg" class="pre-img">
             <ul>
               <li class="ques">
@@ -57,10 +57,10 @@
                 :on-change="handleChange"
                 :before-upload="handleBefore"
                 :auto-upload="false">
-                <el-button class="btn" icon="el-icon-edit" slot="trigger" type="primary" @click="ifVisible = false">选取</el-button>
+                <el-button class="btns" icon="el-icon-edit" type="primary" @click="ifVisible = false">重新选取</el-button>
               </el-upload>
             </div>
-            <h3 @click="run('/basket')">试题篮</h3>
+            <el-button class="btns" type="primary" @click="run('/basket')">试题篮</el-button>
             <!--
             <ul class="textPaper">
               <li v-for="(myPaper, index) in myPapers">
@@ -70,6 +70,20 @@
           </el-aside>
         </el-container>
         <answer></answer>
+      </div>
+      <div class="concern" v-else>
+        <div class="btn">
+          <div class="ipt"><el-input suffix-icon="el-icon-search"></el-input></div>
+          <el-upload
+            class="avatar-uploader"
+            :show-file-list="false"
+            action="http://47.94.215.104:8080/OPOT1/servlet/pictureServlet"
+            :on-change="handleChange"
+            :before-upload="handleBefore"
+            :auto-upload="false">
+            <div class="search btn_text"><i class="el-icon-edit"></i>选取图片</div>
+          </el-upload>
+        </div>
       </div>
     </div>
   </div>
@@ -281,7 +295,37 @@
 <style scoped>
   .main{
     width: 100%;
-    position: relative;
+    position: absolute;
+    top: 111px;
+  }
+  .concern{
+    width: 45%;
+    position: absolute;
+    top: 50%;
+    left: 27.5%;
+    padding-top: 150px;
+  }
+  .btn {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+  .btn_text {
+    width: 120px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: 0.5s;
+  }
+  .btn_text:hover{
+    box-shadow: 0 10px 10px -3px #ccc;
+  }
+  .search{
+    border: 1px solid rgba(0, 0, 0, .5);
+    color: #000;
+    margin-left: 50px;
   }
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
@@ -297,7 +341,7 @@
     border-radius: 5px;
     margin: 10px 2% 10px 2%;
   }
-  .btn {
+  .btns {
     width: 120px;
     margin-top: 20px;
   }
