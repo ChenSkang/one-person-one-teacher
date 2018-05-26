@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    cropImg: '', // 裁切的图片
     tests: '', // test ID
     TK: [], // 试题篮填空题
     XZ: [], // 试题篮选择题
