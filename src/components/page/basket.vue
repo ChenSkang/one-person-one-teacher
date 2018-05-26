@@ -1,6 +1,7 @@
 <template>
   <div>
     <my-head></my-head>
+    <mySpace></mySpace>
     <div class="main">
       <el-container style="width: 84%; margin-left: 8%">
         <el-main><div class="exam" id="pdfDom">
@@ -132,6 +133,7 @@
 
 <script>
   /* import $ from 'jquery' */
+  import mySpace from '../common/mySpace.vue'
   import myHead from '../common/header.vue'
   import draggable from 'vuedraggable'
   import bus from '../../bus'
@@ -145,8 +147,8 @@
         deleteall: false,
         cities: firstOptions,
         mations: secondOptions,
-        showSet: [true, true, true, true],
-        showSets: [true, true, true],
+        showSet: [true, false, true, true],
+        showSets: [true, false, true],
         examName: '初中数学测试试卷',
         examSecondName: '试卷副标题',
         examThirdName: '考试范围：xxx；考试时间：100分钟；命题人：xxx',
@@ -177,6 +179,7 @@
       }
     },
     components: {
+      mySpace,
       ElButton,
       myHead,
       draggable,
