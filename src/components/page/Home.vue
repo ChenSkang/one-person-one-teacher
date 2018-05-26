@@ -1,95 +1,78 @@
 <template>
   <div>
     <my-head></my-head>
-    <el-dialog title="裁剪图片" :visible.sync="visible" width="50%" :show-close="false">
+    <mySpace></mySpace>
+    <el-dialog title="裁剪图片" :visible.sync="visible" width="80%" :show-close="false">
       <vue-cropper ref='cropper'
                    :src="imageSrc"
                    :ready="cropImage"
                    :zoom="cropImage"
                    :cropmove="cropImage"
                    :autoCropArea = "0.99"
-                   style="width:100%;height:400px;">
+                   style="width:100%;height:100%;">
       </vue-cropper>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancelCrop">取 消</el-button>
         <el-button type="primary" @click="sureCrop">确 定</el-button>
       </span>
     </el-dialog>
-    <div class="main">
-      <div class="block" v-if="subject[0].que">
-        <el-container>
-          <el-main v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
-            <img :src="cropImg" class="pre-img">
-            <ul>
-              <li class="ques">
-                <div class="up">
-                  <span class="TH">原题：&nbsp;</span>
-                  <span class="QUE">{{subject[0].que}}</span>
-                </div>
-                <div class="low">
-                  <div @click="showJX(0)"><i class="el-icon-document"></i>解析</div>
-                  <div v-if="!($store.state.tests.indexOf(subject[0].id) + 1)"><el-button type="primary" size="mini" @click="addPaper(0)" icon="el-icon-plus" round>试题</el-button></div>
-                  <div v-else><el-button @click="deletePaper(0)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
-                </div>
-              </li>
-            </ul>
-            <span>$$	\cfrac{2}{c + \cfrac{2}{d + \cfrac{2}{4}}} =a$$</span>
-            <ul v-for="index in 5" :key="index">
-              <li class="ques">
-                <div class="up">
-                  <span class="TH">{{index + '.'}}&nbsp;</span>
-                  <span class="QUE">{{subject[index].que}}</span>
-                </div>
-                <div class="low">
-                  <div @click="showJX(index)"><i class="el-icon-document"></i>解析</div>
-                  <div v-if="!($store.state.tests.indexOf(subject[index].id) + 1)"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus" round>试题</el-button></div>
-                  <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
-                </div>
-              </li>
-            </ul>
-          </el-main>
-          <el-aside width="15%">
-            <div class="crop-demo">
-              <el-upload
-                class="avatar-uploader"
-                :show-file-list="false"
-                action="http://47.94.215.104:8080/OPOT1/servlet/pictureServlet"
-                :on-change="handleChange"
-                :before-upload="handleBefore"
-                :auto-upload="false">
-                <el-button class="btns" icon="el-icon-edit" type="primary" @click="ifVisible = false">重新选取</el-button>
-              </el-upload>
-            </div>
-            <el-button class="btns" type="primary" @click="run('/basket')">试题篮</el-button>
-            <!--
-            <ul class="textPaper">
-              <li v-for="(myPaper, index) in myPapers">
-                <span>{{myPapers[index].name + ':' + myPapers[index].value}}</span>
-              </li>
-            </ul> -->
-          </el-aside>
-        </el-container>
-        <answer></answer>
-      </div>
-      <div class="concern" v-else>
-        <div class="btn">
-          <div class="ipt"><el-input suffix-icon="el-icon-search"></el-input></div>
+    <el-row class="concern">
+      <el-col :span="24">
+        <el-input placeholder="请输入内容" v-model="msg">
           <el-upload
+            slot="append"
             class="avatar-uploader"
             :show-file-list="false"
             action="http://47.94.215.104:8080/OPOT1/servlet/pictureServlet"
             :on-change="handleChange"
             :before-upload="handleBefore"
             :auto-upload="false">
-            <div class="search btn_text"><i class="el-icon-edit"></i>选取图片</div>
+            <el-button icon="el-icon-picture" style="background-color: #fff" @click="ifVisible = false"></el-button>
           </el-upload>
+        </el-input>
+      </el-col>
+    </el-row>
+    <div class="main">
+      <div class="block" v-if="subject[0].que">
+        <div v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
+          <img :src="$store.state.cropImg" class="pre-img">
+          <ul>
+            <li class="ques">
+              <div class="up">
+                <span class="TH">原题：&nbsp;</span>
+                <span class="QUE">{{subject[0].que}}</span>
+              </div>
+              <div class="low">
+                <div @click="showJX(0)"><i class="el-icon-document"></i>解析</div>
+                <div v-if="!($store.state.tests.indexOf(subject[0].id) + 1)"><el-button type="primary" size="mini" @click="addPaper(0)" icon="el-icon-plus" round>试题</el-button></div>
+                <div v-else><el-button @click="deletePaper(0)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
+              </div>
+            </li>
+          </ul>
+          <ul v-for="index in 5" :key="index">
+            <li class="ques">
+              <div class="up">
+                <span class="TH">{{index + '.'}}&nbsp;</span>
+                <span class="QUE">{{subject[index].que}}</span>
+              </div>
+              <div class="low">
+                <div @click="showJX(index)"><i class="el-icon-document"></i>解析</div>
+                <div v-if="!($store.state.tests.indexOf(subject[index].id) + 1)"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus" round>试题</el-button></div>
+                <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
+      <answer></answer>
     </div>
+    <gotop></gotop>
   </div>
 </template>
 
 <script>
+  import gotop from '../common/gotop.vue'
+  import mySpace from '../common/mySpace.vue'
   import VueCropper from 'vue-cropperjs'
   import myHead from '../common/header.vue'
   import myFoot from '../common/footer.vue'
@@ -100,13 +83,15 @@
       VueCropper,
       myHead,
       answer,
-      myFoot
+      myFoot,
+      mySpace,
+      gotop
     },
     data () {
       return {
+        msg: '',
         ifVisible: false,
         imageSrc: '',
-        cropImg: '',
         visible: false,
         subject: [{
           que: ''
@@ -117,18 +102,7 @@
           {name: '填空题', value: 0},
           {name: '解答题', value: 0}
         ],
-        loading: false,
-        data2: [
-          {name: '短袖', value: 1200},
-          {name: '休闲裤', value: 1222},
-          {name: '连衣裙', value: 1283}
-        ],
-        options2: {
-          title: '某商店各商品年度销量',
-          bgColor: '#fff',
-          titleColor: '#fff',
-          legendColor: '#fff'
-        }
+        loading: false
       }
     },
     methods: {
@@ -144,11 +118,11 @@
         }
       },
       cropImage () {
-        this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL()
+        this.$store.state.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL()
       },
       cancelCrop () {
         this.visible = false
-        this.cropImg = sessionStorage.getItem('defaultSrc')
+        this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       },
       handleBefore (file) {
         /*  const self = this
@@ -171,7 +145,7 @@
       sureCrop () {
         this.loading = true
         this.visible = false
-        const page = this.cropImg
+        const page = this.$store.state.cropImg
         let arr = page.split(',')
         let mime = arr[0].match(/:(.*?);/)[1]
         let bstr = atob(arr[1])
@@ -186,7 +160,7 @@
         this.$http.post('http://47.94.215.104:8080/OPOT1/servlet/pictureServlet', fd, {emulateJSON: true}).then((response) => {
           this.loading = false
           this.$message.success('推荐成功')
-          sessionStorage.setItem('defaultSrc', this.cropImg)
+          sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
           /* for (let i in response.data) {
             console.log(response.data[i])
           } */
@@ -194,7 +168,7 @@
           this.subject = JSON.parse(sessionStorage.subj)
         }, (response) => {
           this.loading = false
-          this.cropImg = sessionStorage.getItem('defaultSrc')
+          this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
           this.$message.error('请求服务端失败')
           console.log('上传失败')
         })
@@ -277,7 +251,7 @@
       }
     },
     created () {
-      this.cropImg = sessionStorage.getItem('defaultSrc')
+      this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       if (sessionStorage.getItem('subj')) { this.subject = JSON.parse(sessionStorage.getItem('subj')) }
       if (localStorage.getItem('xz')) { this.$store.state.XZ = JSON.parse(localStorage.getItem('xz')) }
       if (localStorage.getItem('tk')) { this.$store.state.TK = JSON.parse(localStorage.getItem('tk')) }
@@ -299,35 +273,7 @@
   .main{
     width: 100%;
     position: relative;
-  }
-  .concern{
-    width: 45%;
-    position: absolute;
-    top: 50%;
-    left: 27.5%;
-    padding-top: 150px;
-  }
-  .btn {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-  }
-  .btn_text {
-    width: 120px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    border-radius: 5px;
-    font-size: 18px;
-    transition: 0.5s;
-  }
-  .btn_text:hover{
-    box-shadow: 0 10px 10px -3px #ccc;
-  }
-  .search{
-    border: 1px solid rgba(0, 0, 0, .5);
-    color: #000;
-    margin-left: 50px;
+    overflow: hidden;
   }
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
@@ -341,11 +287,18 @@
     max-height: 200px;
     border: 1px solid #eee;
     border-radius: 5px;
-    margin: 10px 2% 10px 2%;
+    margin-left: 50%;
+    transform: translateX(-50%);
   }
-  .btns {
-    width: 120px;
-    margin-top: 20px;
+  .concern{
+     width: 45%;
+     margin-left: 27.5%;
+   }
+  @media screen and (max-width: 500px) {
+    .concern {
+      width: 80%;
+      margin-left: 10%;
+    }
   }
   .block{
     width: 84%;
@@ -360,6 +313,7 @@
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px solid #DCDFE6;
+    overflow: hidden;
   }
   /* .ques:hover{
     display: inline-block;
@@ -367,7 +321,7 @@
   } */
   .up{
     line-height: 25px;
-    font-size: 14px;
+    font-size: 0.875rem;
     padding: 20px 20px 20px 20px;
   }
   .low{
@@ -382,13 +336,13 @@
     padding: 0 20px;
     color: #666666;
     border-radius: 0 0 10px 10px;
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
   .low div{
     margin-left: 15px;
     cursor: pointer;
   }
   .TH{
-    font-size: 16px;
+    font-size: 1rem;
   }
 </style>
