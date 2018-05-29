@@ -134,11 +134,13 @@
         </div>
       </div>
     </div>
+    <gotop></gotop>
     <myFoot style="position: relative; bottom: 0"></myFoot>
   </div>
 </template>
 
 <script>
+  import gotop from '../common/gotop.vue'
   import $ from 'jquery'
   import mySpace from '../common/mySpace.vue'
   import myHead from '../common/header.vue'
@@ -190,7 +192,8 @@
       ElButton,
       myHead,
       draggable,
-      myFoot
+      myFoot,
+      gotop
     },
     methods: {
       sureName () {

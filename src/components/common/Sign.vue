@@ -55,7 +55,7 @@
   export default {
     data () {
       return {
-        msg: 'Welcome to Your Vue.js App',
+        msg: '',
         ifVisible: false,
         visible: false,
         imageSrc: ''

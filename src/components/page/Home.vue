@@ -16,6 +16,9 @@
         <el-button type="primary" @click="sureCrop">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog :visible.sync="imgVisible" width="96%">
+      <img width="100%" :src="$store.state.cropImg">
+    </el-dialog>
     <el-row class="concern">
       <el-col :span="24">
         <el-input placeholder="请输入内容" v-model="msg">
@@ -35,7 +38,7 @@
     <div class="main">
       <div class="block" v-if="subject[0].que">
         <div v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
-          <img :src="$store.state.cropImg" class="pre-img">
+          <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
           <ul>
             <li class="ques">
               <div class="up">
@@ -90,6 +93,7 @@
     data () {
       return {
         msg: '',
+        imgVisible: false,
         ifVisible: false,
         imageSrc: '',
         visible: false,
