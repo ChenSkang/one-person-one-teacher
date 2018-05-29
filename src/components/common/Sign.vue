@@ -15,7 +15,7 @@
       </span>
     </el-dialog>
     <el-container>
-      <el-header height="100px">
+      <el-header height="20vh">
         <mySpace></mySpace>
       </el-header>
       <el-main class="main">
@@ -119,7 +119,6 @@
   .main{
     width: 100%;
     text-align: center;
-    padding-top: 10%;
   }
   .concern{
     width: 45%;

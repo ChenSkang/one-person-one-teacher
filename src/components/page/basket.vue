@@ -1,10 +1,25 @@
 <template>
-  <div>
+  <div style="overflow: hidden">
     <my-head></my-head>
     <mySpace></mySpace>
+    <el-dialog
+      title="提示"
+      :visible.sync="deleteall"
+      width="30vmax">
+      <span>清空后不可恢复，确认清空？</span>
+      <span slot="footer" class="dialog-footer">
+              <el-button @click="deleteall = false" size="small">取 消</el-button>
+              <el-button type="primary" @click="deleteAll()" size="small">确 定</el-button>
+            </span>
+    </el-dialog>
     <div class="main">
-      <el-container style="width: 84%; margin-left: 8%">
-        <el-main><div class="exam" id="pdfDom">
+      <el-row class="tops">
+        <el-button type="primary" icon="el-icon-back" @click="run('/index')" circle></el-button>
+        <el-button type="primary" @click="getPdf()" icon="el-icon-download" circle></el-button>
+        <el-button type="primary" @click="deleteall = true" icon="el-icon-delete" circle></el-button>
+      </el-row>
+      <div class="concern">
+        <div class="exam" id="pdfDom">
           <div class="exam_left" v-if="showSets[2]" title="装订线">
             <img src="../../img/peal_line.png" alt="">
           </div>
@@ -87,8 +102,8 @@
               </div>
             </transition-group>
           </draggable>
-        </div></el-main>
-        <el-aside width="25%">
+        </div>
+        <div class="concern-right">
           <div class="right">
             <div class="right_up">
               <div class="set_title">文字提示</div>
@@ -114,25 +129,15 @@
               </div>
             </div>
           </div>
-          <el-dialog
-            title="提示"
-            :visible.sync="deleteall"
-            width="30%">
-            <span>清空后不可恢复，确认清空？</span>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="deleteall = false">取 消</el-button>
-              <el-button type="primary" @click="deleteAll()">确 定</el-button>
-            </span>
-          </el-dialog>
-        </el-aside>
-      </el-container>
+        </div>
+      </div>
     </div>
     <myFoot style="position: relative; bottom: 0"></myFoot>
   </div>
 </template>
 
 <script>
-  /* import $ from 'jquery' */
+  import $ from 'jquery'
   import mySpace from '../common/mySpace.vue'
   import myHead from '../common/header.vue'
   import draggable from 'vuedraggable'
@@ -277,6 +282,9 @@
           message: '清空试题篮成功',
           type: 'success'
         })
+      },
+      wordDown () {
+        $('#pdfDom').wordExport('hhh')
       }
       /*
       upLoad () {
@@ -311,12 +319,39 @@
     width: 100%;
     position: relative;
     background-color: #F2F6FC;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .concern{
+    width: 84%;
+    margin-left: 8%;
+    display: flex;
+    flex-direction: row
+  }
+  .tops{
+    display: none;
+  }
+  @media screen and (max-width: 1100px){
+    .concern-right{
+      display: none;
+    }
+    .tops{
+      display: block;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .exam{
+      width: 100%;
+      min-width: 300px;
+    }
+  }
+  .concern-right{
+    width: 25%;
   }
   .exam{
+    width: 915px;
     background-color: #fff;
     position: relative;
-    width: 915px;
-    min-width: 915px;
     padding: 40px 40px 40px 100px;
     min-height: 910px;
   }
@@ -325,7 +360,6 @@
     margin-left: 5%;
   }
   .right_up{
-    margin-top: 20px;
     width: 100%;
     text-align: center;
     background-color: #fff;
@@ -340,7 +374,7 @@
     width: 100%;
     height: 45px;
     line-height: 45px;
-    font-size: 15px;
+    font-size: 1rem;
     text-align: center;
     background-color: #EBEEF5;
     border-bottom: 1px solid #E4E7ED;
@@ -372,20 +406,20 @@
     border: 1px solid #fff;
   }
   .exam_name1{
-    font: 22px Arial bold;
+    font: 1.375rem Arial bold;
     line-height: 40px;
   }
   .exam_name2{
-    font: 18px Arial;
+    font: 1.125rem Arial;
     line-height: 1.5em;
   }
   .exam_name3{
-    font: 14px 微软雅黑;
+    font: 0.875rem 微软雅黑;
     height: 50px;
     line-height: 50px;
   }
   .exam_name4{
-    font: 14px 微软雅黑;
+    font: 0.875rem 微软雅黑;
     line-height: 1.5em;
   }
   .scores{
@@ -399,16 +433,16 @@
     width: 50px;
     height: 25px;
     text-align: center;
-    font-size: 12px;
+    font-size: 0.75rem;
   }
   .attentions{
     width: 100%;
     color: #999999;
-    font-size: 12px;
+    font-size: 0.75rem;
     margin-bottom: 5mm;
   }
   .attentions span{
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
   .attentions p{
     line-height: 20px;
@@ -432,7 +466,7 @@
   }
   .up{
     line-height: 25px;
-    font-size: 14px;
+    font-size: 0.875rem;
     padding: 20px 20px 10px 20px;
   }
   .low{
@@ -444,7 +478,7 @@
     line-height: 36px;
     padding: 0 20px;
     color: #fff;
-    font-size: 12px;
+    font-size: 0.75rem;
     border-radius: 0 0 10px 10px;
   }
   .low div{
@@ -452,7 +486,7 @@
     cursor: pointer;
   }
   .TH{
-    font-size: 16px;
+    font-size: 1rem;
   }
   .item-ul::-webkit-scrollbar{
     width: 0;
@@ -460,7 +494,7 @@
   .TM{
     font-family: 新宋体;
     font-weight: bold;
-    font-size: 17px;
+    font-size: 1.0625rem;
   }
   .btn {
     width: 120px;

@@ -106,9 +106,6 @@
       }
     },
     methods: {
-      run (name) {
-        this.$router.push(name)
-      },
       handleChange (files) {
         if (this.ifVisible === false) {
           this.ifVisible = true
@@ -170,7 +167,6 @@
           this.loading = false
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
           this.$message.error('请求服务端失败')
-          console.log('上传失败')
         })
       },
       showJX (x) {
