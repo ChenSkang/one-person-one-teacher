@@ -1,9 +1,9 @@
 /* FileSaver.js
  * A saveAs() FileSaver implementation.
- * 1.3.2
- * 2016-06-16 18:25:19
+ * 1.3.8
+ * 2018-03-22 14:03:47
  *
- * By Eli Grey, http://eligrey.com
+ * By Eli Grey, https://eligrey.com
  * License: MIT
  *   See https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md
  */
@@ -11,9 +11,9 @@
 /*global self */
 /*jslint bitwise: true, indent: 4, laxbreak: true, laxcomma: true, smarttabs: true, plusplus: true */
 
-/*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
+/*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/src/FileSaver.js */
 
-var saveAs = saveAs || (function(view) {
+export var saveAs = saveAs || (function(view) {
 	"use strict";
 	// IE <10 is explicitly unsupported
 	if (typeof view === "undefined" || typeof navigator !== "undefined" && /MSIE [1-9]\./.test(navigator.userAgent)) {
@@ -31,10 +31,11 @@ var saveAs = saveAs || (function(view) {
 			var event = new MouseEvent("click");
 			node.dispatchEvent(event);
 		}
-		, is_safari = /constructor/i.test(view.HTMLElement)
+		, is_safari = /constructor/i.test(view.HTMLElement) || view.safari
 		, is_chrome_ios =/CriOS\/[\d]+/.test(navigator.userAgent)
+		, setImmediate = view.setImmediate || view.setTimeout
 		, throw_outside = function(ex) {
-			(view.setImmediate || view.setTimeout)(function() {
+			setImmediate(function() {
 				throw ex;
 			}, 0);
 		}
@@ -119,19 +120,20 @@ var saveAs = saveAs || (function(view) {
 					filesaver.readyState = filesaver.DONE;
 					dispatch_all();
 					revoke(object_url);
-				};
+				}
+			;
 			filesaver.readyState = filesaver.INIT;
 
 			if (can_use_save_link) {
 				object_url = get_URL().createObjectURL(blob);
-				setTimeout(function() {
+				setImmediate(function() {
 					save_link.href = object_url;
 					save_link.download = name;
 					click(save_link);
 					dispatch_all();
 					revoke(object_url);
 					filesaver.readyState = filesaver.DONE;
-				});
+				}, 0);
 				return;
 			}
 
@@ -142,6 +144,7 @@ var saveAs = saveAs || (function(view) {
 			return new FileSaver(blob, name || blob.name || "download", no_auto_bom);
 		}
 	;
+
 	// IE 10+ (native saveAs)
 	if (typeof navigator !== "undefined" && navigator.msSaveOrOpenBlob) {
 		return function(blob, name, no_auto_bom) {
@@ -153,6 +156,9 @@ var saveAs = saveAs || (function(view) {
 			return navigator.msSaveOrOpenBlob(blob, name);
 		};
 	}
+
+	// todo: detect chrome extensions & packaged apps
+	//save_link.target = "_blank";
 
 	FS_proto.abort = function(){};
 	FS_proto.readyState = FS_proto.INIT = 0;
@@ -172,16 +178,5 @@ var saveAs = saveAs || (function(view) {
 }(
 	   typeof self !== "undefined" && self
 	|| typeof window !== "undefined" && window
-	|| this.content
+	|| this
 ));
-// `self` is undefined in Firefox for Android content script context
-// while `this` is nsIContentFrameMessageManager
-// with an attribute `content` that corresponds to the window
-
-if (typeof module !== "undefined" && module.exports) {
-  module.exports.saveAs = saveAs;
-} else if ((typeof define !== "undefined" && define !== null) && (define.amd !== null)) {
-  define([], function() {
-    return saveAs;
-  });
-}
