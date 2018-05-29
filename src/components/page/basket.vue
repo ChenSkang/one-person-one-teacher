@@ -20,36 +20,38 @@
       </el-row>
       <div class="concern">
         <div class="exam" id="pdfDom">
-          <div class="exam_left" v-if="showSets[2]" title="装订线">
-            <img src="../../img/peal_line.png" alt="">
-          </div>
-          <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName" @change="sureName()"></div>
-          <div v-if="showSets[0]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
-          <div v-if="showSets[1]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
-          <div v-if="showSet[1]" title="点击设置考生信息"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
-          <div class="scores" v-if="showSet[2]" title="打分栏">
-            <table border="1" cellspacing="0" cellpadding="0" align="center">
-              <tr>
-                <td>题号</td>
-                <td>一</td>
-                <td>二</td>
-                <td>三</td>
-                <td>总分</td>
-              </tr>
-              <tr>
-                <td>得分</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            </table>
-          </div>
-          <div class="attentions" v-if="showSet[3]" title="注意事项">
-            <span>注意事项：</span>
-            <p v-for="(attention, index) in attentions" :key="index">
-              {{index + 1 + '.'+ '&nbsp;' + attention}}
-            </p>
+          <div class="exam_something">
+            <div class="exam_left" v-if="showSets[2]" title="装订线">
+              <img src="../../img/peal_line.png" alt="">
+            </div>
+            <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName" @change="sureName()"></div>
+            <div v-if="showSets[0]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
+            <div v-if="showSets[1]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
+            <div v-if="showSet[1]" title="点击设置考生信息"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
+            <div class="scores" v-if="showSet[2]" title="打分栏">
+              <table border="1" cellspacing="0" cellpadding="0" align="center">
+                <tr>
+                  <td>题号</td>
+                  <td>一</td>
+                  <td>二</td>
+                  <td>三</td>
+                  <td>总分</td>
+                </tr>
+                <tr>
+                  <td>得分</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </table>
+            </div>
+            <div class="attentions" v-if="showSet[3]" title="注意事项">
+              <span>注意事项：</span>
+              <p v-for="(attention, index) in attentions" :key="index">
+                {{index + 1 + '.'+ '&nbsp;' + attention}}
+              </p>
+            </div>
           </div>
 
           <div v-if="$store.state.XZ.length" class="TM">一.选择题（共{{$store.state.XZ.length}}小题）</div>
@@ -347,6 +349,14 @@
   }
   .concern-right{
     width: 25%;
+  }
+  @media screen and (max-width: 800px){
+    .exam_something{
+      display: none;
+    }
+    .exam{
+      padding: 40px 10px 40px 10px !important;
+    }
   }
   .exam{
     width: 915px;
