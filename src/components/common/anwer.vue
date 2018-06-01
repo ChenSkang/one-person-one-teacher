@@ -2,10 +2,10 @@
   <div>
     <el-dialog title="试题解析" :visible.sync="IFJX" width="70%">
       <div class="ST TI">{{myTest[0].que}}</div>
-      <div class="KD TI">【考点】{{myTest[0].kddp}}</div>
-      <div class="ZSD TI">【知识点】{{myTest[0].zsd}}</div>
+      <div class="ZSD TI">【考点】{{myTest[0].zsd}}</div>
       <div class="JX TI">【解析】{{myTest[0].jx}}</div>
       <div class="JX TI">【解答】{{myTest[0].answer}}</div>
+      <div class="KD TI">【点评】{{myTest[0].kddp}}</div>
     </el-dialog>
   </div>
 </template>

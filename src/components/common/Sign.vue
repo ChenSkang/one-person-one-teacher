@@ -28,8 +28,10 @@
         </el-row>
         <el-row class="concern">
           <el-col :span="24">
-            <el-input placeholder="请输入内容" v-model="msg">
+            <el-input v-model="msg" v-on:keyup.enter="searchMsg()">
+              <el-button @click="searchMsg()" slot="append" v-if="msg">搜索</el-button>
               <el-upload
+                v-else
                 slot="append"
                 class="avatar-uploader"
                 :show-file-list="false"
@@ -100,6 +102,17 @@
           this.$router.push('/index')
         }, (response) => {
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
+          this.$message.error('请求服务端失败')
+        })
+      },
+      searchMsg () {
+        const str = this.msg
+        this.$http.post('http://47.94.215.104:8080/OPOT1/servlet/wordServlet', str, {emulateJSON: true}).then((response) => {
+          this.$message.success('推荐成功')
+          sessionStorage.setItem('subj', JSON.stringify(response.data))
+          console.log(response.data)
+          this.$router.push('/index')
+        }, (response) => {
           this.$message.error('请求服务端失败')
         })
       }

@@ -118,12 +118,12 @@
               <div class="set_exam">
                 <el-row>
                   <el-col :span="12">
-                    <div v-for="(city, index) in cities">
+                    <div v-for="(city, index) in cities" :key="city">
                       <el-checkbox  v-model="showSet[index]" :key="city">{{city}}</el-checkbox>
                     </div>
                   </el-col>
                   <el-col :span="12">
-                    <div v-for="(mation, index) in mations">
+                    <div v-for="(mation, index) in mations" :key="mation">
                       <el-checkbox  v-model="showSets[index]" :key="mation">{{mation}}</el-checkbox>
                     </div>
                   </el-col>

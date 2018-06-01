@@ -21,8 +21,10 @@
     </el-dialog>
     <el-row class="concern">
       <el-col :span="24">
-        <el-input placeholder="请输入内容" v-model="msg">
+        <el-input v-model="msg" v-on:keyup.enter="searchMsg()">
+          <el-button @click="searchMsg()" slot="append" v-if="msg">搜索</el-button>
           <el-upload
+            v-else
             slot="append"
             class="avatar-uploader"
             :show-file-list="false"
@@ -35,8 +37,9 @@
         </el-input>
       </el-col>
     </el-row>
-    <div class="main">
-      <div class="block" v-if="subject[0].que">
+    <span>{{abc}}</span>
+    <div class="main" v-if="subject[0].que">
+      <div class="block">
         <div v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
           <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
           <ul>
@@ -92,6 +95,7 @@
     },
     data () {
       return {
+        abc: '（2016•宁德）解不等式\\(\\frac{x}{2}\\)﹣1≤\\(\\left( {\\frac{{70 - x}}{3}} \\right)\\)，并把解集在数轴上表示出来．',
         msg: '',
         imgVisible: false,
         ifVisible: false,
@@ -170,6 +174,22 @@
         }, (response) => {
           this.loading = false
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
+          this.$message.error('请求服务端失败')
+        })
+      },
+      searchMsg () {
+        this.loading = true
+        const str = this.msg
+        this.$http.post('http://47.94.215.104:8080/OPOT1/servlet/wordServlet', str, {emulateJSON: true}).then((response) => {
+          this.$store.state.cropImg = ''
+          sessionStorage.setItem('defaultSrc', '')
+          this.loading = false
+          this.$message.success('推荐成功')
+          sessionStorage.setItem('subj', JSON.stringify(response.data))
+          console.log(response.data)
+          this.subject = JSON.parse(sessionStorage.subj)
+        }, (response) => {
+          this.loading = false
           this.$message.error('请求服务端失败')
         })
       },
