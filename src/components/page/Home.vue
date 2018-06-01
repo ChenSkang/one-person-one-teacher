@@ -37,7 +37,6 @@
         </el-input>
       </el-col>
     </el-row>
-    <span>{{abc}}</span>
     <div class="main" v-if="subject[0].que">
       <div class="block">
         <div v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
@@ -95,7 +94,6 @@
     },
     data () {
       return {
-        abc: '（2016•宁德）解不等式\\(\\frac{x}{2}\\)﹣1≤\\(\\left( {\\frac{{70 - x}}{3}} \\right)\\)，并把解集在数轴上表示出来．',
         msg: '',
         imgVisible: false,
         ifVisible: false,

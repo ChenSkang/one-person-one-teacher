@@ -347,7 +347,6 @@
     }
     .exam{
       width: 100%;
-      min-width: 300px;
     }
   }
   .concern-right{
