@@ -10,7 +10,7 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    app: ['babel-polyfill', './src/main.js']
+    app: ['event-source-polyfill', 'babel-polyfill', './src/main.js']
   },
   output: {
     path: config.build.assetsRoot,
@@ -72,12 +72,5 @@ module.exports = {
         }
       }
     ]
-  },
-  plugins: [
-    new webpack.optimize.CommonsChunkPlugin('common.js'),
-    new webpack.ProvidePlugin({
-      jQuery: "jquery",
-      $: "jquery"
-    })
-  ]
+  }
 }

@@ -56,19 +56,4 @@
   .logo > span {
     color: #DD356E;
   }
-  /*
-  .menu{
-    position: absolute;
-    right: 12%;
-    color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    flex-direction: row;
-  }
-  .el-menu-item{
-    font-size: 17px;
-  }
-  .el-menu--horizontal>.el-menu-item.is-active {
-    border-bottom: 2px solid #DD356E !important;
-    color: #303133;
-  } */
 </style>

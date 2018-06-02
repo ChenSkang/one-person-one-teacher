@@ -14,7 +14,7 @@
     </el-dialog>
     <div class="main">
       <el-row class="tops">
-        <el-button type="primary" icon="el-icon-back" @click="run('/index')" circle></el-button>
+        <el-button type="primary" icon="el-icon-back" @click="$router.push('/index')" circle></el-button>
         <el-button type="primary" @click="getPdf()" icon="el-icon-download" circle></el-button>
         <el-button type="primary" @click="deleteall = true" icon="el-icon-delete" circle></el-button>
       </el-row>
@@ -141,7 +141,6 @@
 
 <script>
   import gotop from '../common/gotop.vue'
-  import $ from 'jquery'
   import mySpace from '../common/mySpace.vue'
   import myHead from '../common/header.vue'
   import draggable from 'vuedraggable'
@@ -287,14 +286,7 @@
           message: '清空试题篮成功',
           type: 'success'
         })
-      },
-      wordDown () {
-        $('#pdfDom').wordExport('hhh')
       }
-      /*
-      upLoad () {
-        $('#exam').wordExport($('#leader_name').text() + '试卷')
-      } */
     },
     created () {
       bus.$on('STL', (str, kind) => {
