@@ -4,8 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
     <title>opot</title>
-    <script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="dns-prefetch" href="//cdn.bootcss.com" />
+    <style>
+      .MathJax{outline:0;}
+      html { font-size:16px; }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
         showProcessingMessages: false, //关闭js加载过程信息
@@ -25,13 +33,6 @@
        })
       MathJax.Hub.Queue(["Typeset",MathJax.Hub])
     </script>
-  </head>
-  <style>
-    .MathJax{outline:0;}
-    html { font-size:16px; }
-  </style>
-  <body>
-    <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
 </html>

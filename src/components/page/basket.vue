@@ -274,7 +274,8 @@
       },
       deleteAll () {
         this.deleteall = false
-        this.$store.state.tests = []
+        this.$store.state.tests = 'tests'
+        localStorage.setItem('tests', this.$store.state.tests)
         this.$store.state.TK = []
         localStorage.tk = ''
         this.$store.state.XZ = []

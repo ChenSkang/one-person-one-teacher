@@ -1,8 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Sign from '@/components/common/Sign'
-import Index from '@/components/page/Home'
-import Basket from '@/components/page/basket'
 
 Vue.use(Router)
 
@@ -11,17 +8,17 @@ export default new Router({
     {
       path: '/',
       name: 'Sign',
-      component: Sign
+      component: resolve => require(['@/components/common/Sign'], resolve)
     },
     {
       path: '/index',
       name: 'Index',
-      component: Index
+      component: resolve => require(['@/components/page/Home'], resolve)
     },
     {
       path: '/basket',
       name: 'Basket',
-      component: Basket
+      component: resolve => require(['@/components/page/basket'], resolve)
     }
   ]
 })
