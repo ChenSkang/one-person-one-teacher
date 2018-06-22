@@ -45,11 +45,11 @@
             <li class="ques">
               <div class="up">
                 <span class="TH">原题：&nbsp;</span>
-                <span class="QUE">{{subject[0].que}}</span>
+                <span class="QUE" v-html="subject[0].que"></span>
               </div>
               <div class="low">
                 <div @click="showJX(0)"><i class="el-icon-document"></i>解析</div>
-                <div v-if="!($store.state.tests.indexOf(subject[0].id) + 1)"><el-button type="primary" size="mini" @click="addPaper(0)" icon="el-icon-plus" round>试题</el-button></div>
+                <div v-if="!($store.state.tests.indexOf(subject[0].unique) + 1)"><el-button type="primary" size="mini" @click="addPaper(0)" icon="el-icon-plus" round>试题</el-button></div>
                 <div v-else><el-button @click="deletePaper(0)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
               </div>
             </li>
@@ -58,11 +58,11 @@
             <li class="ques">
               <div class="up">
                 <span class="TH">{{index + '.'}}&nbsp;</span>
-                <span class="QUE">{{subject[index].que}}</span>
+                <span class="QUE" v-html="subject[index].que"></span>
               </div>
               <div class="low">
                 <div @click="showJX(index)"><i class="el-icon-document"></i>解析</div>
-                <div v-if="!($store.state.tests.indexOf(subject[index].id) + 1)"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus" round>试题</el-button></div>
+                <div v-if="!($store.state.tests.indexOf(subject[index].unique) + 1)"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus" round>试题</el-button></div>
                 <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
               </div>
             </li>
@@ -160,15 +160,20 @@
         const obj = new Blob([u8arr], {type: mime})
         const fd = new FormData()
         fd.append('upfile', obj, 'image.png')
-        this.$http.post('http://47.94.215.104:8080/OPOT1/servlet/pictureServlet', fd, {emulateJSON: true}).then((response) => {
+        let url = this.$store.state.urls.url + 'pictureServlet'
+        this.$axios.post(url, fd, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
           this.loading = false
+          this.subject = ''
           this.$message.success('推荐成功')
           sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
-          /* for (let i in response.data) {
-            console.log(response.data[i])
-          } */
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           this.subject = JSON.parse(sessionStorage.subj)
+          console.log(response.data)
         }, (response) => {
           this.loading = false
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
@@ -178,7 +183,13 @@
       searchMsg () {
         this.loading = true
         const str = this.msg
-        this.$http.post('http://47.94.215.104:8080/OPOT1/servlet/wordServlet', str, {emulateJSON: true}).then((response) => {
+        let url = this.$store.state.urls.url + 'wordServlet'
+        this.$axios.post(url, str, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
           this.$store.state.cropImg = ''
           sessionStorage.setItem('defaultSrc', '')
           this.loading = false
@@ -202,7 +213,7 @@
       addPaper (x) {
         let str = this.subject[x].que
         let kind = this.subject[x].kind
-        let ida = this.subject[x].id
+        let ida = this.subject[x].unique
         switch (kind) {
           case '选择题':
             if (localStorage.xz) {
@@ -233,7 +244,7 @@
       },
       deletePaper (x) {
         let kind = this.subject[x].kind
-        let ida = this.subject[x].id
+        let ida = this.subject[x].unique
         switch (kind) {
           case '选择题':
             for (let i = 0; i < this.$store.state.XZ.length; i++) {
@@ -331,7 +342,7 @@
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px solid #DCDFE6;
-    overflow: hidden;
+    word-wrap: break-word;
   }
   /* .ques:hover{
     display: inline-block;

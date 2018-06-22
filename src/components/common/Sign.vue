@@ -1,6 +1,7 @@
 <template>
   <div>
     <register></register>
+    <signin></signin>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="80%" :show-close="false">
       <vue-cropper ref='cropper'
                    :src="imageSrc"
@@ -56,6 +57,9 @@
   import ElRow from 'element-ui/packages/row/src/row'
   import ElCol from 'element-ui/packages/col/src/col'
   import register from '../page/register.vue'
+  import signin from '../page/signin.vue'
+  import MathJax from 'mathjax'
+
   export default {
     data () {
       return {
@@ -97,23 +101,36 @@
         const obj = new Blob([u8arr], {type: mime})
         const fd = new FormData()
         fd.append('upfile', obj, 'image.png')
-        this.$http.post('http://47.94.215.104:8080/OPOT1/servlet/pictureServlet', fd, {emulateJSON: true}).then((response) => {
+        let url = this.$store.state.urls.url + 'pictureServlet'
+        this.$axios.post(url, fd, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
           this.$message.success('推荐成功')
           sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           this.$router.push('/index')
-        }, (response) => {
+        }, (res) => {
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
           this.$message.error('请求服务端失败')
         })
       },
       searchMsg () {
         const str = this.msg
-        this.$http.post('http://47.94.215.104:8080/OPOT1/servlet/wordServlet', str, {emulateJSON: true}).then((response) => {
+        let url = this.$store.state.urls.url + 'wordServlet'
+        this.$axios.post(url, str, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
           this.$message.success('推荐成功')
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           console.log(response.data)
           this.$router.push('/index')
+          MathJax.Hub.Queue(['Typeset', MathJax.Hub])
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
@@ -124,7 +141,8 @@
       ElRow,
       mySpace,
       VueCropper,
-      register
+      register,
+      signin
     },
     created () {
     }

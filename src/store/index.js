@@ -5,8 +5,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 
+import urls from './server'
+
 export default new Vuex.Store({
   state: {
+    user: '游客',
     cropImg: '', // 裁切的图片
     tests: '', // test ID
     TK: [], // 试题篮填空题
@@ -14,5 +17,8 @@ export default new Vuex.Store({
     JD: [] // 试题篮解答题
   },
   mutations: {
+  },
+  modules: {
+    urls: urls
   }
 })

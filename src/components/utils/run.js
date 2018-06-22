@@ -8,7 +8,7 @@ export default{
         path,
         query: {
           t: +new Date()
-        }
+      }
       })
     }
   }

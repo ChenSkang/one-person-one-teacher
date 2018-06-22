@@ -19,6 +19,11 @@ export default new Router({
       path: '/basket',
       name: 'Basket',
       component: resolve => require(['@/components/page/basket'], resolve)
+    },
+    {
+      path: '/history',
+      name: 'History',
+      component: resolve => require(['@/components/page/history'], resolve)
     }
   ]
 })

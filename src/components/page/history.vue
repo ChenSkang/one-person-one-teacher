@@ -24,7 +24,7 @@
             <div class="exam_left" v-if="showSets[2]" title="装订线">
               <img src="../../img/peal_line.png" alt="">
             </div>
-            <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName" @change="sureName()"></div>
+            <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName"></div>
             <div v-if="showSets[0]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
             <div v-if="showSets[1]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
             <div v-if="showSet[1]" title="点击设置考生信息"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
@@ -55,55 +55,43 @@
           </div>
 
           <div v-if="$store.state.XZ.length" class="TM">一.选择题（共{{$store.state.XZ.length}}小题）</div>
-          <draggable v-model="$store.state.XZ" @end="endMove" :options="dragOption1">
-            <transition-group tag="div" class="item-ul">
-              <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
-                <div class="up">
-                  <span class="TH">{{index + 1}}</span>
-                  <span>{{$store.state.XZ[index].que}}</span>
-                </div>
-                <div class="low">
-                  <div @click="deleteX(index)">删除</div>
-                  <div @click="upX(index)">上移</div>
-                  <div @click="downX(index)">下移</div>
-                </div>
-              </div>
-            </transition-group>
-          </draggable>
+          <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
+            <div class="up">
+              <span class="TH">{{index + 1}}</span>
+              <span>{{$store.state.XZ[index].que}}</span>
+            </div>
+            <div class="low">
+              <div @click="deleteX(index)">删除</div>
+              <div @click="upX(index)">上移</div>
+              <div @click="downX(index)">下移</div>
+            </div>
+          </div>
 
           <div v-if="$store.state.TK.length" class="TM">{{$store.state.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.TK.length}}小题）</div>
-          <draggable v-model="$store.state.TK" @end="endMove" :options="dragOption2">
-            <transition-group tag="div" class="item-ul">
-              <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
-                <div class="up">
-                  <span class="TH">{{$store.state.XZ.length + index + 1}}</span>
-                  <span>{{$store.state.TK[index].que}}</span>
-                </div>
-                <div class="low">
-                  <div @click="deleteT(index)">删除</div>
-                  <div @click="upT(index)">上移</div>
-                  <div @click="downT(index)">下移</div>
-                </div>
-              </div>
-            </transition-group>
-          </draggable>
+          <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
+            <div class="up">
+              <span class="TH">{{$store.state.XZ.length + index + 1}}</span>
+              <span>{{$store.state.TK[index].que}}</span>
+            </div>
+            <div class="low">
+              <div @click="deleteT(index)">删除</div>
+              <div @click="upT(index)">上移</div>
+              <div @click="downT(index)">下移</div>
+            </div>
+          </div>
 
           <div v-if="$store.state.JD.length" class="TM">{{strjd}}.解答题（共{{$store.state.JD.length}}小题）</div>
-          <draggable v-model="$store.state.JD" @end="endMove" :options="dragOption3">
-            <transition-group tag="div" class="item-ul">
-              <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
-                <div class="up">
-                  <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}</span>
-                  <span>{{$store.state.JD[x].que}}</span>
-                </div>
-                <div class="low">
-                  <div @click="deleteJ(index)">删除</div>
-                  <div @click="upJ(index)">上移</div>
-                  <div @click="downJ(index)">下移</div>
-                </div>
-              </div>
-            </transition-group>
-          </draggable>
+          <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
+            <div class="up">
+              <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}</span>
+              <span>{{$store.state.JD[x].que}}</span>
+            </div>
+            <div class="low">
+              <div @click="deleteJ(index)">删除</div>
+              <div @click="upJ(index)">上移</div>
+              <div @click="downJ(index)">下移</div>
+            </div>
+          </div>
         </div>
         <div class="concern-right">
           <div class="right">
@@ -111,7 +99,7 @@
               <div class="set_title">文字提示</div>
               <div><el-button class="btn" @click="$router.push('/index')" icon="el-icon-back" type="primary">继续选题</el-button></div>
               <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
-              <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
+              <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">删除试题</el-button></div>
             </div>
             <div class="right_down">
               <div class="set_title">试卷信息</div>
@@ -143,7 +131,7 @@
   import gotop from '../common/gotop.vue'
   import mySpace from '../common/mySpace.vue'
   import myHead from '../common/header.vue'
-  import draggable from 'vuedraggable'
+  import bus from '../../bus'
   import myFoot from '../common/footer.vue'
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项']
@@ -189,88 +177,10 @@
       mySpace,
       ElButton,
       myHead,
-      draggable,
       myFoot,
       gotop
     },
     methods: {
-      sureName () {
-        localStorage.examname = this.examName
-      },
-      endMove () {
-        localStorage.xz = JSON.stringify(this.$store.state.XZ)
-        localStorage.tk = JSON.stringify(this.$store.state.TK)
-        localStorage.jd = JSON.stringify(this.$store.state.JD)
-      },
-      deleteT (x) {
-        localStorage.setItem('tests', this.$store.state.tests.replace(this.$store.state.TK[x].id, ''))
-        this.$store.state.tests = localStorage.getItem('tests')
-        console.log(this.$store.state.tests)
-        this.$store.state.TK.splice(x, 1)
-        localStorage.tk = JSON.stringify(this.$store.state.TK)
-      },
-      deleteJ (x) {
-        localStorage.setItem('tests', this.$store.state.tests.replace(this.$store.state.JD[x].id, ''))
-        this.$store.state.tests = localStorage.getItem('tests')
-        console.log(this.$store.state.tests)
-        this.$store.state.JD.splice(x, 1)
-        localStorage.jd = JSON.stringify(this.$store.state.JD)
-      },
-      deleteX (x) {
-        localStorage.setItem('tests', this.$store.state.tests.replace(this.$store.state.XZ[x].id, ''))
-        this.$store.state.tests = localStorage.getItem('tests')
-        console.log(this.$store.state.tests)
-        this.$store.state.XZ.splice(x, 1)
-        localStorage.xz = JSON.stringify(this.$store.state.XZ)
-      },
-      upT (x) {
-        if (x > 0) {
-          let temp = this.$store.state.TK[x]
-          this.$store.state.TK.splice(x, 1)
-          this.$store.state.TK.splice(x - 1, 0, temp)
-          localStorage.tk = JSON.stringify(this.$store.state.TK)
-        }
-      },
-      upX (x) {
-        if (x > 0) {
-          let temp = this.$store.state.XZ[x]
-          this.$store.state.XZ.splice(x, 1)
-          this.$store.state.XZ.splice(x - 1, 0, temp)
-          localStorage.xz = JSON.stringify(this.$store.state.XZ)
-        }
-      },
-      upJ (x) {
-        if (x > 0) {
-          let temp = this.$store.state.JD[x]
-          this.$store.state.JD.splice(x, 1)
-          this.$store.state.JD.splice(x - 1, 0, temp)
-          localStorage.jd = JSON.stringify(this.$store.state.JD)
-        }
-      },
-      downT (x) {
-        if (x < this.$store.state.TK.length) {
-          let temp = this.$store.state.TK[x]
-          this.$store.state.TK.splice(x, 1)
-          this.$store.state.TK.splice(x + 1, 0, temp)
-          localStorage.getItem('tk', JSON.stringify(this.$store.state.TK))
-        }
-      },
-      downX (x) {
-        if (x < this.$store.state.XZ.length) {
-          let temp = this.$store.state.XZ[x]
-          this.$store.state.XZ.splice(x, 1)
-          this.$store.state.XZ.splice(x + 1, 0, temp)
-          localStorage.getItem('xz', JSON.stringify(this.$store.state.XZ))
-        }
-      },
-      downJ (x) {
-        if (x < this.$store.state.JD.length) {
-          let temp = this.$store.state.JD[x]
-          this.$store.state.JD.splice(x, 1)
-          this.$store.state.JD.splice(x + 1, 0, temp)
-          localStorage.getItem('jd', JSON.stringify(this.$store.state.JD))
-        }
-      },
       deleteAll () {
         this.deleteall = false
         this.$store.state.tests = 'tests'
@@ -289,31 +199,12 @@
       }
     },
     created () {
+      bus.$on('STL', (str, kind) => {
+        console.log('123')
+      })
       if (localStorage.getItem('xz')) { this.$store.state.XZ = JSON.parse(localStorage.getItem('xz')) }
       if (localStorage.getItem('tk')) { this.$store.state.TK = JSON.parse(localStorage.getItem('tk')) }
       if (localStorage.getItem('jd')) { this.$store.state.JD = JSON.parse(localStorage.getItem('jd')) }
-      if (sessionStorage.getItem('sessionId')) {
-        let url = this.$store.state.urls.local + 'GetBasketServlet'
-        let userId = sessionStorage.getItem('userId')
-        let sessionId = sessionStorage.getItem('sessionId')
-        console.log(userId)
-        console.log(sessionId)
-        let formData = new FormData()
-        formData.append('userId', userId)
-        formData.append('sessionId', sessionId)
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          console.log(response)
-          console.log(userId)
-          console.log(sessionId)
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
-      }
     },
     computed: {
       strjd: function () {

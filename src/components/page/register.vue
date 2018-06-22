@@ -1,40 +1,29 @@
 <template>
   <div>
     <div>
-      <el-dialog :title="denglu ? msg : ms" :visible.sync="signShow" width="30%">
-        <el-form v-if="denglu" :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" class="demo-ruleForm">
-          <el-form-item prop="usr">
-            <el-input type="password" v-model="ruleForm2.usr" auto-complete="off" placeholder="手机/邮箱/用户名"></el-input>
+      <el-dialog :title="ms" :visible.sync="registerShow" width="30%" :modal="false">
+        <el-form :model="registerForm" status-icon :rules="registerRule" ref="registerForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="昵称" prop="user">
+            <el-input v-model="registerForm.user"></el-input>
           </el-form-item>
-          <el-form-item prop="pass">
-            <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="密码"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm2')">登录</el-button>
-            <el-button @click="resetForm('ruleForm2')">重置</el-button>
-          </el-form-item>
-          <hr>
-          <p>还没有账号，马上去<span class="to" @click="denglu = false">注册</span></p>
-        </el-form>
-        <el-form v-else :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
           <el-form-item label="用户名" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
+            <el-input v-model="registerForm.name"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="pass">
-            <el-input type="password" v-model="ruleForm.pass" auto-complete="off"></el-input>
+            <el-input type="password" v-model="registerForm.pass" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="确认密码" prop="checkPass">
-            <el-input type="password" v-model="ruleForm.checkPass" auto-complete="off"></el-input>
+          <el-form-item label="确认密码" prop="ifPass">
+            <el-input type="password" v-model="registerForm.ifPass" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item prop="tel" label="电话号码">
-            <el-input type="text" v-model.number="ruleForm.tel" ></el-input>
+            <el-input type="text" v-model.number="registerForm.tel" ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
-            <el-button @click="resetForm('ruleForm')">重置</el-button>
+            <el-button type="primary" @click="submitForm('registerForm')">注册</el-button>
+            <el-button @click="resetForm('registerForm')">重置</el-button>
           </el-form-item>
           <hr>
-          <p>已经有账号，马上去<span class="to" @click="denglu = true">登录</span></p>
+          <p>已经有账号，马上去<span class="to" @click="gosign()">登录</span></p>
         </el-form>
       </el-dialog>
     </div>
@@ -47,19 +36,19 @@
     data () {
       let validatePass = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请输入密码'))
+          return callback(new Error('请输入密码'))
         } else {
-          if (this.ruleForm.checkPass !== '') {
-            this.$refs.ruleForm.validateField('checkPass')
+          if (this.registerForm.ifPass !== '') {
+            this.$refs.registerForm.validateField('ifPass')
           }
           callback()
         }
       }
       let validatePass2 = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请再次输入密码'))
-        } else if (value !== this.ruleForm.pass) {
-          callback(new Error('两次输入密码不一致!'))
+          return callback(new Error('请再次输入密码'))
+        } else if (value !== this.registerForm.pass) {
+          return callback(new Error('两次输入密码不一致!'))
         } else {
           callback()
         }
@@ -76,41 +65,33 @@
         }
       }
       return {
-        denglu: true,
-        msg: '用户名密码登录',
         ms: '用户注册',
-        signShow: false,
-        ruleForm: {
-          pass: '',
-          checkPass: '',
-          name: '',
-          tel: ''
+        registerShow: false,
+        registerForm: {
+          user: '', // 昵称
+          pass: '', // 密码
+          ifPass: '', // 确认密码
+          name: '', // 用户名
+          tel: '' // 手机号
         },
-        ruleForm2: {
-          pass: '',
-          usr: ''
-        },
-        rules: {
-          pass: [
-            { validator: validatePass, required: true, trigger: 'blur' }
+        registerRule: {
+          user: [
+            { required: true, message: '请输入昵称', trigger: 'blur' },
+            { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
           ],
-          checkPass: [
-            { validator: validatePass2, required: true, trigger: 'blur' }
+          pass: [
+            { required: true, validator: validatePass, trigger: 'blur' },
+            { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
+          ],
+          ifPass: [
+            { required: true, validator: validatePass2, trigger: 'blur' }
           ],
           name: [
             { required: true, message: '请输入用户名', trigger: 'blur' },
-            { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+            { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
           ],
           tel: [
             { required: true, validator: telCheck, trigger: 'blur' }
-          ]
-        },
-        rules2: {
-          usr: [
-            {required: true, message: '请输入用户名', trigger: 'blur'}
-          ],
-          pass: [
-            {required: true, trigger: 'blur'}
           ]
         }
       }
@@ -119,9 +100,19 @@
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log('4654')
-            this.$http.post('http://10.14.4.133:8088/OPOT1/servlet/RegisterServlet', {usr: this.ruleForm.name, password: this.ruleForm.pass, phone: this.ruleForm.tel}, {emulateJSON: true}).then((response) => {
-              this.$message.success('推荐成功')
+            let formData = new FormData()
+            formData.append('name', this.registerForm.user)
+            formData.append('username', this.registerForm.name)
+            formData.append('pass', this.registerForm.pass)
+            formData.append('tel', this.registerForm.tel)
+            let url = this.$store.state.urls.local + 'RegisterServlet'
+            this.$axios.post(url, formData, {
+              headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+              },
+              withCredentials: true
+            }).then((response) => {
+              this.$message.success('注册成功')
             }, (response) => {
               this.$message.error('请求服务端失败')
             })
@@ -132,12 +123,15 @@
       },
       resetForm (formName) {
         this.$refs[formName].resetFields()
+      },
+      gosign () {
+        this.registerShow = false
+        bus.$emit('sign')
       }
     },
     mounted () {
-      bus.$on('sign', () => {
-        this.signShow = true
-        console.log('sdadsa')
+      bus.$on('register', () => {
+        this.registerShow = true
       })
     }
   }
