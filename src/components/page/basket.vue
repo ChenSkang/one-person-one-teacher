@@ -111,6 +111,7 @@
               <div class="set_title">文字提示</div>
               <div><el-button class="btn" @click="$router.push('/index')" icon="el-icon-back" type="primary">继续选题</el-button></div>
               <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
+              <div><el-button class="btn" @click="saveExam()" type="primary" icon="el-icon-download">保存试题</el-button></div>
               <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
             </div>
             <div class="right_down">
@@ -217,11 +218,27 @@
         localStorage.jd = JSON.stringify(this.$store.state.JD)
       },
       deleteX (x) {
-        localStorage.setItem('tests', this.$store.state.tests.replace(this.$store.state.XZ[x].id, ''))
+        /* localStorage.setItem('tests', this.$store.state.tests.replace(this.$store.state.XZ[x].id, ''))
         this.$store.state.tests = localStorage.getItem('tests')
         console.log(this.$store.state.tests)
-        this.$store.state.XZ.splice(x, 1)
-        localStorage.xz = JSON.stringify(this.$store.state.XZ)
+        localStorage.xz = JSON.stringify(this.$store.state.XZ) */
+        let sessionId = sessionStorage.getItem('sessionId')
+        let ida = this.$store.state.XZ[x].unique
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('uniqueId', ida)
+        let url = this.$store.state.urls.local + 'RemoveQueServlet'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$message.success('删除成功')
+          this.$store.state.XZ.splice(x, 1)
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
       },
       upT (x) {
         if (x > 0) {
@@ -271,6 +288,38 @@
           localStorage.getItem('jd', JSON.stringify(this.$store.state.JD))
         }
       },
+      saveExam () {
+        this.$prompt('请输入试题名字', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /\S/,
+          inputErrorMessage: '不能为空'
+        }).then(({ value }) => {
+          let sessionId = sessionStorage.getItem('sessionId')
+          let formData = new FormData()
+          formData.append('sessionId', sessionId)
+          formData.append('title', value)
+          let url = this.$store.state.urls.local + 'AddPaperServlet'
+          this.$axios.post(url, formData, {
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            withCredentials: true
+          }).then((response) => {
+            this.$message({
+              type: 'success',
+              message: '试卷 ' + value + ' 保存成功'
+            })
+          }, (response) => {
+            this.$message.error('请求服务端失败')
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          })
+        })
+      },
       deleteAll () {
         this.deleteall = false
         this.$store.state.tests = 'tests'
@@ -307,9 +356,11 @@
           },
           withCredentials: true
         }).then((response) => {
-          console.log(response)
-          console.log(userId)
-          console.log(sessionId)
+          console.log(response.data)
+          this.$store.state.XZ = []
+          for (let i = 0; i < response.data.length; i++) {
+            this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
+          }
         }, (response) => {
           this.$message.error('请求服务端失败')
         })

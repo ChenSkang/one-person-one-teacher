@@ -112,7 +112,18 @@
               },
               withCredentials: true
             }).then((response) => {
-              this.$message.success('注册成功')
+              switch (response.data.message) {
+                case '注册成功':
+                  this.$message.success('注册成功')
+                  this.registerShow = false
+                  break
+                case '该手机号已存在':
+                  this.$message.info('手机号已存在，请重新注册')
+                  break
+                default:
+                  this.$message.warning('未知错误')
+              }
+              console.log(response)
             }, (response) => {
               this.$message.error('请求服务端失败')
             })

@@ -54,11 +54,11 @@
             </div>
           </div>
 
-          <div v-if="$store.state.XZ.length" class="TM">一.选择题（共{{$store.state.XZ.length}}小题）</div>
-          <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
+          <div v-if="XZ.length" class="TM">一.选择题（共{{XZ.length}}小题）</div>
+          <div v-for="(value, index) in XZ" class="ques" :key="index">
             <div class="up">
               <span class="TH">{{index + 1}}</span>
-              <span>{{$store.state.XZ[index].que}}</span>
+              <span>{{XZ[index].que}}</span>
             </div>
             <div class="low">
               <div @click="deleteX(index)">删除</div>
@@ -152,24 +152,7 @@
           '答题前填写好自己的姓名、班级、学号',
           '请将答案填写到答题卡上面'
         ],
-        dragOption1: {
-          animation: 120,
-          scroll: true,
-          group: 'sortlist1',
-          ghostClass: 'ghost-style'
-        },
-        dragOption2: {
-          animation: 120,
-          scroll: true,
-          group: 'sortlist2',
-          ghostClass: 'ghost-style'
-        },
-        dragOption3: {
-          animation: 120,
-          scroll: true,
-          group: 'sortlist3',
-          ghostClass: 'ghost-style'
-        },
+        XZ: [],
         htmlTitle: 'test'
       }
     },
@@ -198,13 +181,19 @@
         })
       }
     },
-    created () {
-      bus.$on('STL', (str, kind) => {
-        console.log('123')
+    mounted () {
+      bus.$on('exams', (arr) => {
+        console.log('dasda')
+        console.log(arr[0].que)
+        this.XZ = []
+        for (let i = 0; i < arr.length; i++) {
+          this.XZ.push({que: arr[i].que, unique: arr[i].unique})
+        }
+        console.log(this.XZ)
+        this.$router.push('/history')
       })
-      if (localStorage.getItem('xz')) { this.$store.state.XZ = JSON.parse(localStorage.getItem('xz')) }
-      if (localStorage.getItem('tk')) { this.$store.state.TK = JSON.parse(localStorage.getItem('tk')) }
-      if (localStorage.getItem('jd')) { this.$store.state.JD = JSON.parse(localStorage.getItem('jd')) }
+    },
+    created () {
     },
     computed: {
       strjd: function () {

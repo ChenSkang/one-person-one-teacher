@@ -1,5 +1,6 @@
 <template>
   <div>
+    <mySpace></mySpace>
     <register></register>
     <signin></signin>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="80%" :show-close="false">
@@ -18,7 +19,6 @@
     </el-dialog>
     <el-container>
       <el-header height="20vh">
-        <mySpace></mySpace>
       </el-header>
       <el-main class="main">
         <el-row class="concern">
@@ -58,7 +58,6 @@
   import ElCol from 'element-ui/packages/col/src/col'
   import register from '../page/register.vue'
   import signin from '../page/signin.vue'
-  import MathJax from 'mathjax'
 
   export default {
     data () {
@@ -101,7 +100,7 @@
         const obj = new Blob([u8arr], {type: mime})
         const fd = new FormData()
         fd.append('upfile', obj, 'image.png')
-        let url = this.$store.state.urls.url + 'pictureServlet'
+        let url = this.$store.state.urls.local + 'pictureServlet'
         this.$axios.post(url, fd, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -130,7 +129,6 @@
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           console.log(response.data)
           this.$router.push('/index')
-          MathJax.Hub.Queue(['Typeset', MathJax.Hub])
         }, (response) => {
           this.$message.error('请求服务端失败')
         })

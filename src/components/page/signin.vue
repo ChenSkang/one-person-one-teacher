@@ -57,12 +57,6 @@
             let name = this.signForm.usr
             // 保存的密码
             let pass = this.signForm.pass
-            if (this.checked === true) {
-              // 传入账号名，密码，和保存天数3个参数
-              this.setCookie(name, pass, 7)
-            } else {
-              this.clearCookie()
-            }
             let formData = new FormData()
             formData.append('tel', this.signForm.usr)
             formData.append('pass', this.signForm.pass)
@@ -79,13 +73,23 @@
                 sessionStorage.setItem('sessionId', response.data.sessionId)
                 sessionStorage.setItem('nowUser', response.data.u.name)
                 sessionStorage.setItem('userId', response.data.u.id)
+                this.$store.state.userNow = response.data.u.name
+                if (this.checked === true) {
+                  // 传入账号名，密码，和保存天数3个参数
+                  this.setCookie(name, pass, 7)
+                } else {
+                  this.clearCookie()
+                }
+                this.$message.success('登录成功')
+                this.signShow = false
+                this.resetForm('signForm')
               } else {
                 this.$alert('账户名或密码错误', '提示', {
                   confirmButtonText: '确定',
                   callback: action => {
                     this.$message({
                       type: 'info',
-                      message: `action: ${action}`
+                      message: '账户名或密码错误'
                     })
                   }
                 })

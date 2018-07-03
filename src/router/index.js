@@ -24,6 +24,11 @@ export default new Router({
       path: '/history',
       name: 'History',
       component: resolve => require(['@/components/page/history'], resolve)
+    },
+    {
+      path: '/myexam',
+      name: 'MyExam',
+      component: resolve => require(['@/components/page/myexam'], resolve)
     }
   ]
 })

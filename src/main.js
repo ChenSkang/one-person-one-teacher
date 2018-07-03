@@ -29,7 +29,6 @@ new Vue({
   store: store,
   template: '<App/>',
   components: { App },
-  create: init
 })
 
 function init () {

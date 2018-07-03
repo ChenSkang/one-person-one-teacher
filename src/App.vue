@@ -1,10 +1,13 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
+  import 'babel-polyfill'
   export default {
     name: 'app',
     data () {
@@ -14,6 +17,12 @@
     watch: {
     },
     methods: {
+    },
+    mounted () {
+      if (sessionStorage.getItem('sessionId')) {
+        this.$store.state.userNow = sessionStorage.getItem('nowUser')
+        console.log(sessionStorage.getItem('sessionId'))
+      }
     }
   }
 </script>

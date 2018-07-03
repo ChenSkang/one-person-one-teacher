@@ -37,7 +37,7 @@
         </el-input>
       </el-col>
     </el-row>
-    <div class="main" v-if="subject[0].que">
+    <div id="main" v-if="subject[0].que">
       <div class="block">
         <div v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
           <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
@@ -160,7 +160,7 @@
         const obj = new Blob([u8arr], {type: mime})
         const fd = new FormData()
         fd.append('upfile', obj, 'image.png')
-        let url = this.$store.state.urls.url + 'pictureServlet'
+        let url = this.$store.state.urls.local + 'pictureServlet'
         this.$axios.post(url, fd, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -173,6 +173,10 @@
           sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           this.subject = JSON.parse(sessionStorage.subj)
+          let mathId = document.getElementById('main')
+          if (window.MathJax) {
+            window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, mathId])
+          }
           console.log(response.data)
         }, (response) => {
           this.loading = false
@@ -211,10 +215,27 @@
         bus.$emit('JX', que, kddp, zsd, answer, jx)
       },
       addPaper (x) {
-        let str = this.subject[x].que
-        let kind = this.subject[x].kind
+        /* let str = this.subject[x].que
+        let kind = this.subject[x].kind */
+        let userId = sessionStorage.getItem('userId')
+        let sessionId = sessionStorage.getItem('sessionId')
         let ida = this.subject[x].unique
-        switch (kind) {
+        let formData = new FormData()
+        formData.append('userId', userId)
+        formData.append('sessionId', sessionId)
+        formData.append('unique', ida)
+        let url = this.$store.state.urls.local + 'AddQueServlet'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$message.success('试题添加成功')
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+        /* switch (kind) {
           case '选择题':
             if (localStorage.xz) {
               this.$store.state.XZ = JSON.parse(localStorage.xz)
@@ -240,7 +261,7 @@
         this.$message.success('添加试题篮成功')
         localStorage.setItem('tests', this.$store.state.tests.concat(ida))
         this.$store.state.tests = localStorage.getItem('tests')
-        console.log(this.$store.state.tests)
+        console.log(this.$store.state.tests) */
       },
       deletePaper (x) {
         let kind = this.subject[x].kind
@@ -277,18 +298,43 @@
         localStorage.setItem('tests', this.$store.state.tests.replace(ida, ''))
         this.$store.state.tests = localStorage.getItem('tests')
         console.log(this.$store.state.tests)
+      },
+      clear: function () {
+        window.MathJax.Hub.Config({
+          showProcessingMessages: false,
+          messageStyle: 'none',
+          extensions: ['tex2jax.js'],
+          jax: ['input/TeX', 'output/HTML-CSS'],
+          tex2jax: {
+            inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+            displayMath: [ ['$$', '$$'], ['\\[', '\\]'] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a'],
+            ignoreClass: 'comment-content'
+          },
+          'HTML-CSS': {
+            linebreaks: {automatic: true, width: 'container'},
+            availableFonts: ['STIX', 'TeX'],
+            showMathMenu: false
+          }
+        })
+        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
+        console.log(window.MathJax)
       }
     },
     created () {
       this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       if (sessionStorage.getItem('subj')) { this.subject = JSON.parse(sessionStorage.getItem('subj')) }
-      if (localStorage.getItem('xz')) { this.$store.state.XZ = JSON.parse(localStorage.getItem('xz')) }
+      /* if (localStorage.getItem('xz')) { this.$store.state.XZ = JSON.parse(localStorage.getItem('xz')) }
       if (localStorage.getItem('tk')) { this.$store.state.TK = JSON.parse(localStorage.getItem('tk')) }
-      if (localStorage.getItem('jd')) { this.$store.state.JD = JSON.parse(localStorage.getItem('jd')) }
+      if (localStorage.getItem('jd')) { this.$store.state.JD = JSON.parse(localStorage.getItem('jd')) } */
       if (localStorage.getItem('tests')) {
         this.$store.state.tests = localStorage.getItem('tests')
       } else {
         localStorage.setItem('tests', 'tests')
+      }
+      if (window.MathJax) {
+        let mathId = document.getElementById('main')
+        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, mathId])
       }
     },
     mounted () {
@@ -299,7 +345,7 @@
 </script>
 
 <style scoped>
-  .main{
+  #main{
     width: 100%;
     position: relative;
     overflow: hidden;

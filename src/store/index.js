@@ -9,7 +9,7 @@ import urls from './server'
 
 export default new Vuex.Store({
   state: {
-    user: '游客',
+    userNow: '',
     cropImg: '', // 裁切的图片
     tests: '', // test ID
     TK: [], // 试题篮填空题
