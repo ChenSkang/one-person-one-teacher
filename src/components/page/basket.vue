@@ -199,29 +199,72 @@
         localStorage.examname = this.examName
       },
       endMove () {
-        localStorage.xz = JSON.stringify(this.$store.state.XZ)
-        localStorage.tk = JSON.stringify(this.$store.state.TK)
-        localStorage.jd = JSON.stringify(this.$store.state.JD)
+        let arr = []
+        for (let i = 0; i < this.$store.state.XZ.length; i++) {
+          arr.push(this.$store.state.XZ[i].unique)
+        }
+        for (let i = 0; i < this.$store.state.TK.length; i++) {
+          arr.push(this.$store.state.TK[i].unique)
+        }
+        for (let i = 0; i < this.$store.state.JD.length; i++) {
+          arr.push(this.$store.state.JD[i].unique)
+        }
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('questions', arr)
+        let url = this.$store.state.urls.local + 'MoveBasketServlet'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$message.success('移动成功')
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+        console.log(arr)
       },
       deleteT (x) {
-        localStorage.setItem('tests', this.$store.state.tests.replace(this.$store.state.TK[x].id, ''))
-        this.$store.state.tests = localStorage.getItem('tests')
-        console.log(this.$store.state.tests)
-        this.$store.state.TK.splice(x, 1)
-        localStorage.tk = JSON.stringify(this.$store.state.TK)
+        let sessionId = sessionStorage.getItem('sessionId')
+        let ida = this.$store.state.TK[x].unique
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('uniqueId', ida)
+        let url = this.$store.state.urls.local + 'RemoveQueServlet'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$message.success('删除成功')
+          this.$store.state.TK.splice(x, 1)
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
       },
       deleteJ (x) {
-        localStorage.setItem('tests', this.$store.state.tests.replace(this.$store.state.JD[x].id, ''))
-        this.$store.state.tests = localStorage.getItem('tests')
-        console.log(this.$store.state.tests)
-        this.$store.state.JD.splice(x, 1)
-        localStorage.jd = JSON.stringify(this.$store.state.JD)
+        let sessionId = sessionStorage.getItem('sessionId')
+        let ida = this.$store.state.JD[x].unique
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('uniqueId', ida)
+        let url = this.$store.state.urls.local + 'RemoveQueServlet'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$message.success('删除成功')
+          this.$store.state.JD.splice(x, 1)
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
       },
       deleteX (x) {
-        /* localStorage.setItem('tests', this.$store.state.tests.replace(this.$store.state.XZ[x].id, ''))
-        this.$store.state.tests = localStorage.getItem('tests')
-        console.log(this.$store.state.tests)
-        localStorage.xz = JSON.stringify(this.$store.state.XZ) */
         let sessionId = sessionStorage.getItem('sessionId')
         let ida = this.$store.state.XZ[x].unique
         let formData = new FormData()
@@ -338,32 +381,43 @@
       }
     },
     created () {
-      if (localStorage.getItem('xz')) { this.$store.state.XZ = JSON.parse(localStorage.getItem('xz')) }
-      if (localStorage.getItem('tk')) { this.$store.state.TK = JSON.parse(localStorage.getItem('tk')) }
-      if (localStorage.getItem('jd')) { this.$store.state.JD = JSON.parse(localStorage.getItem('jd')) }
-      if (sessionStorage.getItem('sessionId')) {
-        let url = this.$store.state.urls.local + 'GetBasketServlet'
-        let userId = sessionStorage.getItem('userId')
-        let sessionId = sessionStorage.getItem('sessionId')
-        console.log(userId)
-        console.log(sessionId)
-        let formData = new FormData()
-        formData.append('userId', userId)
-        formData.append('sessionId', sessionId)
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          console.log(response.data)
-          this.$store.state.XZ = []
-          for (let i = 0; i < response.data.length; i++) {
-            this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
-          }
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
+      if (this.$store.state.XZ.length === 0) {
+        if (sessionStorage.getItem('sessionId')) {
+          let url = this.$store.state.urls.local + 'GetBasketServlet'
+          let userId = sessionStorage.getItem('userId')
+          let sessionId = sessionStorage.getItem('sessionId')
+          console.log(sessionId)
+          let formData = new FormData()
+          formData.append('userId', userId)
+          formData.append('sessionId', sessionId)
+          this.$axios.post(url, formData, {
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            withCredentials: true
+          }).then((response) => {
+            this.$store.state.XZ = []
+            this.$store.state.TK = []
+            this.$store.state.JD = []
+            for (let i = 0; i < response.data.length; i++) {
+              switch (response.data[i].kind) {
+                case '选择题':
+                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
+                  break
+                case '填空题':
+                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique})
+                  break
+                case '解答题':
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                  break
+                default:
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+              }
+            }
+          }, (response) => {
+            this.$message.error('请求服务端失败')
+          })
+        }
       }
     },
     computed: {

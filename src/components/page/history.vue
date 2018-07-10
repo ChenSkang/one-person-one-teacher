@@ -2,16 +2,6 @@
   <div style="overflow: hidden">
     <my-head></my-head>
     <mySpace></mySpace>
-    <el-dialog
-      title="提示"
-      :visible.sync="deleteall"
-      width="30vmax">
-      <span>清空后不可恢复，确认清空？</span>
-      <span slot="footer" class="dialog-footer">
-              <el-button @click="deleteall = false" size="small">取 消</el-button>
-              <el-button type="primary" @click="deleteAll()" size="small">确 定</el-button>
-            </span>
-    </el-dialog>
     <div class="main">
       <el-row class="tops">
         <el-button type="primary" icon="el-icon-back" @click="$router.push('/index')" circle></el-button>
@@ -95,12 +85,6 @@
         </div>
         <div class="concern-right">
           <div class="right">
-            <div class="right_up">
-              <div class="set_title">文字提示</div>
-              <div><el-button class="btn" @click="$router.push('/index')" icon="el-icon-back" type="primary">继续选题</el-button></div>
-              <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
-              <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">删除试题</el-button></div>
-            </div>
             <div class="right_down">
               <div class="set_title">试卷信息</div>
               <div class="set_exam">
@@ -262,11 +246,6 @@
     width: 90%;
     margin-left: 5%;
   }
-  .right_up{
-    width: 100%;
-    text-align: center;
-    background-color: #fff;
-  }
   .right_down{
     margin-top: 20px;
     width: 100%;
@@ -398,9 +377,5 @@
     font-family: 新宋体;
     font-weight: bold;
     font-size: 1.0625rem;
-  }
-  .btn {
-    width: 120px;
-    margin: 10px 0 10px 0;
   }
 </style>

@@ -37,7 +37,7 @@
         </el-input>
       </el-col>
     </el-row>
-    <div id="main" v-if="subject[0].que">
+    <div id="main" v-if="subject.length">
       <div class="block">
         <div v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
           <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
@@ -54,8 +54,8 @@
               </div>
             </li>
           </ul>
-          <ul v-for="index in 5" :key="index">
-            <li class="ques">
+          <ul>
+            <li class="ques" v-for="index in subject.length - 1" :key="index">
               <div class="up">
                 <span class="TH">{{index + '.'}}&nbsp;</span>
                 <span class="QUE" v-html="subject[index].que"></span>
@@ -99,9 +99,7 @@
         ifVisible: false,
         imageSrc: '',
         visible: false,
-        subject: [{
-          que: ''
-        }],
+        subject: [],
         thisTi: 0,
         myPapers: [
           {name: '选择题', value: 0},
@@ -173,16 +171,13 @@
           sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           this.subject = JSON.parse(sessionStorage.subj)
-          let mathId = document.getElementById('main')
-          if (window.MathJax) {
-            window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, mathId])
-          }
           console.log(response.data)
         }, (response) => {
           this.loading = false
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
           this.$message.error('请求服务端失败')
         })
+        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
       },
       searchMsg () {
         this.loading = true
@@ -215,8 +210,6 @@
         bus.$emit('JX', que, kddp, zsd, answer, jx)
       },
       addPaper (x) {
-        /* let str = this.subject[x].que
-        let kind = this.subject[x].kind */
         let userId = sessionStorage.getItem('userId')
         let sessionId = sessionStorage.getItem('sessionId')
         let ida = this.subject[x].unique
@@ -235,33 +228,6 @@
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
-        /* switch (kind) {
-          case '选择题':
-            if (localStorage.xz) {
-              this.$store.state.XZ = JSON.parse(localStorage.xz)
-            }
-            this.$store.state.XZ.push({que: str, id: ida})
-            localStorage.xz = JSON.stringify(this.$store.state.XZ)
-            break
-          case '填空题':
-            if (localStorage.tk) {
-              this.$store.state.TK = JSON.parse(localStorage.tk)
-            }
-            this.$store.state.TK.push({que: str, id: ida})
-            localStorage.tk = JSON.stringify(this.$store.state.TK)
-            break
-          case '解答题':
-            if (localStorage.jd) {
-              this.$store.state.JD = JSON.parse(localStorage.jd)
-            }
-            this.$store.state.JD.push({que: str, id: ida})
-            localStorage.jd = JSON.stringify(this.$store.state.JD)
-            break
-        }
-        this.$message.success('添加试题篮成功')
-        localStorage.setItem('tests', this.$store.state.tests.concat(ida))
-        this.$store.state.tests = localStorage.getItem('tests')
-        console.log(this.$store.state.tests) */
       },
       deletePaper (x) {
         let kind = this.subject[x].kind
@@ -298,27 +264,6 @@
         localStorage.setItem('tests', this.$store.state.tests.replace(ida, ''))
         this.$store.state.tests = localStorage.getItem('tests')
         console.log(this.$store.state.tests)
-      },
-      clear: function () {
-        window.MathJax.Hub.Config({
-          showProcessingMessages: false,
-          messageStyle: 'none',
-          extensions: ['tex2jax.js'],
-          jax: ['input/TeX', 'output/HTML-CSS'],
-          tex2jax: {
-            inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-            displayMath: [ ['$$', '$$'], ['\\[', '\\]'] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a'],
-            ignoreClass: 'comment-content'
-          },
-          'HTML-CSS': {
-            linebreaks: {automatic: true, width: 'container'},
-            availableFonts: ['STIX', 'TeX'],
-            showMathMenu: false
-          }
-        })
-        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
-        console.log(window.MathJax)
       }
     },
     created () {

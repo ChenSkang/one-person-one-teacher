@@ -1,8 +1,6 @@
 <template>
   <div>
     <mySpace></mySpace>
-    <register></register>
-    <signin></signin>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="80%" :show-close="false">
       <vue-cropper ref='cropper'
                    :src="imageSrc"
@@ -56,8 +54,6 @@
   import mySpace from './mySpace.vue'
   import ElRow from 'element-ui/packages/row/src/row'
   import ElCol from 'element-ui/packages/col/src/col'
-  import register from '../page/register.vue'
-  import signin from '../page/signin.vue'
 
   export default {
     data () {
@@ -138,9 +134,7 @@
       ElCol,
       ElRow,
       mySpace,
-      VueCropper,
-      register,
-      signin
+      VueCropper
     },
     created () {
     }

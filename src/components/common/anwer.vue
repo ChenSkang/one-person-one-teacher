@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div id="answer">
     <el-dialog title="试题解析" :visible.sync="IFJX" width="70%">
-      <div class="ST TI">{{myTest[0].que}}</div>
-      <div class="ZSD TI">【考点】{{myTest[0].zsd}}</div>
-      <div class="JX TI">【解析】{{myTest[0].jx}}</div>
-      <div class="JX TI">【解答】{{myTest[0].answer}}</div>
-      <div class="KD TI">【点评】{{myTest[0].kddp}}</div>
+      <div class="ST TI" v-html="myTest[0].que"></div>
+      <div class="ZSD TI">【考点】<span v-html="myTest[0].zsd"></span></div>
+      <div class="JX TI">【解析】<span v-html="myTest[0].jx"></span></div>
+      <div class="JX TI">【解答】<span v-html="myTest[0].answer"></span></div>
+      <div class="KD TI">【点评】<span v-html="myTest[0].kddp"></span></div>
     </el-dialog>
   </div>
 </template>
@@ -27,12 +27,13 @@
     },
     mounted () {
       bus.$on('JX', (que, kddp, zsd, answer, jx) => {
-        this.IFJX = true
         this.myTest[0].que = que
         this.myTest[0].kddp = kddp
         this.myTest[0].zsd = zsd
         this.myTest[0].answer = answer
         this.myTest[0].jx = jx
+        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
+        this.IFJX = true
       })
     }
   }
