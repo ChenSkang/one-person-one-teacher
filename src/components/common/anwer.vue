@@ -32,9 +32,11 @@
         this.myTest[0].zsd = zsd
         this.myTest[0].answer = answer
         this.myTest[0].jx = jx
-        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
         this.IFJX = true
       })
+    },
+    updated () {
+      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
     }
   }
 </script>

@@ -177,7 +177,6 @@
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
           this.$message.error('请求服务端失败')
         })
-        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
       },
       searchMsg () {
         this.loading = true
@@ -269,18 +268,14 @@
     created () {
       this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       if (sessionStorage.getItem('subj')) { this.subject = JSON.parse(sessionStorage.getItem('subj')) }
-      /* if (localStorage.getItem('xz')) { this.$store.state.XZ = JSON.parse(localStorage.getItem('xz')) }
-      if (localStorage.getItem('tk')) { this.$store.state.TK = JSON.parse(localStorage.getItem('tk')) }
-      if (localStorage.getItem('jd')) { this.$store.state.JD = JSON.parse(localStorage.getItem('jd')) } */
       if (localStorage.getItem('tests')) {
         this.$store.state.tests = localStorage.getItem('tests')
       } else {
         localStorage.setItem('tests', 'tests')
       }
-      if (window.MathJax) {
-        let mathId = document.getElementById('main')
-        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, mathId])
-      }
+    },
+    updated () {
+      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
     },
     mounted () {
     },

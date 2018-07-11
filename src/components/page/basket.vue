@@ -378,47 +378,56 @@
           message: '清空试题篮成功',
           type: 'success'
         })
+      },
+      creat () {
+        if (this.$store.state.XZ.length === 0) {
+          if (sessionStorage.getItem('sessionId')) {
+            let url = this.$store.state.urls.local + 'GetBasketServlet'
+            let userId = sessionStorage.getItem('userId')
+            let sessionId = sessionStorage.getItem('sessionId')
+            console.log(sessionId)
+            let formData = new FormData()
+            formData.append('userId', userId)
+            formData.append('sessionId', sessionId)
+            this.$axios.post(url, formData, {
+              headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+              },
+              withCredentials: true
+            }).then((response) => {
+              this.$store.state.XZ = []
+              this.$store.state.TK = []
+              this.$store.state.JD = []
+              for (let i = 0; i < response.data.length; i++) {
+                switch (response.data[i].kind) {
+                  case '选择题':
+                    this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
+                    break
+                  case '填空题':
+                    this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique})
+                    break
+                  case '解答题':
+                    this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                    break
+                  default:
+                    this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                }
+              }
+            }, (response) => {
+              this.$message.error('请求服务端失败')
+            })
+          }
+        }
+      },
+      mathJax () {
+        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
       }
     },
     created () {
-      if (this.$store.state.XZ.length === 0) {
-        if (sessionStorage.getItem('sessionId')) {
-          let url = this.$store.state.urls.local + 'GetBasketServlet'
-          let userId = sessionStorage.getItem('userId')
-          let sessionId = sessionStorage.getItem('sessionId')
-          console.log(sessionId)
-          let formData = new FormData()
-          formData.append('userId', userId)
-          formData.append('sessionId', sessionId)
-          this.$axios.post(url, formData, {
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            withCredentials: true
-          }).then((response) => {
-            this.$store.state.XZ = []
-            this.$store.state.TK = []
-            this.$store.state.JD = []
-            for (let i = 0; i < response.data.length; i++) {
-              switch (response.data[i].kind) {
-                case '选择题':
-                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
-                  break
-                case '填空题':
-                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique})
-                  break
-                case '解答题':
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
-                  break
-                default:
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
-              }
-            }
-          }, (response) => {
-            this.$message.error('请求服务端失败')
-          })
-        }
-      }
+      this.creat()
+    },
+    updated () {
+      this.mathJax()
     },
     computed: {
       strjd: function () {
