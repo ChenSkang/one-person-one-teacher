@@ -242,6 +242,7 @@
                 case '注册成功':
                   this.$message.success('注册成功')
                   this.registerShow = false
+                  this.resetForm('registerForm')
                   break
                 case '该手机号已存在':
                   this.$message.info('手机号已存在，请重新注册')

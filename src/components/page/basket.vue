@@ -24,7 +24,7 @@
             <div class="exam_left" v-if="showSets[2]" title="装订线">
               <img src="../../img/peal_line.png" alt="">
             </div>
-            <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName" @change="sureName()"></div>
+            <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName"></div>
             <div v-if="showSets[0]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
             <div v-if="showSets[1]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
             <div v-if="showSet[1]" title="点击设置考生信息"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
@@ -94,7 +94,7 @@
               <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
                 <div class="up">
                   <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}</span>
-                  <span>{{$store.state.JD[x].que}}</span>
+                  <span>{{$store.state.JD[index].que}}</span>
                 </div>
                 <div class="low">
                   <div @click="deleteJ(index)">删除</div>
@@ -195,9 +195,6 @@
       gotop
     },
     methods: {
-      sureName () {
-        localStorage.examname = this.examName
-      },
       endMove () {
         let arr = []
         for (let i = 0; i < this.$store.state.XZ.length; i++) {
@@ -288,7 +285,7 @@
           let temp = this.$store.state.TK[x]
           this.$store.state.TK.splice(x, 1)
           this.$store.state.TK.splice(x - 1, 0, temp)
-          localStorage.tk = JSON.stringify(this.$store.state.TK)
+          this.endMove()
         }
       },
       upX (x) {
@@ -296,7 +293,7 @@
           let temp = this.$store.state.XZ[x]
           this.$store.state.XZ.splice(x, 1)
           this.$store.state.XZ.splice(x - 1, 0, temp)
-          localStorage.xz = JSON.stringify(this.$store.state.XZ)
+          this.endMove()
         }
       },
       upJ (x) {
@@ -304,7 +301,7 @@
           let temp = this.$store.state.JD[x]
           this.$store.state.JD.splice(x, 1)
           this.$store.state.JD.splice(x - 1, 0, temp)
-          localStorage.jd = JSON.stringify(this.$store.state.JD)
+          this.endMove()
         }
       },
       downT (x) {
@@ -312,7 +309,7 @@
           let temp = this.$store.state.TK[x]
           this.$store.state.TK.splice(x, 1)
           this.$store.state.TK.splice(x + 1, 0, temp)
-          localStorage.getItem('tk', JSON.stringify(this.$store.state.TK))
+          this.endMove()
         }
       },
       downX (x) {
@@ -320,7 +317,7 @@
           let temp = this.$store.state.XZ[x]
           this.$store.state.XZ.splice(x, 1)
           this.$store.state.XZ.splice(x + 1, 0, temp)
-          localStorage.getItem('xz', JSON.stringify(this.$store.state.XZ))
+          this.endMove()
         }
       },
       downJ (x) {
@@ -328,7 +325,7 @@
           let temp = this.$store.state.JD[x]
           this.$store.state.JD.splice(x, 1)
           this.$store.state.JD.splice(x + 1, 0, temp)
-          localStorage.getItem('jd', JSON.stringify(this.$store.state.JD))
+          this.endMove()
         }
       },
       saveExam () {
@@ -380,43 +377,42 @@
         })
       },
       creat () {
-        if (this.$store.state.XZ.length === 0) {
-          if (sessionStorage.getItem('sessionId')) {
-            let url = this.$store.state.urls.local + 'GetBasketServlet'
-            let userId = sessionStorage.getItem('userId')
-            let sessionId = sessionStorage.getItem('sessionId')
-            console.log(sessionId)
-            let formData = new FormData()
-            formData.append('userId', userId)
-            formData.append('sessionId', sessionId)
-            this.$axios.post(url, formData, {
-              headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-              },
-              withCredentials: true
-            }).then((response) => {
-              this.$store.state.XZ = []
-              this.$store.state.TK = []
-              this.$store.state.JD = []
-              for (let i = 0; i < response.data.length; i++) {
-                switch (response.data[i].kind) {
-                  case '选择题':
-                    this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
-                    break
-                  case '填空题':
-                    this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique})
-                    break
-                  case '解答题':
-                    this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
-                    break
-                  default:
-                    this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
-                }
+        if (sessionStorage.getItem('sessionId')) {
+          let url = this.$store.state.urls.local + 'GetBasketServlet'
+          let userId = sessionStorage.getItem('userId')
+          let sessionId = sessionStorage.getItem('sessionId')
+          console.log(sessionId)
+          let formData = new FormData()
+          formData.append('userId', userId)
+          formData.append('sessionId', sessionId)
+          this.$axios.post(url, formData, {
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            withCredentials: true
+          }).then((response) => {
+            this.$store.state.XZ = []
+            this.$store.state.TK = []
+            this.$store.state.JD = []
+            console.log(response)
+            for (let i = 0; i < response.data.length; i++) {
+              switch (response.data[i].kind) {
+                case '选择题':
+                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
+                  break
+                case '填空题':
+                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique})
+                  break
+                case '解答题':
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                  break
+                default:
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
               }
-            }, (response) => {
-              this.$message.error('请求服务端失败')
-            })
-          }
+            }
+          }, (response) => {
+            this.$message.error('请求服务端失败')
+          })
         }
       },
       mathJax () {
@@ -424,7 +420,9 @@
       }
     },
     created () {
-      this.creat()
+      if (this.$store.state.XZ.length === 0 || this.$store.state.TK.length === 0 || this.$store.state.JD.length === 0) {
+        this.creat()
+      }
     },
     updated () {
       this.mathJax()

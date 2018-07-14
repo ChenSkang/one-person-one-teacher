@@ -29,22 +29,3 @@ new Vue({
   template: '<App/>',
   components: { App },
 })
-
-/*MathJax.Hub.Config({
-  showProcessingMessages: false, // 关闭js加载过程信息
-  messageStyle: 'none', // 不显示信息
-  extensions: ['tex2jax.js'],
-  jax: ['input/TeX', 'output/HTML-CSS'],
-  tex2jax: {
-    inlineMath: [ ['$','$'], ["\\(","\\)"] ], // 行内公式选择符
-    displayMath: [ ['$$','$$'], ["\\[","\\]"] ], // 段内公式选择符
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'], // 避开某些标签
-    ignoreClass:"comment-content" // 避开含该Class的标签
-  },
-  "HTML-CSS": {
-    linebreaks: {automatic: true, width: 'container'},
-    availableFonts: ["STIX","TeX"],
-    showMathMenu: false
-  }
-})
-MathJax.Hub.Queue(['Typeset',MathJax.Hub])*/
