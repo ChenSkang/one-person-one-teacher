@@ -6,9 +6,11 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import urls from './server'
+import history from './history'
 
 export default new Vuex.Store({
   state: {
+    examHistory: [],
     userNow: '',
     cropImg: '', // 裁切的图片
     tests: '', // test ID
@@ -19,6 +21,7 @@ export default new Vuex.Store({
   mutations: {
   },
   modules: {
-    urls: urls
+    urls: urls,
+    history: history
   }
 })

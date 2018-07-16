@@ -278,8 +278,9 @@
       window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
     },
     mounted () {
-    },
-    computed: {
+      if (this.$store.state.XZ || this.$store.state.XZ || this.$store.state.XZ) {
+        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
+      }
     }
   }
 </script>

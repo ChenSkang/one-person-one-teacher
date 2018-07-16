@@ -5,8 +5,8 @@
       <el-col :span="4" v-else><div class="col"><span>{{$store.state.userNow}}</span></div></el-col>
       <el-col :span="6" v-if="nowuser"><div class="col" @click="registerShows()"><span>注册</span></div></el-col>
       <el-col :span="4" v-else><div class="col" @click="signOut()"><span>退出</span></div></el-col>
-      <el-col :span="4" v-if="!nowuser"><div class="col" @click="$router.push('/myexam')"><span>历史试题</span></div></el-col>
-      <el-col :span="4" v-if="!nowuser"><div class="col"><span>搜索历史</span></div></el-col>
+      <el-col :span="4" v-if="!nowuser"><div class="col" @click="goMyExam()"><span>历史试题</span></div></el-col>
+      <el-col :span="4" v-if="!nowuser"><div class="col" @click="searchHistory()"><span>搜索历史</span></div></el-col>
       <el-col :span="nowuser ? 6 : 4"><div class="col" @click="goBasket()"><span>试题篮</span></div></el-col>
       <el-col :span="nowuser ? 6 : 4"><div class="col" @click="$router.push('/')"><span>首页</span></div></el-col>
     </el-row>
@@ -166,6 +166,7 @@
                 sessionStorage.setItem('userId', response.data.u.id)
                 this.$store.state.userNow = response.data.u.name
                 if (this.checked === true) {
+                  this.clearCookie()
                   // 传入账号名，密码，和保存天数3个参数
                   this.setCookie(name, pass, 7)
                 } else {
@@ -332,6 +333,42 @@
             this.$message.error('请求服务端失败')
           })
         }
+      },
+      goMyExam () {
+        let url = this.$store.state.urls.local + 'GetPaperServlet'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$store.state.history.exam = []
+          for (let i = 0; i < response.data.length; i++) {
+            this.$store.state.history.exam.push({time: response.data[i].time, title: response.data[i].title, id: response.data[i].id})
+          }
+          this.$router.push('/myexam')
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      },
+      searchHistory () {
+        let url = this.$store.state.urls.local + 'GetHistoryServlet'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response)
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
       }
     },
     mounted () {
@@ -351,6 +388,7 @@
 
 <style scoped>
   #space{
+    background-color: #fff;
     height: 33px;
     position: fixed;
     right: 10px;
@@ -367,6 +405,7 @@
     line-height: 33px;
     text-decoration: underline;
     text-align: center;
+    cursor: pointer;
   }
   .demo-ruleForm{
     text-align: center;

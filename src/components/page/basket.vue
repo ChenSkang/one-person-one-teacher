@@ -60,7 +60,7 @@
               <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
                 <div class="up">
                   <span class="TH">{{index + 1}}</span>
-                  <span>{{$store.state.XZ[index].que}}</span>
+                  <span v-html="$store.state.XZ[index].que"></span>
                 </div>
                 <div class="low">
                   <div @click="deleteX(index)">删除</div>
@@ -77,7 +77,7 @@
               <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
                 <div class="up">
                   <span class="TH">{{$store.state.XZ.length + index + 1}}</span>
-                  <span>{{$store.state.TK[index].que}}</span>
+                  <span v-html="$store.state.TK[index].que"></span>
                 </div>
                 <div class="low">
                   <div @click="deleteT(index)">删除</div>
@@ -94,7 +94,7 @@
               <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
                 <div class="up">
                   <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}</span>
-                  <span>{{$store.state.JD[index].que}}</span>
+                  <span v-html="$store.state.JD[index].que"></span>
                 </div>
                 <div class="low">
                   <div @click="deleteJ(index)">删除</div>
@@ -217,11 +217,10 @@
           },
           withCredentials: true
         }).then((response) => {
-          this.$message.success('移动成功')
+          console.log('success')
         }, (response) => {
-          this.$message.error('请求服务端失败')
+          this.$message.error('未知错误')
         })
-        console.log(arr)
       },
       deleteT (x) {
         let sessionId = sessionStorage.getItem('sessionId')
@@ -362,18 +361,26 @@
       },
       deleteAll () {
         this.deleteall = false
-        this.$store.state.tests = 'tests'
-        localStorage.setItem('tests', this.$store.state.tests)
-        this.$store.state.TK = []
-        localStorage.tk = ''
-        this.$store.state.XZ = []
-        localStorage.xz = ''
-        this.$store.state.JD = []
-        localStorage.jd = ''
-        this.$notify({
-          title: '提示',
-          message: '清空试题篮成功',
-          type: 'success'
+        let url = this.$store.state.urls.local + 'CleanBasketServlet'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$store.state.XZ = []
+          this.$store.state.TK = []
+          this.$store.state.JD = []
+          this.$notify({
+            title: '提示',
+            message: '清空试题篮成功',
+            type: 'success'
+          })
+        }, (response) => {
+          this.$message.error('请求服务端失败')
         })
       },
       creat () {
@@ -381,7 +388,6 @@
           let url = this.$store.state.urls.local + 'GetBasketServlet'
           let userId = sessionStorage.getItem('userId')
           let sessionId = sessionStorage.getItem('sessionId')
-          console.log(sessionId)
           let formData = new FormData()
           formData.append('userId', userId)
           formData.append('sessionId', sessionId)
@@ -394,7 +400,6 @@
             this.$store.state.XZ = []
             this.$store.state.TK = []
             this.$store.state.JD = []
-            console.log(response)
             for (let i = 0; i < response.data.length; i++) {
               switch (response.data[i].kind) {
                 case '选择题':
@@ -426,6 +431,11 @@
     },
     updated () {
       this.mathJax()
+    },
+    mounted () {
+      if (this.$store.state.XZ || this.$store.state.XZ || this.$store.state.XZ) {
+        this.mathJax()
+      }
     },
     computed: {
       strjd: function () {

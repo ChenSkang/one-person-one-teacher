@@ -44,42 +44,42 @@
             </div>
           </div>
 
-          <div v-if="XZ.length" class="TM">一.选择题（共{{XZ.length}}小题）</div>
-          <div v-for="(value, index) in XZ" class="ques" :key="index">
+          <div v-if="$store.state.history.XZ.length" class="TM">一.选择题（共{{$store.state.history.XZ.length}}小题）</div>
+          <div v-for="(value, index) in $store.state.history.XZ" class="ques" :key="index">
             <div class="up">
               <span class="TH">{{index + 1}}</span>
-              <span>{{XZ[index].que}}</span>
+              <span>{{$store.state.history.XZ[index].que}}</span>
             </div>
             <div class="low">
-              <div @click="deleteX(index)">删除</div>
-              <div @click="upX(index)">上移</div>
-              <div @click="downX(index)">下移</div>
+              <div @click="deleteX(index)"></div>
+              <div @click="upX(index)"></div>
+              <div @click="downX(index)"></div>
             </div>
           </div>
 
-          <div v-if="$store.state.TK.length" class="TM">{{$store.state.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.TK.length}}小题）</div>
-          <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
+          <div v-if="$store.state.history.TK.length" class="TM">{{$store.state.history.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.TK.length}}小题）</div>
+          <div v-for="(value, index) in $store.state.history.TK" class="ques" :key="index">
             <div class="up">
-              <span class="TH">{{$store.state.XZ.length + index + 1}}</span>
+              <span class="TH">{{$store.state.history.XZ.length + index + 1}}</span>
               <span>{{$store.state.TK[index].que}}</span>
             </div>
             <div class="low">
-              <div @click="deleteT(index)">删除</div>
-              <div @click="upT(index)">上移</div>
-              <div @click="downT(index)">下移</div>
+              <div @click="deleteT(index)"></div>
+              <div @click="upT(index)"></div>
+              <div @click="downT(index)"></div>
             </div>
           </div>
 
-          <div v-if="$store.state.JD.length" class="TM">{{strjd}}.解答题（共{{$store.state.JD.length}}小题）</div>
-          <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
+          <div v-if="$store.state.history.JD.length" class="TM">{{strjd}}.解答题（共{{$store.state.history.JD.length}}小题）</div>
+          <div v-for="(value, index) in $store.state.history.JD" class="ques" :key="index">
             <div class="up">
-              <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}</span>
-              <span>{{$store.state.JD[x].que}}</span>
+              <span class="TH">{{$store.state.history.XZ.length + $store.state.history.TK.length + index + 1}}</span>
+              <span>{{$store.state.history.JD[x].que}}</span>
             </div>
             <div class="low">
-              <div @click="deleteJ(index)">删除</div>
-              <div @click="upJ(index)">上移</div>
-              <div @click="downJ(index)">下移</div>
+              <div @click="deleteJ(index)"></div>
+              <div @click="upJ(index)"></div>
+              <div @click="downJ(index)"></div>
             </div>
           </div>
         </div>
@@ -115,7 +115,6 @@
   import gotop from '../common/gotop.vue'
   import mySpace from '../common/mySpace.vue'
   import myHead from '../common/header.vue'
-  import bus from '../../bus'
   import myFoot from '../common/footer.vue'
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项']
@@ -136,7 +135,6 @@
           '答题前填写好自己的姓名、班级、学号',
           '请将答案填写到答题卡上面'
         ],
-        XZ: [],
         htmlTitle: 'test'
       }
     },
@@ -148,42 +146,55 @@
       gotop
     },
     methods: {
-      deleteAll () {
-        this.deleteall = false
-        this.$store.state.tests = 'tests'
-        localStorage.setItem('tests', this.$store.state.tests)
-        this.$store.state.TK = []
-        localStorage.tk = ''
-        this.$store.state.XZ = []
-        localStorage.xz = ''
-        this.$store.state.JD = []
-        localStorage.jd = ''
-        this.$notify({
-          title: '提示',
-          message: '清空试题篮成功',
-          type: 'success'
+    },
+    created () {
+      if (this.$store.state.history.XZ.length === 0 || this.$store.state.history.TK.length === 0 || this.$store.state.history.JD.length === 0) {
+        let url = this.$store.state.urls.local + 'GetPaperQueServlet'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('paperId', sessionStorage.getItem('paper'))
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$store.state.history.XZ = []
+          this.$store.state.history.TK = []
+          this.$store.state.history.JD = []
+          for (let i = 0; i < response.data.length; i++) {
+            switch (response.data[i].kind) {
+              case '选择题':
+                this.$store.state.history.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
+                break
+              case '填空题':
+                this.$store.state.history.TK.push({que: response.data[i].que, unique: response.data[i].unique})
+                break
+              case '解答题':
+                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                break
+              default:
+                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+            }
+          }
+          this.$router.push('/history')
+        }, (response) => {
+          this.$message.error('请求服务端失败')
         })
       }
     },
     mounted () {
-      bus.$on('exams', (arr) => {
-        console.log('dasda')
-        console.log(arr[0].que)
-        this.XZ = []
-        for (let i = 0; i < arr.length; i++) {
-          this.XZ.push({que: arr[i].que, unique: arr[i].unique})
-        }
-        console.log(this.XZ)
-        this.$router.push('/history')
-      })
+      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
     },
-    created () {
+    updated () {
+      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
     },
     computed: {
       strjd: function () {
-        if (this.$store.state.XZ.length && this.$store.state.TK.length) {
+        if (this.$store.state.history.XZ.length && this.$store.history.state.TK.length) {
           return '三'
-        } else if (this.$store.state.XZ.length || this.$store.state.TK.length) {
+        } else if (this.$store.history.state.XZ.length || this.$store.history.state.TK.length) {
           return '二'
         } else {
           return '一'

@@ -29,3 +29,18 @@ new Vue({
   template: '<App/>',
   components: { App },
 })
+
+/* 路由跳转验证 */
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(res => res.meta.requireAuth)) {
+    if (sessionStorage.getItem('sessionId')) {
+      next()
+    } else {
+      next({
+        path: '/' // 未登录则跳转至login页面
+      })
+    }
+  } else {
+    next ()
+  }
+})

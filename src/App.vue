@@ -14,14 +14,9 @@
       return {
       }
     },
-    watch: {
-    },
-    methods: {
-    },
     mounted () {
       if (sessionStorage.getItem('sessionId')) {
         this.$store.state.userNow = sessionStorage.getItem('nowUser')
-        console.log(sessionStorage.getItem('sessionId'))
       }
     }
   }
