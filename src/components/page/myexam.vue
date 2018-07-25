@@ -96,7 +96,7 @@
       }
     },
     created () {
-      if (!this.$store.state.history.exam) {
+      if (!this.$store.state.history.exam.length) {
         let url = this.$store.state.urls.local + 'GetPaperServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()

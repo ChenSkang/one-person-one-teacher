@@ -8,11 +8,13 @@
                    :zoom="cropImage"
                    :cropmove="cropImage"
                    :autoCropArea = "0.99"
-                   style="width:100%;height:100%;">
+                   :background = 'false'
+                   style="width:100%;height:100%;max-height: 80vh">
       </vue-cropper>
       <span slot="footer" class="dialog-footer">
+        <el-button @click="rotateImage()">转圈</el-button>
         <el-button @click="cancelCrop">取消</el-button>
-        <el-button type="primary" @click="sureCrop">确定</el-button>
+        <el-button type="primary" @click="sureCrop" v-loading.fullscreen.lock="load">确定</el-button>
       </span>
     </el-dialog>
     <el-container>
@@ -61,7 +63,8 @@
         msg: '',
         ifVisible: false,
         visible: false,
-        imageSrc: ''
+        imageSrc: '',
+        load: false
       }
     },
     methods: {
@@ -78,11 +81,15 @@
       cropImage () {
         this.$store.state.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL()
       },
+      rotateImage () {
+        this.$refs.cropper.rotate(90)
+      },
       cancelCrop () {
         this.visible = false
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       },
       sureCrop () {
+        this.load = true
         this.visible = false
         const page = this.$store.state.cropImg
         let arr = page.split(',')
@@ -106,6 +113,7 @@
           this.$message.success('推荐成功')
           sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
           sessionStorage.setItem('subj', JSON.stringify(response.data))
+          this.load = false
           this.$router.push('/index')
         }, (res) => {
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')

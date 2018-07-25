@@ -332,6 +332,9 @@
           }, (response) => {
             this.$message.error('请求服务端失败')
           })
+        } else {
+          this.signShows()
+          this.$message('请先登录')
         }
       },
       goMyExam () {

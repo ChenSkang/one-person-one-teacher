@@ -3,11 +3,6 @@
     <my-head></my-head>
     <mySpace></mySpace>
     <div class="main">
-      <el-row class="tops">
-        <el-button type="primary" icon="el-icon-back" @click="$router.push('/index')" circle></el-button>
-        <el-button type="primary" @click="getPdf()" icon="el-icon-download" circle></el-button>
-        <el-button type="primary" @click="deleteall = true" icon="el-icon-delete" circle></el-button>
-      </el-row>
       <div class="concern">
         <div class="exam" id="pdfDom">
           <div class="exam_something">
@@ -48,7 +43,7 @@
           <div v-for="(value, index) in $store.state.history.XZ" class="ques" :key="index">
             <div class="up">
               <span class="TH">{{index + 1}}</span>
-              <span>{{$store.state.history.XZ[index].que}}</span>
+              <span v-html="$store.state.history.XZ[index].que"></span>
             </div>
             <div class="low">
               <div @click="deleteX(index)"></div>
@@ -57,11 +52,11 @@
             </div>
           </div>
 
-          <div v-if="$store.state.history.TK.length" class="TM">{{$store.state.history.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.TK.length}}小题）</div>
+          <div v-if="$store.state.history.TK.length" class="TM">{{$store.state.history.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.history.TK.length}}小题）</div>
           <div v-for="(value, index) in $store.state.history.TK" class="ques" :key="index">
             <div class="up">
               <span class="TH">{{$store.state.history.XZ.length + index + 1}}</span>
-              <span>{{$store.state.TK[index].que}}</span>
+              <span v-html="$store.state.history.TK[index].que"></span>
             </div>
             <div class="low">
               <div @click="deleteT(index)"></div>
@@ -74,7 +69,7 @@
           <div v-for="(value, index) in $store.state.history.JD" class="ques" :key="index">
             <div class="up">
               <span class="TH">{{$store.state.history.XZ.length + $store.state.history.TK.length + index + 1}}</span>
-              <span>{{$store.state.history.JD[x].que}}</span>
+              <span v-html="$store.state.history.JD[index].que"></span>
             </div>
             <div class="low">
               <div @click="deleteJ(index)"></div>
@@ -178,7 +173,6 @@
                 this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
             }
           }
-          this.$router.push('/history')
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
@@ -192,9 +186,9 @@
     },
     computed: {
       strjd: function () {
-        if (this.$store.state.history.XZ.length && this.$store.history.state.TK.length) {
+        if (this.$store.state.history.XZ.length && this.$store.state.history.TK.length) {
           return '三'
-        } else if (this.$store.history.state.XZ.length || this.$store.history.state.TK.length) {
+        } else if (this.$store.state.history.XZ.length || this.$store.state.history.TK.length) {
           return '二'
         } else {
           return '一'

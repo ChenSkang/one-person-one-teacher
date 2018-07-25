@@ -39,6 +39,7 @@ router.beforeEach((to, from, next) => {
       next({
         path: '/' // 未登录则跳转至login页面
       })
+      alert('请先登录')
     }
   } else {
     next ()

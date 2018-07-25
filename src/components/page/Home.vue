@@ -9,9 +9,11 @@
                    :zoom="cropImage"
                    :cropmove="cropImage"
                    :autoCropArea = "0.99"
-                   style="width:100%;height:100%;">
+                   :background = 'false'
+                   style="width:100%;height:100%;max-height: 80vh">
       </vue-cropper>
       <span slot="footer" class="dialog-footer">
+        <el-button @click="rotateImage()">转圈</el-button>
         <el-button @click="cancelCrop">取 消</el-button>
         <el-button type="primary" @click="sureCrop">确 定</el-button>
       </span>
@@ -39,7 +41,7 @@
     </el-row>
     <div id="main" v-if="subject.length">
       <div class="block">
-        <div v-loading="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
+        <div v-loading.fullscreen.lock="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
           <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
           <ul>
             <li class="ques">
@@ -57,7 +59,7 @@
           <ul>
             <li class="ques" v-for="index in subject.length - 1" :key="index">
               <div class="up">
-                <span class="TH">{{index + '.'}}&nbsp;</span>
+                <span class="TH">{{index + '.' + subject[index].kind}}&nbsp;&nbsp;</span>
                 <span class="QUE" v-html="subject[index].que"></span>
               </div>
               <div class="low">
@@ -120,6 +122,9 @@
       },
       cropImage () {
         this.$store.state.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL()
+      },
+      rotateImage () {
+        this.$refs.cropper.rotate(90)
       },
       cancelCrop () {
         this.visible = false
@@ -211,58 +216,28 @@
       addPaper (x) {
         let userId = sessionStorage.getItem('userId')
         let sessionId = sessionStorage.getItem('sessionId')
-        let ida = this.subject[x].unique
-        let formData = new FormData()
-        formData.append('userId', userId)
-        formData.append('sessionId', sessionId)
-        formData.append('unique', ida)
-        let url = this.$store.state.urls.local + 'AddQueServlet'
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$message.success('试题添加成功')
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
+        if (sessionId) {
+          let ida = this.subject[x].unique
+          let formData = new FormData()
+          formData.append('userId', userId)
+          formData.append('sessionId', sessionId)
+          formData.append('unique', ida)
+          let url = this.$store.state.urls.local + 'AddQueServlet'
+          this.$axios.post(url, formData, {
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            withCredentials: true
+          }).then((response) => {
+            this.$message.success('试题添加成功')
+          }, (response) => {
+            this.$message.error('请求服务端失败')
+          })
+        } else {
+          this.$message('请先登录，谢谢')
+        }
       },
       deletePaper (x) {
-        let kind = this.subject[x].kind
-        let ida = this.subject[x].unique
-        switch (kind) {
-          case '选择题':
-            for (let i = 0; i < this.$store.state.XZ.length; i++) {
-              if (ida === this.$store.state.XZ[i].id) {
-                this.$store.state.XZ.splice(i, 1)
-                break
-              }
-            }
-            localStorage.xz = JSON.stringify(this.$store.state.XZ)
-            break
-          case '填空题':
-            for (let i = 0; i < this.$store.state.TK.length; i++) {
-              if (ida === this.$store.state.TK[i].id) {
-                this.$store.state.TK.splice(i, 1)
-                break
-              }
-            }
-            localStorage.tk = JSON.stringify(this.$store.state.TK)
-            break
-          case '解答题':
-            for (let i = 0; i < this.$store.state.JD.length; i++) {
-              if (ida === this.$store.state.JD[i].id) {
-                this.$store.state.JD.splice(i, 1)
-                break
-              }
-            }
-            localStorage.jd = JSON.stringify(this.$store.state.JD)
-            break
-        }
-        localStorage.setItem('tests', this.$store.state.tests.replace(ida, ''))
-        this.$store.state.tests = localStorage.getItem('tests')
-        console.log(this.$store.state.tests)
       }
     },
     created () {
@@ -278,9 +253,7 @@
       window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
     },
     mounted () {
-      if (this.$store.state.XZ || this.$store.state.XZ || this.$store.state.XZ) {
-        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
-      }
+      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
     }
   }
 </script>
