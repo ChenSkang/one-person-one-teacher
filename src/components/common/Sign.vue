@@ -117,6 +117,7 @@
           this.$router.push('/index')
         }, (res) => {
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
+          this.load = false
           this.$message.error('请求服务端失败')
         })
       },
