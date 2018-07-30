@@ -1,14 +1,14 @@
 <template>
   <div>
     <el-row id="space">
-      <el-col :span="6" v-if="nowuser"><div class="col" @click="signShows()"><span>登录</span></div></el-col>
+      <el-col :span="8" v-if="nowuser"><div class="col" @click="signShows()"><span>登录</span></div></el-col>
       <el-col :span="4" v-else><div class="col"><span>{{$store.state.userNow}}</span></div></el-col>
-      <el-col :span="6" v-if="nowuser"><div class="col" @click="registerShows()"><span>注册</span></div></el-col>
+      <el-col :span="8" v-if="nowuser"><div class="col" @click="registerShows()"><span>注册</span></div></el-col>
       <el-col :span="4" v-else><div class="col" @click="signOut()"><span>退出</span></div></el-col>
       <el-col :span="4" v-if="!nowuser"><div class="col" @click="goMyExam()"><span>历史试题</span></div></el-col>
       <el-col :span="4" v-if="!nowuser"><div class="col" @click="searchHistory()"><span>搜索历史</span></div></el-col>
-      <el-col :span="nowuser ? 6 : 4"><div class="col" @click="goBasket()"><span>试题篮</span></div></el-col>
-      <el-col :span="nowuser ? 6 : 4"><div class="col" @click="$router.push('/')"><span>首页</span></div></el-col>
+      <el-col :span="4" v-if="!nowuser"><div class="col" @click="goBasket()"><span>试题篮</span></div></el-col>
+      <el-col :span="nowuser ? 8 : 4"><div class="col" @click="$router.push('/')"><span>首页</span></div></el-col>
     </el-row>
     <el-dialog :title="ms" :visible.sync="registerShow" width="30%" :modal="false">
       <el-form :model="registerForm" status-icon :rules="registerRule" ref="registerForm" label-width="100px" class="demo-ruleForm">
@@ -149,8 +149,8 @@
             // 保存的密码
             let pass = this.signForm.pass
             let formData = new FormData()
-            formData.append('tel', this.signForm.usr)
-            formData.append('pass', this.signForm.pass)
+            formData.append('tel', name)
+            formData.append('pass', pass)
             let url = this.$store.state.urls.local + 'LoginServlet'
             this.$axios.post(url, formData, {
               headers: {
@@ -158,8 +158,6 @@
               },
               withCredentials: true
             }).then((response) => {
-              console.log(response.data.sessionId)
-              console.log(response)
               if (response.data.sessionId) {
                 sessionStorage.setItem('sessionId', response.data.sessionId)
                 sessionStorage.setItem('nowUser', response.data.u.name)
@@ -174,6 +172,8 @@
                 }
                 this.$message.success('登录成功')
                 this.signShow = false
+                localStorage.setItem('thisUser', name)
+                localStorage.setItem('thisPass', pass)
                 this.resetForm('signForm')
               } else {
                 this.$alert('账户名或密码错误', '提示', {
@@ -289,6 +289,8 @@
           sessionStorage.removeItem('sessionId')
           sessionStorage.removeItem('userId')
           sessionStorage.removeItem('nowUser')
+          localStorage.removeItem('thisUser')
+          localStorage.removeItem('thisPass')
           this.$store.state.userNow = ''
         }, (response) => {
           this.$message.error('请求服务端失败')
@@ -376,6 +378,40 @@
     },
     mounted () {
       this.getCookie()
+      if (localStorage.getItem('thisUser')) {
+        let name = localStorage.getItem('thisUser')
+        let pass = localStorage.getItem('thisPass')
+        let formData = new FormData()
+        formData.append('tel', name)
+        formData.append('pass', pass)
+        let url = this.$store.state.urls.url + 'LoginServlet'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          if (response.data.sessionId) {
+            sessionStorage.setItem('sessionId', response.data.sessionId)
+            sessionStorage.setItem('nowUser', response.data.u.name)
+            sessionStorage.setItem('userId', response.data.u.id)
+            this.$store.state.userNow = response.data.u.name
+            this.signShow = false
+          } else {
+            this.$alert('自动登录失效', '提示', {
+              confirmButtonText: '确定',
+              callback: action => {
+                this.$message({
+                  type: 'info',
+                  message: '自动登录失效'
+                })
+              }
+            })
+          }
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      }
     },
     computed: {
       nowuser: function () {

@@ -2,10 +2,10 @@
   <div id="answer">
     <el-dialog title="试题解析" :visible.sync="IFJX" width="70%">
       <div class="ST TI" v-html="myTest[0].que"></div>
-      <div class="ZSD TI">【考点】<span v-html="myTest[0].zsd"></span></div>
+      <div class="ZSD TI" v-if="myTest[0].zsd">【考点】<span v-html="myTest[0].zsd"></span></div>
       <div class="JX TI">【解析】<span v-html="myTest[0].jx"></span></div>
       <div class="JX TI">【解答】<span v-html="myTest[0].answer"></span></div>
-      <div class="KD TI">【点评】<span v-html="myTest[0].kddp"></span></div>
+      <div class="KD TI" v-if="myTest[0].kddp">【点评】<span v-html="myTest[0].kddp"></span></div>
     </el-dialog>
   </div>
 </template>
@@ -46,5 +46,6 @@
     line-height: 25px;
     font-size: 14px;
     padding: 20px 20px 20px 20px;
+    letter-spacing: 1px;
   }
 </style>

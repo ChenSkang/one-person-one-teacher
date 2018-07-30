@@ -459,6 +459,7 @@
     background-color: #F2F6FC;
     padding-top: 20px;
     padding-bottom: 20px;
+    letter-spacing: 1px;
   }
   .concern{
     width: 84%;

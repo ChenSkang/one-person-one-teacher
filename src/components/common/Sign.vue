@@ -110,9 +110,11 @@
           },
           withCredentials: true
         }).then((response) => {
+          this.$store.state.nowSub = []
           this.$message.success('推荐成功')
           sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
           sessionStorage.setItem('subj', JSON.stringify(response.data))
+          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
           this.load = false
           this.$router.push('/index')
         }, (res) => {
@@ -181,32 +183,4 @@
     position: relative;
     overflow: hidden;
   }
- /* .btn {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-  }
-  .btn_text {
-    width: 160px;
-    height: 60px;
-    line-height: 60px;
-    text-align: center;
-    border-radius: 30px;
-    font-size: 18px;
-    transition: 0.5s;
-  }
-  .btn_text:hover{
-    box-shadow: 0 10px 10px -3px #ccc;
-  }
-  .search{
-    background: #dd356e;
-    color: #fff;
-    margin-left: 50%;
-    transform: translateX(-180px);
-  }
-  .basket{
-    background: #fee856;
-    color: #000;
-    transform: translateX(-140px);
-  }*/
 </style>
