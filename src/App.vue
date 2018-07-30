@@ -23,6 +23,8 @@
 </script>
 
 <style>
+  @import "css/mathStyles_f558024.css";
+  @import "css/question_9861710.css";
   *{
     margin:0;
     padding:0;
@@ -30,7 +32,7 @@
     list-style: none;
   }
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: 微软雅黑, Arial, sans-serif;
     width: 100%;
     height: 100%;
   }
