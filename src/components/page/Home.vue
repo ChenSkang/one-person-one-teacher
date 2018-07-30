@@ -39,7 +39,7 @@
         </el-input>
       </el-col>
     </el-row>
-    <div id="main" v-if="subject.length">
+    <div id="main" v-if="$store.state.nowSub.length">
       <div class="block">
         <div v-loading.fullscreen.lock="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
           <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
@@ -47,24 +47,24 @@
             <li class="ques">
               <div class="up">
                 <span class="TH">原题：&nbsp;</span>
-                <span class="QUE" v-html="subject[0].que"></span>
+                <span class="QUE" v-html="$store.state.nowSub[0].que"></span>
               </div>
               <div class="low">
                 <div @click="showJX(0)"><i class="el-icon-document"></i>解析</div>
-                <div v-if="!($store.state.tests.indexOf(subject[0].unique) + 1)"><el-button type="primary" size="mini" @click="addPaper(0)" icon="el-icon-plus" round>试题</el-button></div>
+                <div v-if="!($store.state.tests.indexOf($store.state.nowSub[0].unique) + 1)"><el-button type="primary" size="mini" @click="addPaper(0)" icon="el-icon-plus" round>试题</el-button></div>
                 <div v-else><el-button @click="deletePaper(0)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
               </div>
             </li>
           </ul>
           <ul>
-            <li class="ques" v-for="index in subject.length - 1" :key="index">
+            <li class="ques" v-for="index in $store.state.nowSub.length - 1" :key="index">
               <div class="up">
-                <span class="TH">{{index + '.' + subject[index].kind}}&nbsp;&nbsp;</span>
-                <span class="QUE" v-html="subject[index].que"></span>
+                <span class="TH">{{index + '.' + $store.state.nowSub[index].kind}}&nbsp;&nbsp;</span>
+                <span class="QUE" v-html="$store.state.nowSub[index].que"></span>
               </div>
               <div class="low">
                 <div @click="showJX(index)"><i class="el-icon-document"></i>解析</div>
-                <div v-if="!($store.state.tests.indexOf(subject[index].unique) + 1)"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus" round>试题</el-button></div>
+                <div v-if="!($store.state.tests.indexOf($store.state.nowSub[index].unique) + 1)"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus" round>试题</el-button></div>
                 <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
               </div>
             </li>
@@ -101,7 +101,6 @@
         ifVisible: false,
         imageSrc: '',
         visible: false,
-        subject: [],
         thisTi: 0,
         myPapers: [
           {name: '选择题', value: 0},
@@ -171,11 +170,11 @@
           withCredentials: true
         }).then((response) => {
           this.loading = false
-          this.subject = ''
+          this.$store.state.nowSub = ''
           this.$message.success('推荐成功')
           sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
           sessionStorage.setItem('subj', JSON.stringify(response.data))
-          this.subject = JSON.parse(sessionStorage.subj)
+          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
           console.log(response.data)
         }, (response) => {
           this.loading = false
@@ -199,25 +198,25 @@
           this.$message.success('推荐成功')
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           console.log(response.data)
-          this.subject = JSON.parse(sessionStorage.subj)
+          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
         }, (response) => {
           this.loading = false
           this.$message.error('请求服务端失败')
         })
       },
       showJX (x) {
-        let que = this.subject[x].que
-        let kddp = this.subject[x].kddp
-        let zsd = this.subject[x].zsd
-        let answer = this.subject[x].answer
-        let jx = this.subject[x].jx
+        let que = this.$store.state.nowSub[x].que
+        let kddp = this.$store.state.nowSub[x].kddp
+        let zsd = this.$store.state.nowSub[x].zsd
+        let answer = this.$store.state.nowSub[x].answer
+        let jx = this.$store.state.nowSub[x].jx
         bus.$emit('JX', que, kddp, zsd, answer, jx)
       },
       addPaper (x) {
         let userId = sessionStorage.getItem('userId')
         let sessionId = sessionStorage.getItem('sessionId')
         if (sessionId) {
-          let ida = this.subject[x].unique
+          let ida = this.$store.state.nowSub[x].unique
           let formData = new FormData()
           formData.append('userId', userId)
           formData.append('sessionId', sessionId)
@@ -242,7 +241,7 @@
     },
     created () {
       this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
-      if (sessionStorage.getItem('subj')) { this.subject = JSON.parse(sessionStorage.getItem('subj')) }
+      if (sessionStorage.getItem('subj')) { this.$store.state.nowSub = JSON.parse(sessionStorage.getItem('subj')) }
       if (localStorage.getItem('tests')) {
         this.$store.state.tests = localStorage.getItem('tests')
       } else {
@@ -303,6 +302,7 @@
     border-radius: 10px;
     border: 1px solid #DCDFE6;
     word-wrap: break-word;
+    letter-spacing: 1px;
   }
   /* .ques:hover{
     display: inline-block;

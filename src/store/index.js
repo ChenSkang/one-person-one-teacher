@@ -10,7 +10,7 @@ import history from './history'
 
 export default new Vuex.Store({
   state: {
-    examHistory: [],
+    nowSub: [],
     userNow: '',
     cropImg: '', // 裁切的图片
     tests: '', // test ID
