@@ -53,6 +53,7 @@
           withCredentials: true
         }).then((response) => {
           sessionStorage.setItem('paper', this.$store.state.history.exam[x].id)
+          this.$store.state.history.paper = false
           this.$store.state.history.XZ = []
           this.$store.state.history.TK = []
           this.$store.state.history.JD = []
@@ -96,7 +97,7 @@
       }
     },
     created () {
-      if (!this.$store.state.history.exam.length) {
+      if (this.$store.state.history.myexam) {
         let url = this.$store.state.urls.local + 'GetPaperServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()

@@ -7,6 +7,9 @@ export default {
     exam: arr,
     XZ: [],
     TK: [],
-    JD: []
+    JD: [],
+    basket: true,
+    myexam: true,
+    paper: true
   }
 }

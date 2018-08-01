@@ -6,9 +6,11 @@ import JsPDF from 'jspdf'
 export default{
   install (Vue, options) {
     Vue.prototype.getPdf = function () {
-      var title = this.htmlTitle
+      let title = this.htmlTitle
       html2Canvas(document.querySelector('#pdfDom'), {
-        allowTaint: true
+        scale: 2,
+        allowTaint: false,
+        useCORS: true
       }).then(function (canvas) {
         let contentWidth = canvas.width
         let contentHeight = canvas.height
@@ -32,8 +34,7 @@ export default{
           }
         }
         PDF.save(title + '.pdf')
-      }
-      )
+      })
     }
   }
 }
