@@ -326,6 +326,5 @@
     cursor: pointer;
   }
   .TH{
-    font-size: 1rem;
   }
 </style>
