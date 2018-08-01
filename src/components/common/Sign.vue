@@ -137,7 +137,15 @@
           console.log(response.data)
           this.$router.push('/index')
         }, (response) => {
-          this.$message.error('请求服务端失败')
+          this.$alert('请检查图片或文本内容并确认网络是否正常', '未知错误', {
+            confirmButtonText: '确定',
+            callback: action => {
+              this.$message({
+                type: 'info',
+                message: '未知错误'
+              })
+            }
+          })
         })
       }
     },
