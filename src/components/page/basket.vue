@@ -1,5 +1,6 @@
 <template>
   <div style="overflow: hidden">
+    <answer></answer>
     <my-head></my-head>
     <mySpace></mySpace>
     <el-dialog
@@ -59,10 +60,17 @@
             <transition-group tag="div" class="item-ul">
               <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
                 <div class="up">
-                  <span class="TH">{{index + 1}}</span>
+                  <span class="TH">{{index + 1}}.</span>
                   <span v-html="$store.state.XZ[index].que"></span>
+                  <div v-if="showSet[4]">
+                    <span class="jx">解析：</span><span v-html="$store.state.XZ[index].jx"></span>
+                  </div>
+                  <div v-if="showSets[3]">
+                    <span class="jx">解答：</span><span v-html="$store.state.XZ[index].answer"></span>
+                  </div>
                 </div>
                 <div class="low">
+                  <div @click="showJX1(index)">解析</div>
                   <div @click="deleteX(index)">删除</div>
                   <div @click="upX(index)">上移</div>
                   <div @click="downX(index)">下移</div>
@@ -76,10 +84,17 @@
             <transition-group tag="div" class="item-ul">
               <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
                 <div class="up">
-                  <span class="TH">{{$store.state.XZ.length + index + 1}}</span>
+                  <span class="TH">{{$store.state.XZ.length + index + 1}}.</span>
                   <span v-html="$store.state.TK[index].que"></span>
+                  <div v-if="showSet[4]">
+                    <span class="jx">解析：</span><span v-html="$store.state.TK[index].jx"></span>
+                  </div>
+                  <div v-if="showSets[3]">
+                    <span class="jx">解答：</span><span v-html="$store.state.TK[index].answer"></span>
+                  </div>
                 </div>
                 <div class="low">
+                  <div @click="showJX2(index)">解析</div>
                   <div @click="deleteT(index)">删除</div>
                   <div @click="upT(index)">上移</div>
                   <div @click="downT(index)">下移</div>
@@ -93,10 +108,17 @@
             <transition-group tag="div" class="item-ul">
               <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
                 <div class="up">
-                  <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}</span>
+                  <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>
                   <span v-html="$store.state.JD[index].que"></span>
+                  <div v-if="showSet[4]">
+                    <span class="jx">解析：</span><span v-html="$store.state.JD[index].jx"></span>
+                  </div>
+                  <div v-if="showSets[3]">
+                    <span class="jx">解答：</span><span v-html="$store.state.JD[index].answer"></span>
+                  </div>
                 </div>
                 <div class="low">
+                  <div @click="showJX3(index)">解析</div>
                   <div @click="deleteJ(index)">删除</div>
                   <div @click="upJ(index)">上移</div>
                   <div @click="downJ(index)">下移</div>
@@ -147,16 +169,18 @@
   import draggable from 'vuedraggable'
   import myFoot from '../common/footer.vue'
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
-  const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项']
-  const secondOptions = ['副标题', '试卷信息', '装订线']
+  import answer from '../common/anwer.vue'
+  import bus from '../../bus'
+  const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项', '显示解析']
+  const secondOptions = ['副标题', '试卷信息', '装订线', '显示答案']
   export default {
     data () {
       return {
         deleteall: false,
         cities: firstOptions,
         mations: secondOptions,
-        showSet: [true, false, true, true],
-        showSets: [true, false, true],
+        showSet: [true, false, true, true, false],
+        showSets: [true, false, true, false],
         examName: '初中数学测试试卷',
         examSecondName: '试卷副标题',
         examThirdName: '考试范围：xxx；考试时间：100分钟；命题人：xxx',
@@ -192,7 +216,8 @@
       myHead,
       draggable,
       myFoot,
-      gotop
+      gotop,
+      answer
     },
     methods: {
       endMove () {
@@ -221,6 +246,30 @@
         }, (response) => {
           this.$message.error('未知错误')
         })
+      },
+      showJX1 (x) {
+        let que = this.$store.state.XZ[x].que
+        let kddp = ''
+        let zsd = ''
+        let answer = this.$store.state.XZ[x].answer
+        let jx = this.$store.state.XZ[x].jx
+        bus.$emit('JX', que, kddp, zsd, answer, jx)
+      },
+      showJX2 (x) {
+        let que = this.$store.state.TK[x].que
+        let kddp = ''
+        let zsd = ''
+        let answer = this.$store.state.TK[x].answer
+        let jx = this.$store.state.TK[x].jx
+        bus.$emit('JX', que, kddp, zsd, answer, jx)
+      },
+      showJX3 (x) {
+        let que = this.$store.state.JD[x].que
+        let kddp = ''
+        let zsd = ''
+        let answer = this.$store.state.JD[x].answer
+        let jx = this.$store.state.JD[x].jx
+        bus.$emit('JX', que, kddp, zsd, answer, jx)
       },
       deleteT (x) {
         let sessionId = sessionStorage.getItem('sessionId')
@@ -403,16 +452,16 @@
             for (let i = 0; i < response.data.length; i++) {
               switch (response.data[i].kind) {
                 case '选择题':
-                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
+                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                   break
                 case '填空题':
-                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique})
+                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                   break
                 case '解答题':
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                   break
                 default:
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
               }
             }
           }, (response) => {
@@ -425,7 +474,7 @@
       }
     },
     created () {
-      if (this.$store.state.XZ.length === 0 || this.$store.state.TK.length === 0 || this.$store.state.JD.length === 0) {
+      if (this.$store.state.history.basket) {
         this.creat()
       }
     },
@@ -614,6 +663,10 @@
     line-height: 25px;
     font-size: 0.875rem;
     padding: 20px 20px 10px 20px;
+  }
+  .jx{
+    color: #409EFF;
+    font-weight: bold;
   }
   .low{
     height: 36px;

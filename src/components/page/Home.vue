@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading.fullscreen.lock="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
     <my-head></my-head>
     <mySpace></mySpace>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="80%" :show-close="false">
@@ -41,12 +41,12 @@
     </el-row>
     <div id="main" v-if="$store.state.nowSub.length">
       <div class="block">
-        <div v-loading.fullscreen.lock="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
+        <div>
           <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
           <ul>
             <li class="ques">
               <div class="up">
-                <span class="TH">原题：&nbsp;</span>
+                <span class="TH">原题：</span>
                 <span class="QUE" v-html="$store.state.nowSub[0].que"></span>
               </div>
               <div class="low">
@@ -59,7 +59,7 @@
           <ul>
             <li class="ques" v-for="index in $store.state.nowSub.length - 1" :key="index">
               <div class="up">
-                <span class="TH">{{index + '.' + $store.state.nowSub[index].kind}}&nbsp;&nbsp;</span>
+                <span class="TH">{{index + '.'}}</span>
                 <span class="QUE" v-html="$store.state.nowSub[index].que"></span>
               </div>
               <div class="low">
@@ -101,12 +101,6 @@
         ifVisible: false,
         imageSrc: '',
         visible: false,
-        thisTi: 0,
-        myPapers: [
-          {name: '选择题', value: 0},
-          {name: '填空题', value: 0},
-          {name: '解答题', value: 0}
-        ],
         loading: false
       }
     },

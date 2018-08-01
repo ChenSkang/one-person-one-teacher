@@ -143,7 +143,7 @@
     methods: {
     },
     created () {
-      if (this.$store.state.history.XZ.length === 0 || this.$store.state.history.TK.length === 0 || this.$store.state.history.JD.length === 0) {
+      if (this.$store.state.history.XZ.paper) {
         let url = this.$store.state.urls.local + 'GetPaperQueServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
