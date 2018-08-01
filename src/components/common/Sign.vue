@@ -111,12 +111,12 @@
           withCredentials: true
         }).then((response) => {
           this.$store.state.nowSub = []
-          this.$message.success('推荐成功')
           sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
           this.load = false
           this.$router.push('/index')
+          this.$message.success('推荐成功')
         }, (res) => {
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
           this.load = false
