@@ -312,22 +312,23 @@
             withCredentials: true
           }).then((response) => {
             console.log(response.data)
+            this.$store.state.history.basket = false
             this.$store.state.XZ = []
             this.$store.state.TK = []
             this.$store.state.JD = []
             for (let i = 0; i < response.data.length; i++) {
               switch (response.data[i].kind) {
                 case '选择题':
-                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
+                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                   break
                 case '填空题':
-                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique})
+                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                   break
                 case '解答题':
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                   break
                 default:
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
               }
             }
             this.$router.push('/basket')
@@ -350,6 +351,7 @@
           },
           withCredentials: true
         }).then((response) => {
+          this.$store.state.history.myexam = false
           this.$store.state.history.exam = []
           for (let i = 0; i < response.data.length; i++) {
             this.$store.state.history.exam.push({time: response.data[i].time, title: response.data[i].title, id: response.data[i].id})
