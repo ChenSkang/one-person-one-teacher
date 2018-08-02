@@ -40,8 +40,8 @@ export default new Router({
       component: resolve => require(['@/components/page/myexam'], resolve)
     },
     {
-      path: '/shistory',
-      name: 'Shistory',
+      path: '/searched',
+      name: 'Searched',
       meta: {
         requireAuth: true // 配置此条，进入页面前判断是否需要登陆
       },

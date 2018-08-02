@@ -10,6 +10,8 @@ export default {
     JD: [],
     basket: true,
     myexam: true,
-    paper: true
+    paper: true,
+    find: true,
+    searched: []
   }
 }
