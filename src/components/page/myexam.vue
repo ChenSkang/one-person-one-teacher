@@ -1,24 +1,32 @@
 <template>
 <div>
   <myHead></myHead>
+  <mySpace></mySpace>
   <el-container>
-    <el-header height="20vh">
-      <mySpace></mySpace>
-    </el-header>
     <el-main class="main">
-      <el-row class="concern">
-        <div class="exam">
-          <ul>
-            <li v-for="(value,index) in $store.state.history.exam" :key="index">
-              <div>
-                <div @click="showExam(index)">{{$store.state.history.exam[index].time}}</div>
-                <span @click="deleteExam(index)">删除</span>
-                <div>{{$store.state.history.exam[index].title}}</div>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </el-row>
+      <el-table
+        :data="$store.state.history.exam"
+        class="table"
+        @row-dblclick="showExams">
+        <el-table-column
+          prop="time"
+          label="组卷时间"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="title"
+          label="试卷名称">
+        </el-table-column>
+        <el-table-column
+          fixed="right"
+          label="操作"
+          width="180">
+          <template slot-scope="scope">
+            <el-button size="small" @click="showExam(scope.$index)">查看</el-button>
+            <el-button size="small" type="danger" @click="deleteExam(scope.$index)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-main>
   </el-container>
   <myFoot></myFoot>
@@ -40,6 +48,43 @@
       mySpace
     },
     methods: {
+      showExams (row) {
+        let url = this.$store.state.urls.local + 'GetPaperQueServlet'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('paperId', row.id)
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          sessionStorage.setItem('paper', row.id)
+          this.$store.state.history.paper = false
+          this.$store.state.history.XZ = []
+          this.$store.state.history.TK = []
+          this.$store.state.history.JD = []
+          for (let i = 0; i < response.data.length; i++) {
+            switch (response.data[i].kind) {
+              case '选择题':
+                this.$store.state.history.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
+                break
+              case '填空题':
+                this.$store.state.history.TK.push({que: response.data[i].que, unique: response.data[i].unique})
+                break
+              case '解答题':
+                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                break
+              default:
+                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+            }
+          }
+          this.$router.push('/history')
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      },
       showExam (x) {
         let url = this.$store.state.urls.local + 'GetPaperQueServlet'
         let sessionId = sessionStorage.getItem('sessionId')
@@ -121,5 +166,13 @@
 </script>
 
 <style scoped>
-
+  .main{
+    background-color: #F2F6FC;
+  }
+.table{
+  position: relative;
+  left: 10%;
+  width: 80%;
+  border: #DCDFE6 1px solid;
+}
 </style>

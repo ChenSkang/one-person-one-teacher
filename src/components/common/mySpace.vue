@@ -372,7 +372,9 @@
           },
           withCredentials: true
         }).then((response) => {
-          console.log(response)
+          this.$store.state.history.find = false
+          this.$store.state.history.searched = response.data
+          this.$router.push('/searched')
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
