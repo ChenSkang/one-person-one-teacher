@@ -126,6 +126,36 @@
               </div>
             </transition-group>
           </draggable>
+
+          <div v-if="showSet[5] || showSets[4]">
+            <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
+              <div class="up">
+                <div>
+                  <span>{{index + 1}}.</span>
+                  <span v-if="showSet[5]">解析：<span v-html="$store.state.XZ[index].jx"></span></span><br/>
+                  <span v-if="showSets[4]">解答：<span v-html="$store.state.XZ[index].answer"></span></span>
+                </div>
+              </div>
+            </div>
+            <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
+              <div class="up">
+                <div>
+                  <span>{{index + 1}}.</span>
+                  <span v-if="showSet[5]">解析：<span v-html="$store.state.TK[index].jx"></span></span><br/>
+                  <span v-if="showSets[4]">解答：<span v-html="$store.state.TK[index].answer"></span></span>
+                </div>
+              </div>
+            </div>
+            <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
+              <div class="up">
+                <div>
+                  <span>{{index + 1}}.</span>
+                  <span v-if="showSet[5]">解析：<span v-html="$store.state.JD[index].jx"></span></span><br/>
+                  <span v-if="showSets[4]">解答：<span v-html="$store.state.JD[index].answer"></span></span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="concern-right">
           <div class="right">
@@ -171,16 +201,16 @@
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   import answer from '../common/anwer.vue'
   import bus from '../../bus'
-  const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项', '显示解析']
-  const secondOptions = ['副标题', '试卷信息', '装订线', '显示答案']
+  const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项', '显示解析', '解析后置']
+  const secondOptions = ['副标题', '试卷信息', '装订线', '显示答案', '答案后置']
   export default {
     data () {
       return {
         deleteall: false,
         cities: firstOptions,
         mations: secondOptions,
-        showSet: [true, false, true, true, false],
-        showSets: [true, false, true, false],
+        showSet: [true, false, true, true, false, false],
+        showSets: [true, false, true, false, false],
         examName: '初中数学测试试卷',
         examSecondName: '试卷副标题',
         examThirdName: '考试范围：xxx；考试时间：100分钟；命题人：xxx',
@@ -685,7 +715,6 @@
     cursor: pointer;
   }
   .TH{
-    font-size: 1rem;
   }
   .item-ul::-webkit-scrollbar{
     width: 0;

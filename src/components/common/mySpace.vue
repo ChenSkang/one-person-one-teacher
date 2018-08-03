@@ -301,7 +301,6 @@
           let url = this.$store.state.urls.local + 'GetBasketServlet'
           let userId = sessionStorage.getItem('userId')
           let sessionId = sessionStorage.getItem('sessionId')
-          console.log(sessionId)
           let formData = new FormData()
           formData.append('userId', userId)
           formData.append('sessionId', sessionId)
@@ -311,7 +310,6 @@
             },
             withCredentials: true
           }).then((response) => {
-            console.log(response.data)
             this.$store.state.history.basket = false
             this.$store.state.XZ = []
             this.$store.state.TK = []
