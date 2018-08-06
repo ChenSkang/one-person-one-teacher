@@ -2,6 +2,9 @@
   <div>
     <myHead></myHead>
     <mySpace></mySpace>
+    <el-dialog :visible.sync="imgVisible" width="96%">
+      <img width="100%" :src="searchImage">
+    </el-dialog>
     <el-container>
       <el-main class="main">
         <el-button size="small" type="primary" @click="clearSearched()">清空历史</el-button>
@@ -41,6 +44,8 @@
   export default {
     data () {
       return {
+        imgVisible: false,
+        searchImage: ''
       }
     },
     components: {
@@ -51,6 +56,8 @@
     methods: {
       showExams (row) {
         console.log(row)
+        this.searchImage = row.image
+        this.imgVisible = true
       },
       showExam (x) {
         let url = this.$store.state.urls.local + 'GetPaperQueServlet'
