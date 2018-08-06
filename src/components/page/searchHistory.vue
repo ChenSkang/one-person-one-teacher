@@ -2,8 +2,11 @@
   <div>
     <myHead></myHead>
     <mySpace></mySpace>
-    <el-dialog :visible.sync="imgVisible" width="96%">
-      <img width="100%" :src="searchImage">
+    <el-dialog :visible.sync="imgVisible" width="60%" title="搜索图片">
+      <img style="max-height: 55vh; margin-left: 50%; transform: translateX(-50%)" :src="searchImage">
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="searchAgain(searchMd5)">重新搜索</el-button>
+      </span>
     </el-dialog>
     <el-container>
       <el-main class="main">
@@ -26,7 +29,7 @@
             label="操作"
             width="180">
             <template slot-scope="scope">
-              <el-button size="small">查看</el-button>
+              <el-button size="small" @click="showExams(scope.row)">查看</el-button>
               <el-button size="small" type="danger" @click="deleteHistory(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
@@ -45,7 +48,8 @@
     data () {
       return {
         imgVisible: false,
-        searchImage: ''
+        searchImage: '',
+        searchMd5: ''
       }
     },
     components: {
@@ -56,42 +60,21 @@
     methods: {
       showExams (row) {
         console.log(row)
+        this.searchMd5 = row.queMD5
         this.searchImage = row.image
         this.imgVisible = true
       },
-      showExam (x) {
+      searchAgain (md5) {
         let url = this.$store.state.urls.local + 'GetPaperQueServlet'
-        let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        formData.append('paperId', this.$store.state.history.exam[x].id)
+        formData.append('md5', md5)
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
           },
           withCredentials: true
         }).then((response) => {
-          sessionStorage.setItem('paper', this.$store.state.history.exam[x].id)
-          this.$store.state.history.paper = false
-          this.$store.state.history.XZ = []
-          this.$store.state.history.TK = []
-          this.$store.state.history.JD = []
-          for (let i = 0; i < response.data.length; i++) {
-            switch (response.data[i].kind) {
-              case '选择题':
-                this.$store.state.history.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
-                break
-              case '填空题':
-                this.$store.state.history.TK.push({que: response.data[i].que, unique: response.data[i].unique})
-                break
-              case '解答题':
-                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
-                break
-              default:
-                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
-            }
-          }
-          this.$router.push('/history')
+          console.log(response)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })

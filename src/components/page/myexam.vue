@@ -22,7 +22,7 @@
           label="操作"
           width="180">
           <template slot-scope="scope">
-            <el-button size="small" @click="showExam(scope.$index)">查看</el-button>
+            <el-button size="small" @click="showExams(scope.row)">查看</el-button>
             <el-button size="small" type="danger" @click="deleteExam(scope.$index)">删除</el-button>
           </template>
         </el-table-column>
@@ -61,43 +61,6 @@
           withCredentials: true
         }).then((response) => {
           sessionStorage.setItem('paper', row.id)
-          this.$store.state.history.paper = false
-          this.$store.state.history.XZ = []
-          this.$store.state.history.TK = []
-          this.$store.state.history.JD = []
-          for (let i = 0; i < response.data.length; i++) {
-            switch (response.data[i].kind) {
-              case '选择题':
-                this.$store.state.history.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
-                break
-              case '填空题':
-                this.$store.state.history.TK.push({que: response.data[i].que, unique: response.data[i].unique})
-                break
-              case '解答题':
-                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
-                break
-              default:
-                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
-            }
-          }
-          this.$router.push('/history')
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
-      },
-      showExam (x) {
-        let url = this.$store.state.urls.local + 'GetPaperQueServlet'
-        let sessionId = sessionStorage.getItem('sessionId')
-        let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        formData.append('paperId', this.$store.state.history.exam[x].id)
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          sessionStorage.setItem('paper', this.$store.state.history.exam[x].id)
           this.$store.state.history.paper = false
           this.$store.state.history.XZ = []
           this.$store.state.history.TK = []
