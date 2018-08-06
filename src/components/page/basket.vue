@@ -62,6 +62,7 @@
                 <div class="up">
                   <span class="TH">{{index + 1}}.</span>
                   <span v-html="$store.state.XZ[index].que"></span>
+                  <div :style="{width: 10 + 'px', height: $store.state.XZ[index].area + 'px'}"></div>
                   <div v-if="showSet[4]">
                     <span class="jx">解析：</span><span v-html="$store.state.XZ[index].jx"></span>
                   </div>
@@ -74,6 +75,8 @@
                   <div @click="deleteX(index)">删除</div>
                   <div @click="upX(index)">上移</div>
                   <div @click="downX(index)">下移</div>
+                  <div @click="$store.state.XZ[index].area += 50">增加答题区</div>
+                  <div v-if="$store.state.XZ[index].area >= 50" @click="$store.state.XZ[index].area -= 50">减少答题区</div>
                 </div>
               </div>
             </transition-group>
@@ -86,6 +89,7 @@
                 <div class="up">
                   <span class="TH">{{$store.state.XZ.length + index + 1}}.</span>
                   <span v-html="$store.state.TK[index].que"></span>
+                  <div :style="{width: 10 + 'px', height: $store.state.TK[index].area + 'px'}"></div>
                   <div v-if="showSet[4]">
                     <span class="jx">解析：</span><span v-html="$store.state.TK[index].jx"></span>
                   </div>
@@ -98,6 +102,8 @@
                   <div @click="deleteT(index)">删除</div>
                   <div @click="upT(index)">上移</div>
                   <div @click="downT(index)">下移</div>
+                  <div @click="$store.state.TK[index].area += 50">增加答题区</div>
+                  <div v-if="$store.state.TK[index].area >= 50" @click="$store.state.TK[index].area -= 50">减少答题区</div>
                 </div>
               </div>
             </transition-group>
@@ -110,6 +116,7 @@
                 <div class="up">
                   <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>
                   <span v-html="$store.state.JD[index].que"></span>
+                  <div :style="{width: 10 + 'px', height: $store.state.JD[index].area + 'px'}"></div>
                   <div v-if="showSet[4]">
                     <span class="jx">解析：</span><span v-html="$store.state.JD[index].jx"></span>
                   </div>
@@ -122,6 +129,8 @@
                   <div @click="deleteJ(index)">删除</div>
                   <div @click="upJ(index)">上移</div>
                   <div @click="downJ(index)">下移</div>
+                  <div @click="$store.state.JD[index].area += 50">增加答题区</div>
+                  <div v-if="$store.state.JD[index].area >= 50" @click="$store.state.JD[index].area -= 50">减少答题区</div>
                 </div>
               </div>
             </transition-group>
@@ -482,16 +491,16 @@
             for (let i = 0; i < response.data.length; i++) {
               switch (response.data[i].kind) {
                 case '选择题':
-                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
+                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
                   break
                 case '填空题':
-                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
+                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
                   break
                 case '解答题':
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
                   break
                 default:
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
               }
             }
           }, (response) => {
