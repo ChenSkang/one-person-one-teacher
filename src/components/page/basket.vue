@@ -49,7 +49,7 @@
             </div>
             <div class="attentions" v-if="showSet[3]" title="注意事项">
               <span>注意事项：</span>
-              <p v-for="(attention, index) in attentions" :key="index">
+              <p v-for="(attention, index) in attentions" :key="attention">
                 {{index + 1 + '.'+ '&nbsp;' + attention}}
               </p>
             </div>
@@ -58,16 +58,16 @@
           <div v-if="$store.state.XZ.length" class="TM">一.选择题（共{{$store.state.XZ.length}}小题）</div>
           <draggable v-model="$store.state.XZ" @end="endMove" :options="dragOption1">
             <transition-group tag="div" class="item-ul">
-              <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
+              <div v-for="(value, index) in $store.state.XZ" class="ques" :key="value.unique">
                 <div class="up">
                   <span class="TH">{{index + 1}}.</span>
-                  <span v-html="$store.state.XZ[index].que"></span>
-                  <div :style="{width: 10 + 'px', height: $store.state.XZ[index].area + 'px'}"></div>
+                  <span v-html="value.que"></span>
+                  <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
                   <div v-if="showSet[4]">
-                    <span class="jx">解析：</span><span v-html="$store.state.XZ[index].jx"></span>
+                    <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
                   <div v-if="showSets[3]">
-                    <span class="jx">解答：</span><span v-html="$store.state.XZ[index].answer"></span>
+                    <span class="jx">解答：</span><span v-html="value.answer"></span>
                   </div>
                 </div>
                 <div class="low">
@@ -75,8 +75,8 @@
                   <div @click="deleteX(index)">删除</div>
                   <div @click="upX(index)">上移</div>
                   <div @click="downX(index)">下移</div>
-                  <div @click="$store.state.XZ[index].area += 50">增加答题区</div>
-                  <div v-if="$store.state.XZ[index].area >= 50" @click="$store.state.XZ[index].area -= 50">减少答题区</div>
+                  <div @click="value.area += 50">增加答题区</div>
+                  <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
                 </div>
               </div>
             </transition-group>
@@ -85,16 +85,16 @@
           <div v-if="$store.state.TK.length" class="TM">{{$store.state.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.TK.length}}小题）</div>
           <draggable v-model="$store.state.TK" @end="endMove" :options="dragOption2">
             <transition-group tag="div" class="item-ul">
-              <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
+              <div v-for="(value, index) in $store.state.TK" class="ques" :key="value.unique">
                 <div class="up">
                   <span class="TH">{{$store.state.XZ.length + index + 1}}.</span>
-                  <span v-html="$store.state.TK[index].que"></span>
-                  <div :style="{width: 10 + 'px', height: $store.state.TK[index].area + 'px'}"></div>
+                  <span v-html="value.que"></span>
+                  <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
                   <div v-if="showSet[4]">
-                    <span class="jx">解析：</span><span v-html="$store.state.TK[index].jx"></span>
+                    <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
                   <div v-if="showSets[3]">
-                    <span class="jx">解答：</span><span v-html="$store.state.TK[index].answer"></span>
+                    <span class="jx">解答：</span><span v-html="value.answer"></span>
                   </div>
                 </div>
                 <div class="low">
@@ -102,8 +102,8 @@
                   <div @click="deleteT(index)">删除</div>
                   <div @click="upT(index)">上移</div>
                   <div @click="downT(index)">下移</div>
-                  <div @click="$store.state.TK[index].area += 50">增加答题区</div>
-                  <div v-if="$store.state.TK[index].area >= 50" @click="$store.state.TK[index].area -= 50">减少答题区</div>
+                  <div @click="value.area += 50">增加答题区</div>
+                  <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
                 </div>
               </div>
             </transition-group>
@@ -112,16 +112,16 @@
           <div v-if="$store.state.JD.length" class="TM">{{strjd}}.解答题（共{{$store.state.JD.length}}小题）</div>
           <draggable v-model="$store.state.JD" @end="endMove" :options="dragOption3">
             <transition-group tag="div" class="item-ul">
-              <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
+              <div v-for="(value, index) in $store.state.JD" class="ques" :key="value.unique">
                 <div class="up">
                   <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>
-                  <span v-html="$store.state.JD[index].que"></span>
-                  <div :style="{width: 10 + 'px', height: $store.state.JD[index].area + 'px'}"></div>
+                  <span v-html="value.que"></span>
+                  <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
                   <div v-if="showSet[4]">
-                    <span class="jx">解析：</span><span v-html="$store.state.JD[index].jx"></span>
+                    <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
                   <div v-if="showSets[3]">
-                    <span class="jx">解答：</span><span v-html="$store.state.JD[index].answer"></span>
+                    <span class="jx">解答：</span><span v-html="value.answer"></span>
                   </div>
                 </div>
                 <div class="low">
@@ -129,38 +129,38 @@
                   <div @click="deleteJ(index)">删除</div>
                   <div @click="upJ(index)">上移</div>
                   <div @click="downJ(index)">下移</div>
-                  <div @click="$store.state.JD[index].area += 50">增加答题区</div>
-                  <div v-if="$store.state.JD[index].area >= 50" @click="$store.state.JD[index].area -= 50">减少答题区</div>
+                  <div @click="value.area += 50">增加答题区</div>
+                  <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
                 </div>
               </div>
             </transition-group>
           </draggable>
 
           <div v-if="showSet[5] || showSets[4]">
-            <div v-for="(value, index) in $store.state.XZ" class="ques" :key="index">
+            <div v-for="(value, index) in $store.state.XZ" class="ques" :key="value.answer">
               <div class="up">
                 <div>
                   <span>{{index + 1}}.</span>
-                  <span v-if="showSet[5]">解析：<span v-html="$store.state.XZ[index].jx"></span></span><br/>
-                  <span v-if="showSets[4]">解答：<span v-html="$store.state.XZ[index].answer"></span></span>
+                  <span v-if="showSet[5]">解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-if="showSets[4]">解答：<span v-html="value.answer"></span></span>
                 </div>
               </div>
             </div>
-            <div v-for="(value, index) in $store.state.TK" class="ques" :key="index">
+            <div v-for="(value, index) in $store.state.TK" class="ques" :key="value.answer">
               <div class="up">
                 <div>
                   <span>{{index + 1}}.</span>
-                  <span v-if="showSet[5]">解析：<span v-html="$store.state.TK[index].jx"></span></span><br/>
-                  <span v-if="showSets[4]">解答：<span v-html="$store.state.TK[index].answer"></span></span>
+                  <span v-if="showSet[5]">解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-if="showSets[4]">解答：<span v-html="value.answer"></span></span>
                 </div>
               </div>
             </div>
-            <div v-for="(value, index) in $store.state.JD" class="ques" :key="index">
+            <div v-for="(value, index) in $store.state.JD" class="ques" :key="value.answer">
               <div class="up">
                 <div>
                   <span>{{index + 1}}.</span>
-                  <span v-if="showSet[5]">解析：<span v-html="$store.state.JD[index].jx"></span></span><br/>
-                  <span v-if="showSets[4]">解答：<span v-html="$store.state.JD[index].answer"></span></span>
+                  <span v-if="showSet[5]">解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-if="showSets[4]">解答：<span v-html="value.answer"></span></span>
                 </div>
               </div>
             </div>

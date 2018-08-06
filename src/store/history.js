@@ -1,10 +1,9 @@
 /**
  * Created by getYou on 2018/7/15.
  */
-let arr = []
 export default {
   state: {
-    exam: arr,
+    exam: [],
     XZ: [],
     TK: [],
     JD: [],

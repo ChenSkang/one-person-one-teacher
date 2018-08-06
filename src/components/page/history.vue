@@ -33,17 +33,17 @@
             </div>
             <div class="attentions" v-if="showSet[3]" title="注意事项">
               <span>注意事项：</span>
-              <p v-for="(attention, index) in attentions" :key="index">
+              <p v-for="(attention, index) in attentions" :key="attention">
                 {{index + 1 + '.'+ '&nbsp;' + attention}}
               </p>
             </div>
           </div>
 
           <div v-if="$store.state.history.XZ.length" class="TM">一.选择题（共{{$store.state.history.XZ.length}}小题）</div>
-          <div v-for="(value, index) in $store.state.history.XZ" class="ques" :key="index">
+          <div v-for="(value, index) in $store.state.history.XZ" class="ques" :key="value.unique">
             <div class="up">
               <span class="TH">{{index + 1}}</span>
-              <span v-html="$store.state.history.XZ[index].que"></span>
+              <span v-html="value.que"></span>
             </div>
             <div class="low">
               <div @click="deleteX(index)"></div>
@@ -53,10 +53,10 @@
           </div>
 
           <div v-if="$store.state.history.TK.length" class="TM">{{$store.state.history.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.history.TK.length}}小题）</div>
-          <div v-for="(value, index) in $store.state.history.TK" class="ques" :key="index">
+          <div v-for="(value, index) in $store.state.history.TK" class="ques" :key="value.unique">
             <div class="up">
               <span class="TH">{{$store.state.history.XZ.length + index + 1}}</span>
-              <span v-html="$store.state.history.TK[index].que"></span>
+              <span v-html="value.que"></span>
             </div>
             <div class="low">
               <div @click="deleteT(index)"></div>
@@ -66,10 +66,10 @@
           </div>
 
           <div v-if="$store.state.history.JD.length" class="TM">{{strjd}}.解答题（共{{$store.state.history.JD.length}}小题）</div>
-          <div v-for="(value, index) in $store.state.history.JD" class="ques" :key="index">
+          <div v-for="(value, index) in $store.state.history.JD" class="ques" :key="value.unique">
             <div class="up">
               <span class="TH">{{$store.state.history.XZ.length + $store.state.history.TK.length + index + 1}}</span>
-              <span v-html="$store.state.history.JD[index].que"></span>
+              <span v-html="value.que"></span>
             </div>
             <div class="low">
               <div @click="deleteJ(index)"></div>
@@ -143,8 +143,8 @@
     methods: {
     },
     created () {
-      if (this.$store.state.history.XZ.paper) {
-        let url = this.$store.state.urls.local + 'GetPaperQueServlet'
+      if (this.$store.state.history.paper) {
+        let url = this.$store.state.urls.url + 'GetPaperQueServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
@@ -374,10 +374,6 @@
     cursor: pointer;
   }
   .TH{
-    font-size: 1rem;
-  }
-  .item-ul::-webkit-scrollbar{
-    width: 0;
   }
   .TM{
     font-family: 新宋体;
