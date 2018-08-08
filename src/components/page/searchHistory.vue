@@ -84,6 +84,7 @@
           console.log(response)
           this.$store.state.nowSub = []
           sessionStorage.setItem('defaultSrc', this.searchImage)
+          this.$store.state.cropImg = this.searchImage
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
           this.loading = false
@@ -120,7 +121,6 @@
           },
           withCredentials: true
         }).then((response) => {
-          console.log(response)
           this.$store.state.history.searched.splice(x, 1)
         }, (response) => {
           this.$message.error('请求服务端失败')
