@@ -18,8 +18,8 @@
         <el-button type="primary" @click="sureCrop">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog :visible.sync="imgVisible" width="96%">
-      <img width="100%" :src="$store.state.cropImg">
+    <el-dialog :visible.sync="imgVisible" width="70%">
+      <img style="max-height: 60vh; margin-left: 50%; transform: translateX(-50%)" :src="$store.state.cropImg">
     </el-dialog>
     <el-row class="concern">
       <el-col :span="24">

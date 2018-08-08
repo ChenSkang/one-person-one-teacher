@@ -2,7 +2,7 @@
   <div>
     <myHead></myHead>
     <mySpace></mySpace>
-    <el-dialog :visible.sync="imgVisible" width="60%" title="搜索图片">
+    <el-dialog :visible.sync="imgVisible" width="60%" title="图片信息">
       <img style="max-height: 55vh; margin-left: 50%; transform: translateX(-50%)" :src="searchImage">
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="searchAgain(searchMd5)">重新搜索</el-button>
@@ -10,30 +10,32 @@
     </el-dialog>
     <el-container>
       <el-main class="main">
-        <el-button size="small" type="primary" @click="clearSearched()">清空历史</el-button>
-        <el-table
-          :data="$store.state.history.searched"
-          class="table"
-          @row-dblclick="showExams">
-          <el-table-column
-            prop="time"
-            label="搜索时间"
-            width="200">
-          </el-table-column>
-          <el-table-column
-            prop="id"
-            label="搜索内容">
-          </el-table-column>
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="180">
-            <template slot-scope="scope">
-              <el-button size="small" @click="showExams(scope.row)">查看</el-button>
-              <el-button size="small" type="danger" @click="deleteHistory(scope.$index)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+        <div class="middle">
+          <el-button size="small" type="primary" @click="clearSearched()">清空历史</el-button>
+          <el-table
+            class="table"
+            :data="$store.state.history.searched"
+            @row-dblclick="showExams">
+            <el-table-column
+              prop="time"
+              label="搜索时间"
+              width="200">
+            </el-table-column>
+            <el-table-column
+              prop="id"
+              label="搜索内容">
+            </el-table-column>
+            <el-table-column
+              fixed="right"
+              label="操作"
+              width="180">
+              <template slot-scope="scope">
+                <el-button size="small" @click="showExams(scope.row)">查看</el-button>
+                <el-button size="small" type="danger" @click="deleteHistory(scope.$index)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </el-main>
     </el-container>
     <myFoot></myFoot>
@@ -137,10 +139,12 @@
   .main{
     background-color: #F2F6FC;
   }
-  .table{
+  .middle{
     position: relative;
     left: 10%;
     width: 80%;
+  }
+  .table{
     border: #DCDFE6 1px solid;
   }
 </style>
