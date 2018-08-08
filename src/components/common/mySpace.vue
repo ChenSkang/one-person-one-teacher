@@ -240,18 +240,17 @@
               withCredentials: true
             }).then((response) => {
               switch (response.data.message) {
-                case '注册成功':
-                  this.$message.success('注册成功')
-                  this.registerShow = false
-                  this.resetForm('registerForm')
+                case '手机号格式不正确':
+                  this.$message.info('请输入正确的手机号')
                   break
                 case '该手机号已存在':
                   this.$message.info('手机号已存在，请重新注册')
                   break
                 default:
-                  this.$message.warning('未知错误')
+                  this.$message.success('注册成功')
+                  this.registerShow = false
+                  this.resetForm('registerForm')
               }
-              console.log(response)
             }, (response) => {
               this.$message.error('请求服务端失败')
             })
