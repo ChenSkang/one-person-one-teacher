@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  v-loading.fullscreen.lock="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
     <myHead></myHead>
     <mySpace></mySpace>
     <el-dialog :visible.sync="imgVisible" width="60%" title="图片信息">
@@ -22,8 +22,10 @@
               width="200">
             </el-table-column>
             <el-table-column
-              prop="id"
               label="搜索内容">
+              <template slot-scope="scope">
+                <span>双击图片内容</span>
+              </template>
             </el-table-column>
             <el-table-column
               fixed="right"
@@ -51,7 +53,8 @@
       return {
         imgVisible: false,
         searchImage: '',
-        searchMd5: ''
+        searchMd5: '',
+        loading: false
       }
     },
     components: {
@@ -67,7 +70,9 @@
         this.imgVisible = true
       },
       searchAgain (md5) {
-        let url = this.$store.state.urls.local + 'GetPaperQueServlet'
+        let url = this.$store.state.urls.local + 'SearchAgainServlet'
+        this.imgVisible = false
+        this.loading = true
         let formData = new FormData()
         formData.append('md5', md5)
         this.$axios.post(url, formData, {
@@ -77,7 +82,15 @@
           withCredentials: true
         }).then((response) => {
           console.log(response)
+          this.$store.state.nowSub = []
+          sessionStorage.setItem('defaultSrc', this.searchImage)
+          sessionStorage.setItem('subj', JSON.stringify(response.data))
+          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
+          this.loading = false
+          this.$router.push('/index')
+          this.$message.success('推荐成功')
         }, (response) => {
+          this.loading = false
           this.$message.error('请求服务端失败')
         })
       },

@@ -411,7 +411,7 @@
             })
           }
         }, (response) => {
-          this.$message.error('请求服务端失败')
+          this.$message.error('自动登录失效')
         })
       }
     },
