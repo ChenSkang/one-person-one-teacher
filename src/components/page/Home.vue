@@ -2,7 +2,7 @@
   <div v-loading.fullscreen.lock="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
     <my-head></my-head>
     <mySpace></mySpace>
-    <el-dialog title="裁剪图片" :visible.sync="visible" width="80%" :show-close="false">
+    <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" :show-close="false">
       <vue-cropper ref='cropper'
                    :src="imageSrc"
                    :ready="cropImage"
@@ -10,7 +10,7 @@
                    :cropmove="cropImage"
                    :autoCropArea = "0.99"
                    :background = 'false'
-                   style="width:100%;height:100%;max-height: 80vh">
+                   style="width:100%;height:100%;max-height: 60vh">
       </vue-cropper>
       <span slot="footer" class="dialog-footer">
         <el-button @click="rotateImage()">转圈</el-button>
