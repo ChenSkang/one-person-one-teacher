@@ -3,6 +3,10 @@
     <my-head></my-head>
     <mySpace></mySpace>
     <div class="main">
+      <el-row class="tops">
+        <el-button type="primary" icon="el-icon-back" @click="$router.push('/myexam')" circle></el-button>
+        <el-button type="primary" @click="getPdf()" icon="el-icon-download" circle></el-button>
+      </el-row>
       <div class="concern">
         <div class="exam" id="pdfDom">
           <div class="exam_something">
@@ -80,6 +84,11 @@
         </div>
         <div class="concern-right">
           <div class="right">
+            <div class="right_up">
+              <div class="set_title">文字提示</div>
+              <div><el-button class="btn" @click="$router.push('/myexam')" icon="el-icon-back" type="primary">返回</el-button></div>
+              <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载</el-button></div>
+             </div>
             <div class="right_down">
               <div class="set_title">试卷信息</div>
               <div class="set_exam">
@@ -117,7 +126,6 @@
   export default {
     data () {
       return {
-        deleteall: false,
         cities: firstOptions,
         mations: secondOptions,
         showSet: [true, false, true, true],
@@ -252,6 +260,11 @@
     width: 90%;
     margin-left: 5%;
   }
+  .right_up{
+    width: 100%;
+    text-align: center;
+    background-color: #fff;
+  }
   .right_down{
     margin-top: 20px;
     width: 100%;
@@ -375,9 +388,16 @@
   }
   .TH{
   }
+  .item-ul::-webkit-scrollbar{
+    width: 0;
+  }
   .TM{
     font-family: 新宋体;
     font-weight: bold;
     font-size: 1.0625rem;
+  }
+  .btn {
+    width: 120px;
+    margin: 10px 0 10px 0;
   }
 </style>

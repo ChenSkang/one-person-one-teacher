@@ -105,24 +105,26 @@
       }
     },
     created () {
-      if (this.$store.state.history.myexam) {
-        let url = this.$store.state.urls.local + 'GetPaperServlet'
-        let sessionId = sessionStorage.getItem('sessionId')
-        let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.history.exam = []
-          for (let i = 0; i < response.data.length; i++) {
-            this.$store.state.history.exam.push({time: response.data[i].time, title: response.data[i].title, id: response.data[i].id})
-          }
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
+      if (this.$store.state.userNow) {
+        if (this.$store.state.history.myexam) {
+          let url = this.$store.state.urls.local + 'GetPaperServlet'
+          let sessionId = sessionStorage.getItem('sessionId')
+          let formData = new FormData()
+          formData.append('sessionId', sessionId)
+          this.$axios.post(url, formData, {
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            withCredentials: true
+          }).then((response) => {
+            this.$store.state.history.exam = []
+            for (let i = 0; i < response.data.length; i++) {
+              this.$store.state.history.exam.push({time: response.data[i].time, title: response.data[i].title, id: response.data[i].id})
+            }
+          }, (response) => {
+            this.$message.error('请求服务端失败')
+          })
+        }
       }
     }
   }

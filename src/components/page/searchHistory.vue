@@ -22,10 +22,8 @@
               width="200">
             </el-table-column>
             <el-table-column
+              prop="que"
               label="搜索内容">
-              <template slot-scope="scope">
-                <span>双击图片内容</span>
-              </template>
             </el-table-column>
             <el-table-column
               fixed="right"
@@ -128,21 +126,23 @@
       }
     },
     created () {
-      if (this.$store.state.history.find) {
-        let url = this.$store.state.urls.local + 'GetHistoryServlet'
-        let sessionId = sessionStorage.getItem('sessionId')
-        let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.history.searched = response.data
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
+      if (this.$store.state.userNow) {
+        if (this.$store.state.history.find) {
+          let url = this.$store.state.urls.local + 'GetHistoryServlet'
+          let sessionId = sessionStorage.getItem('sessionId')
+          let formData = new FormData()
+          formData.append('sessionId', sessionId)
+          this.$axios.post(url, formData, {
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            withCredentials: true
+          }).then((response) => {
+            this.$store.state.history.searched = response.data
+          }, (response) => {
+            this.$message.error('请求服务端失败')
+          })
+        }
       }
     }
   }
