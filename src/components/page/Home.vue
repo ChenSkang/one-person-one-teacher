@@ -24,18 +24,10 @@
     <el-row class="concern">
       <el-col :span="24">
         <el-input v-model="msg" v-on:keyup.enter="searchMsg()">
-          <el-button @click="searchMsg()" slot="append" v-if="msg">搜索</el-button>
-          <el-upload
-            v-else
-            slot="append"
-            class="avatar-uploader"
-            :show-file-list="false"
-            action="http://47.94.215.104:8080/OPOT1/servlet/pictureServlet"
-            :on-change="handleChange"
-            :before-upload="handleBefore"
-            :auto-upload="false">
-            <el-button icon="el-icon-picture" style="background-color: #fff" @click="ifVisible = false"></el-button>
-          </el-upload>
+          <el-button @click="searchMsg()" slot="append" v-if="msg" class="crop-demo-btn">搜索</el-button>
+          <el-button v-else slot="append" class="crop-demo-btn" icon="el-icon-picture-outline">
+            <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" icon="el-icon-search"/>
+          </el-button>
         </el-input>
       </el-col>
     </el-row>
@@ -85,6 +77,7 @@
   import myFoot from '../common/footer.vue'
   import answer from '../common/anwer.vue'
   import bus from '../../bus'
+  import lrz from 'lrz'
   export default {
     components: {
       VueCropper,
@@ -98,20 +91,32 @@
       return {
         msg: '',
         imgVisible: false,
-        ifVisible: false,
         imageSrc: '',
         visible: false,
         loading: false
       }
     },
     methods: {
-      handleChange (files) {
-        if (this.ifVisible === false) {
-          this.ifVisible = true
-          this.visible = true
-          this.imageSrc = files.url
-          this.$refs.cropper && this.$refs.cropper.replace(files.url)
+      setImage (e) {
+        const that = this
+        const file = e.target.files[0]
+        if (!file.type.includes('image/')) {
+          return
         }
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          lrz(event.target.result, { width: 1080 }).then(function (rst) {
+            console.log('执行成功')
+            that.visible = true
+            that.imageSrc = rst.base64
+            that.$refs.cropper && that.$refs.cropper.replace(rst.base64)
+          }).catch(function (err) {
+            console.log('执行失败' + err)
+          }).always(function () {
+            console.log('总是执行')
+          })
+        }
+        reader.readAsDataURL(file)
       },
       cropImage () {
         this.$store.state.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL()
@@ -122,24 +127,6 @@
       cancelCrop () {
         this.visible = false
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
-      },
-      handleBefore (file) {
-        /*  const self = this
-         let reader = new FileReader()
-         reader.readAsDataURL(files)
-         reader.onload = function () {
-         self.upLoadData.img_base64 = this.result
-         console.log('上传成功')
-         }
-         const isImg = file.type === 'image/*'
-         const isLt10M = file.size / 1024 / 1024 < 10
-         if (!isImg) {
-         this.$message.error('亲，只能选择图片')
-         }
-         if (!isLt10M) {
-         this.$message.error('上传图片大小不能超过 10MB!')
-         }
-         return isImg && isLt10M */
       },
       sureCrop () {
         this.loading = true
@@ -265,12 +252,22 @@
     position: relative;
     overflow: hidden;
   }
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
+  .crop-demo-btn{
     position: relative;
-    overflow: hidden;
+    width: 70px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    padding: 0 20px;
+  }
+  .crop-input{
+    position: absolute;
+    width: 70px;
+    height: 40px;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
   }
   .pre-img{
     max-width: 96%;
@@ -306,10 +303,6 @@
     word-wrap: break-word;
     letter-spacing: 1px;
   }
-  /* .ques:hover{
-    display: inline-block;
-    border: 2px solid #C0C4CC;
-  } */
   .up{
     line-height: 25px;
     font-size: 0.875rem;
