@@ -106,14 +106,12 @@
         const reader = new FileReader()
         reader.onload = (event) => {
           lrz(event.target.result, { width: 1080 }).then(function (rst) {
-            console.log('执行成功')
             that.visible = true
             that.imageSrc = rst.base64
             that.$refs.cropper && that.$refs.cropper.replace(rst.base64)
           }).catch(function (err) {
-            console.log('执行失败' + err)
+            console.log('压缩失败' + err)
           }).always(function () {
-            console.log('总是执行')
           })
         }
         reader.readAsDataURL(file)
