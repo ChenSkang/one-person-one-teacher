@@ -616,6 +616,13 @@
     background-color: #fff;
     padding-bottom: 20px;
   }
+  .set_exam{
+    width: 80%;
+    margin-left: 10%;
+  }
+  .set_exam div{
+    margin-top: 10px;
+  }
   .set_title{
     width: 100%;
     height: 45px;
@@ -625,13 +632,6 @@
     background-color: #EBEEF5;
     border-bottom: 1px solid #E4E7ED;
     margin-bottom: 10px;
-  }
-  .set_exam{
-    width: 80%;
-    margin-left: 10%;
-  }
-  .set_exam div{
-    margin-top: 10px;
   }
   .exam_left img{
     position: absolute;
