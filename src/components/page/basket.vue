@@ -477,7 +477,6 @@
         })
       },
       saveWord () {
-        console.log($)
         console.log(saveAs)
         let x = document.getElementById('pdfDom')
         console.log(x)
