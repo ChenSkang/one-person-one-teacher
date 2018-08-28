@@ -121,10 +121,19 @@
         }, (res) => {
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
           this.load = false
-          this.$message.error('请求服务端失败')
+          this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
+            confirmButtonText: '确定',
+            callback: action => {
+              this.$message({
+                type: 'info',
+                message: '未知错误'
+              })
+            }
+          })
         })
       },
       searchMsg () {
+        this.load = true
         const str = this.msg
         let url = this.$store.state.urls.url + 'wordServlet'
         this.$axios.post(url, str, {
@@ -133,12 +142,14 @@
           },
           withCredentials: true
         }).then((response) => {
+          this.load = false
           this.$message.success('推荐成功')
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           console.log(response.data)
           this.$router.push('/index')
         }, (response) => {
-          this.$alert('请检查图片或文本内容并确认网络是否正常', '未知错误', {
+          this.load = false
+          this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {
             confirmButtonText: '确定',
             callback: action => {
               this.$message({
