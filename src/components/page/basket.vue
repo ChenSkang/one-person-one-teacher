@@ -174,8 +174,6 @@
               <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
               <div><el-button class="btn" @click="saveExam()" type="primary" icon="el-icon-download">保存试题</el-button></div>
               <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
-              <div><el-button class="btn" @click="saveWord()" type="primary" icon="el-icon-download">word测试</el-button></div>
-
             </div>
             <div class="right_down">
               <div class="set_title">试卷信息</div>
@@ -212,9 +210,6 @@
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   import answer from '../common/anwer.vue'
   import bus from '../../bus'
-  import saveAs from '../utils/fileexport'
-  import $ from '../utils/jqueryexport'
-  import '../../../static/jquery.wordexport'
   const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项', '显示解析', '解析后置']
   const secondOptions = ['副标题', '试卷信息', '装订线', '显示答案', '答案后置']
   export default {
@@ -475,12 +470,6 @@
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
-      },
-      saveWord () {
-        console.log(saveAs)
-        let x = document.getElementById('pdfDom')
-        console.log(x)
-        $(x).wordExport('filename')
       },
       creat () {
         if (sessionStorage.getItem('sessionId')) {
