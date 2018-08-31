@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  v-loading.fullscreen.lock="loading">
     <el-row id="space">
       <el-col :span="8" v-if="nowuser"><div class="col" @click="signShows()"><span>登录</span></div></el-col>
       <el-col :span="4" v-else><div class="col"><span>{{$store.state.userNow}}</span></div></el-col>
@@ -96,6 +96,7 @@
       return {
         msg: '用户名密码登录',
         checked: true,
+        loading: false,
         signShow: false,
         signForm: {
           usr: '',
@@ -297,6 +298,7 @@
       },
       goBasket () {
         if (sessionStorage.getItem('sessionId')) {
+          this.loading = true
           let url = this.$store.state.urls.local + 'GetBasketServlet'
           let userId = sessionStorage.getItem('userId')
           let sessionId = sessionStorage.getItem('sessionId')
@@ -328,8 +330,10 @@
                   this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
               }
             }
+            this.loading = false
             this.$router.push('/basket')
           }, (response) => {
+            this.loading = false
             this.$message.error('请求服务端失败')
           })
         } else {

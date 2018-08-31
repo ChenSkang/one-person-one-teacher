@@ -142,9 +142,12 @@
           },
           withCredentials: true
         }).then((response) => {
+          this.$store.state.cropImg = ''
+          sessionStorage.removeItem('defaultSrc')
           this.load = false
           this.$message.success('推荐成功')
           sessionStorage.setItem('subj', JSON.stringify(response.data))
+          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
           console.log(response.data)
           this.$router.push('/index')
         }, (response) => {

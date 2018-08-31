@@ -180,7 +180,7 @@
           withCredentials: true
         }).then((response) => {
           this.$store.state.cropImg = ''
-          sessionStorage.setItem('defaultSrc', '')
+          sessionStorage.removeItem('defaultSrc')
           this.loading = false
           this.$message.success('推荐成功')
           sessionStorage.setItem('subj', JSON.stringify(response.data))
