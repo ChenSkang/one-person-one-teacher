@@ -105,6 +105,7 @@
         }
         const reader = new FileReader()
         reader.onload = (event) => {
+          e.target.value = ''
           lrz(event.target.result, { width: 1080 }).then(function (rst) {
             that.visible = true
             that.imageSrc = rst.base64

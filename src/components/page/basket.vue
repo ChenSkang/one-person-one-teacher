@@ -422,10 +422,21 @@
           inputPattern: /\S/,
           inputErrorMessage: '不能为空'
         }).then(({ value }) => {
+          let arr = []
+          for (let i = 0; i < this.$store.state.XZ.length; i++) {
+            arr.push(this.$store.state.XZ[i].unique)
+          }
+          for (let i = 0; i < this.$store.state.TK.length; i++) {
+            arr.push(this.$store.state.TK[i].unique)
+          }
+          for (let i = 0; i < this.$store.state.JD.length; i++) {
+            arr.push(this.$store.state.JD[i].unique)
+          }
           let sessionId = sessionStorage.getItem('sessionId')
           let formData = new FormData()
           formData.append('sessionId', sessionId)
           formData.append('title', value)
+          formData.append('questions', arr)
           let url = this.$store.state.urls.local + 'AddPaperServlet'
           this.$axios.post(url, formData, {
             headers: {
