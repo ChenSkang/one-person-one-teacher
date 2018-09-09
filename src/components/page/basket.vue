@@ -174,6 +174,7 @@
               <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
               <div><el-button class="btn" @click="saveExam()" type="primary" icon="el-icon-download">保存试题</el-button></div>
               <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
+              <div><el-button class="btn" @click="wordDown()" type="primary" icon="el-icon-delete">word测试</el-button></div>
             </div>
             <div class="right_down">
               <div class="set_title">试卷信息</div>
@@ -456,6 +457,34 @@
             type: 'info',
             message: '取消输入'
           })
+        })
+      },
+      wordDown () {
+        let arr = []
+        for (let i = 0; i < this.$store.state.XZ.length; i++) {
+          arr.push(this.$store.state.XZ[i].unique)
+        }
+        for (let i = 0; i < this.$store.state.TK.length; i++) {
+          arr.push(this.$store.state.TK[i].unique)
+        }
+        for (let i = 0; i < this.$store.state.JD.length; i++) {
+          arr.push(this.$store.state.JD[i].unique)
+        }
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('questions', arr)
+        let url = this.$store.state.urls.url + 'BasketDownJump'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response)
+          window.location.href = response.data
+        }, (response) => {
+          this.$message.error('请求服务端失败')
         })
       },
       deleteAll () {

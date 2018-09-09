@@ -20,9 +20,10 @@
         <el-table-column
           fixed="right"
           label="操作"
-          width="180">
+          width="240">
           <template slot-scope="scope">
             <el-button size="small" @click="showExams(scope.row)">查看</el-button>
+            <el-button size="small" type="primary" @click="downExam(scope.row)">下载</el-button>
             <el-button size="small" type="danger" @click="deleteExam(scope.$index)">删除</el-button>
           </template>
         </el-table-column>
@@ -49,7 +50,7 @@
     },
     methods: {
       showExams (row) {
-        let url = this.$store.state.urls.local + 'GetPaperQueServlet'
+        let url = this.$store.state.urls.url + 'GetPaperQueServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
@@ -85,8 +86,27 @@
           this.$message.error('请求服务端失败')
         })
       },
+      downExam (row) {
+        let url = this.$store.state.urls.url + 'PaperDownJump'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('paperId', row.id)
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          sessionStorage.setItem('paper', row.id)
+          console.log(response)
+          window.location.href = response.data
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      },
       deleteExam (x) {
-        let url = this.$store.state.urls.local + 'DeletePaperServlet'
+        let url = this.$store.state.urls.url + 'DeletePaperServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
