@@ -1,6 +1,25 @@
 <template>
   <div>
     <mySpace></mySpace>
+    <el-popover
+      slot="append"
+      placement="bottom"
+      title="提示"
+      width="250"
+      trigger="manual"
+      v-model="visibleTwo">
+      <p>此处可注册或者登录帐号，只有登录后才可以添加试题到试题篮以及体验后续功能</p>
+      <div style="text-align: right; margin: 5px 0 0 0">
+        <el-button type="primary" size="mini" @click="signThree()">我知道了</el-button>
+      </div>
+      <el-button slot="reference" class="signSpace"></el-button>
+    </el-popover>
+    <el-dialog title="提示" :visible.sync="visibles" width="40%" :modal="false">
+      <span>OPOT是面向初中数学教育，包含搜题，组卷，下载的辅助学习功能性网站</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="signOne()">我知道了</el-button>
+      </span>
+    </el-dialog>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" :show-close="false">
       <vue-cropper ref='cropper'
                    :src="imageSrc"
@@ -31,6 +50,19 @@
         <el-row class="concern">
           <el-col :span="24">
             <el-input v-model="msg" v-on:keyup.enter="searchMsg()">
+              <el-popover
+                slot="append"
+                placement="bottom"
+                title="提示"
+                width="200"
+                trigger="manual"
+                v-model="visibleOne">
+                <p>点击可选择图片进行搜索并可添加试题至试题篮</p>
+                <div style="text-align: right; margin: 5px 0 0 0">
+                  <el-button type="primary" size="mini" @click="signTwo()">我知道了</el-button>
+                </div>
+                <el-button slot="reference" class="crop-demo"></el-button>
+              </el-popover>
               <el-button @click="searchMsg()" slot="append" v-if="msg" class="crop-demo-btn">搜索</el-button>
               <el-button v-else slot="append" class="crop-demo-btn" icon="el-icon-picture-outline">
                 <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" icon="el-icon-search"/>
@@ -56,10 +88,25 @@
         msg: '',
         visible: false,
         imageSrc: '',
-        load: false
+        load: false,
+        visibles: false,
+        visibleOne: false,
+        visibleTwo: false
       }
     },
     methods: {
+      signOne () {
+        this.visibles = false
+        this.visibleOne = true
+      },
+      signTwo () {
+        this.visibleOne = false
+        this.visibleTwo = true
+      },
+      signThree () {
+        this.visibleTwo = false
+        localStorage.setItem('ifFirst', 'noFirst')
+      },
       setImage (e) {
         const that = this
         const file = e.target.files[0]
@@ -171,7 +218,15 @@
       mySpace,
       VueCropper
     },
+    beforeCreate () {
+      if (!localStorage.getItem('ifFirst')) {
+        localStorage.setItem('ifFirst', 'first')
+      }
+    },
     created () {
+      if (localStorage.getItem('ifFirst') === 'first') {
+        this.visibles = true
+      }
     }
   }
 </script>
@@ -208,6 +263,12 @@
     line-height: 40px;
     padding: 0 20px;
   }
+  .crop-demo{
+    position: relative;
+    width: 0;
+    height: 0;
+    z-index: -1;
+  }
   .crop-input{
     position: absolute;
     width: 70px;
@@ -216,5 +277,13 @@
     top: 0;
     opacity: 0;
     cursor: pointer;
+  }
+  .signSpace{
+    border: none;
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 10px;
+    right: 150px;
   }
 </style>
