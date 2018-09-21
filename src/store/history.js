@@ -11,6 +11,7 @@ export default {
     myexam: true,
     paper: true,
     find: true,
-    searched: []
+    searched: [],
+    loading: false
   }
 }
