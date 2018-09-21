@@ -1,15 +1,15 @@
 <template>
   <div  v-loading.fullscreen.lock="loading">
-    <el-row id="space">
-      <el-col :span="8" v-if="nowuser"><div class="col" @click="signShows()"><span>登录</span></div></el-col>
-      <el-col :span="4" v-else><div class="col"><span>{{$store.state.userNow}}</span></div></el-col>
-      <el-col :span="8" v-if="nowuser"><div class="col" @click="registerShows()"><span>注册</span></div></el-col>
-      <el-col :span="4" v-else><div class="col" @click="signOut()"><span>退出</span></div></el-col>
-      <el-col :span="4" v-if="!nowuser"><div class="col" @click="goMyExam()"><span>历史试题</span></div></el-col>
-      <el-col :span="4" v-if="!nowuser"><div class="col" @click="searchHistory()"><span>搜索历史</span></div></el-col>
-      <el-col :span="4" v-if="!nowuser"><div class="col" @click="goBasket()"><span>试题篮</span></div></el-col>
-      <el-col :span="nowuser ? 8 : 4"><div class="col" @click="$router.push('/')"><span>首页</span></div></el-col>
-    </el-row>
+    <div id="space">
+      <div class="col" @click="$router.push('/')"><span>首页</span>丨</div>
+      <div class="col" v-if="nowuser" @click="signShows()"><span>登录</span>丨</div>
+      <div class="col" v-else><span>{{$store.state.userNow}}</span>丨</div>
+      <div class="col" v-if="nowuser" @click="registerShows()"><span>注册</span></div>
+      <div class="col" v-else @click="signOut()"><span>搜索</span>丨</div>
+      <div class="col" v-if="!nowuser" @click="goMyExam()"><span>历史试题</span>丨</div>
+      <div class="col" v-if="!nowuser" @click="searchHistory()"><span>搜索历史</span>丨</div>
+      <div class="col" v-if="!nowuser" @click="goBasket()"><span>试题篮</span></div>
+    </div>
     <el-dialog :title="ms" :visible.sync="registerShow" width="30%" :modal="false">
       <el-form :model="registerForm" status-icon :rules="registerRule" ref="registerForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="昵称" prop="user">
@@ -432,23 +432,22 @@
 
 <style scoped>
   #space{
-    background-color: #fff;
-    height: 33px;
+    height: 40px;
     position: fixed;
-    right: 10px;
+    right: 16%;
     top: 0;
-    z-index: 9;
+    z-index: 999;
+    display: flex;
+    flex-direction: row;
   }
   .col{
-    width: 60px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 0.75rem;
-    height: 33px;
-    line-height: 33px;
-    text-decoration: underline;
+    color: #FFF;
     text-align: center;
+    font-size: 14px;
+    font-family: 微软雅黑;
+    letter-spacing: 1px;
+    height: 40px;
+    line-height: 40px;
     cursor: pointer;
   }
   .demo-ruleForm{
