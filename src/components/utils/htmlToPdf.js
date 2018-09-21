@@ -134,7 +134,11 @@ export default{
       }
     }
     Vue.prototype.signShows = function () {
-      this.$store.state.signShow = true
+      if (sessionStorage.getItem('sessionId')) {
+        this.$message('请不要重复登录')
+      } else {
+        this.$store.state.signShow = true
+      }
     }
   }
 }

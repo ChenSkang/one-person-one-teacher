@@ -51,9 +51,9 @@
                 <span class="QUE" v-html="$store.state.nowSub[0].que"></span>
               </div>
               <div class="low">
-                <div @click="showJX(0)"><i class="el-icon-document"></i>解析</div>
-                <div v-if="!($store.state.tests.indexOf($store.state.nowSub[0].unique) + 1)"><el-button type="primary" size="mini" @click="addPaper(0)" icon="el-icon-plus" round>试题</el-button></div>
-                <div v-else><el-button @click="deletePaper(0)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
+                <div><el-button type="primary" size="mini" @click="showJX(0)" icon="el-icon-document">查看解析</el-button></div>
+                <div v-if="!($store.state.tests.indexOf($store.state.nowSub[0].unique) + 1)"><el-button type="danger" size="mini" @click="addPaper(0)" icon="el-icon-plus">添加试题</el-button></div>
+                <div v-else><el-button @click="deletePaper(0)" type="info" size="mini" icon="el-icon-minus">试题</el-button></div>
               </div>
             </li>
           </ul>
@@ -64,8 +64,8 @@
                 <span class="QUE" v-html="$store.state.nowSub[index].que"></span>
               </div>
               <div class="low">
-                <div @click="showJX(index)"><i class="el-icon-document"></i>解析</div>
-                <div v-if="!($store.state.tests.indexOf($store.state.nowSub[index].unique) + 1)"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus" round>试题</el-button></div>
+                <div @click="showJX(index)"><el-button type="primary" size="mini" @click="showJX(0)" icon="el-icon-document">查看解析</el-button></div>
+                <div v-if="!($store.state.tests.indexOf($store.state.nowSub[index].unique) + 1)"><el-button type="danger" @click="addPaper(index)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
                 <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
               </div>
             </li>
@@ -272,6 +272,15 @@
     position: relative;
     top: 40px;
     overflow: hidden;
+  }
+  .first-head{
+    width: 100%;
+    height: 160px;
+    position: relative;
+    top: 40px;
+    box-sizing: border-box;
+    background-image: url("./../../img/base_head.png");
+    background-size: cover;
   }
   .pre-img{
     max-width: 96%;

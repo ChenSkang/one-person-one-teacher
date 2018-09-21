@@ -238,6 +238,15 @@
 </script>
 
 <style scoped>
+  .first-head{
+    width: 100%;
+    height: 160px;
+    position: relative;
+    top: 40px;
+    box-sizing: border-box;
+    background-image: url("./../../img/base_head.png");
+    background-size: cover;
+  }
   .first-middle{
     width: 100%;
     position: relative;
