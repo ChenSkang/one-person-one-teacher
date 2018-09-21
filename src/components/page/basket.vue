@@ -1,5 +1,5 @@
 <template>
-  <div style="overflow: hidden">
+  <div>
     <answer></answer>
     <my-head></my-head>
     <mySpace></mySpace>
@@ -14,11 +14,6 @@
             </span>
     </el-dialog>
     <div class="main">
-      <el-row class="tops">
-        <el-button type="primary" icon="el-icon-back" @click="$router.push('/index')" circle></el-button>
-        <el-button type="primary" @click="getPdf()" icon="el-icon-download" circle></el-button>
-        <el-button type="primary" @click="deleteall = true" icon="el-icon-delete" circle></el-button>
-      </el-row>
       <div class="concern">
         <div class="exam" id="pdfDom">
           <div class="exam_something">
@@ -71,12 +66,14 @@
                   </div>
                 </div>
                 <div class="low">
-                  <div @click="showJX1(index)">解析</div>
-                  <div @click="deleteX(index)">删除</div>
-                  <div @click="upX(index)">上移</div>
-                  <div @click="downX(index)">下移</div>
-                  <div @click="value.area += 50">增加答题区</div>
-                  <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                  <div class="low-main">
+                    <div @click="showJX1(index)">解析</div>
+                    <div @click="deleteX(index)">删除</div>
+                    <div @click="upX(index)">上移</div>
+                    <div @click="downX(index)">下移</div>
+                    <div @click="value.area += 50">增加答题区</div>
+                    <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                  </div>
                 </div>
               </div>
             </transition-group>
@@ -98,12 +95,14 @@
                   </div>
                 </div>
                 <div class="low">
-                  <div @click="showJX2(index)">解析</div>
-                  <div @click="deleteT(index)">删除</div>
-                  <div @click="upT(index)">上移</div>
-                  <div @click="downT(index)">下移</div>
-                  <div @click="value.area += 50">增加答题区</div>
-                  <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                  <div class="low-main">
+                    <div @click="showJX2(index)">解析</div>
+                    <div @click="deleteT(index)">删除</div>
+                    <div @click="upT(index)">上移</div>
+                    <div @click="downT(index)">下移</div>
+                    <div @click="value.area += 50">增加答题区</div>
+                    <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                  </div>
                 </div>
               </div>
             </transition-group>
@@ -125,12 +124,14 @@
                   </div>
                 </div>
                 <div class="low">
-                  <div @click="showJX3(index)">解析</div>
-                  <div @click="deleteJ(index)">删除</div>
-                  <div @click="upJ(index)">上移</div>
-                  <div @click="downJ(index)">下移</div>
-                  <div @click="value.area += 50">增加答题区</div>
-                  <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                  <div class="low-main">
+                    <div @click="showJX3(index)">解析</div>
+                    <div @click="deleteJ(index)">删除</div>
+                    <div @click="upJ(index)">上移</div>
+                    <div @click="downJ(index)">下移</div>
+                    <div @click="value.area += 50">增加答题区</div>
+                    <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                  </div>
                 </div>
               </div>
             </transition-group>
@@ -169,7 +170,7 @@
         <div class="concern-right">
           <div class="right">
             <div class="right_up">
-              <div class="set_title">文字提示</div>
+              <div class="set_title">试卷操作</div>
               <div><el-button class="btn" @click="$router.push('/index')" icon="el-icon-back" type="primary">继续选题</el-button></div>
               <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
               <div><el-button class="btn" @click="saveExam()" type="primary" icon="el-icon-download">保存试题</el-button></div>
@@ -198,7 +199,7 @@
       </div>
     </div>
     <gotop></gotop>
-    <myFoot style="position: relative; bottom: 0"></myFoot>
+    <myFoot></myFoot>
   </div>
 </template>
 
@@ -513,39 +514,41 @@
       },
       creat () {
         if (sessionStorage.getItem('sessionId')) {
-          let url = this.$store.state.urls.local + 'GetBasketServlet'
-          let userId = sessionStorage.getItem('userId')
-          let sessionId = sessionStorage.getItem('sessionId')
-          let formData = new FormData()
-          formData.append('userId', userId)
-          formData.append('sessionId', sessionId)
-          this.$axios.post(url, formData, {
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            withCredentials: true
-          }).then((response) => {
-            this.$store.state.XZ = []
-            this.$store.state.TK = []
-            this.$store.state.JD = []
-            for (let i = 0; i < response.data.length; i++) {
-              switch (response.data[i].kind) {
-                case '选择题':
-                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                case '填空题':
-                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                case '解答题':
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                default:
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
+          if (this.$store.state.history.basket) {
+            let url = this.$store.state.urls.local + 'GetBasketServlet'
+            let userId = sessionStorage.getItem('userId')
+            let sessionId = sessionStorage.getItem('sessionId')
+            let formData = new FormData()
+            formData.append('userId', userId)
+            formData.append('sessionId', sessionId)
+            this.$axios.post(url, formData, {
+              headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+              },
+              withCredentials: true
+            }).then((response) => {
+              this.$store.state.XZ = []
+              this.$store.state.TK = []
+              this.$store.state.JD = []
+              for (let i = 0; i < response.data.length; i++) {
+                switch (response.data[i].kind) {
+                  case '选择题':
+                    this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
+                    break
+                  case '填空题':
+                    this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
+                    break
+                  case '解答题':
+                    this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
+                    break
+                  default:
+                    this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
+                }
               }
-            }
-          }, (response) => {
-            this.$message.error('请求服务端失败')
-          })
+            }, (response) => {
+              this.$message.error('请求服务端失败')
+            })
+          }
         }
       },
       mathJax () {
@@ -580,14 +583,15 @@
 </script>
 
 <style scoped>
-  /* @import "../../someJs/demo.css"; */
   .main {
     width: 100%;
     position: relative;
+    top: 40px;
     background-color: #F2F6FC;
     padding-top: 20px;
     padding-bottom: 20px;
     letter-spacing: 1px;
+    overflow: hidden;
   }
   .concern{
     width: 84%;
@@ -595,32 +599,8 @@
     display: flex;
     flex-direction: row
   }
-  .tops{
-    display: none;
-  }
-  @media screen and (max-width: 1100px){
-    .concern-right{
-      display: none;
-    }
-    .tops{
-      display: block;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .exam{
-      width: 100%;
-    }
-  }
   .concern-right{
     width: 25%;
-  }
-  @media screen and (max-width: 800px){
-    .exam_something{
-      display: none;
-    }
-    .exam{
-      padding: 40px 10px 40px 10px !important;
-    }
   }
   .exam{
     width: 915px;
@@ -751,19 +731,19 @@
     height: 36px;
     position: relative;
     bottom: 0;
-    display: flex;
-    flex-direction: row;
     line-height: 36px;
     padding: 0 20px;
     color: #fff;
     font-size: 0.75rem;
     border-radius: 0 0 10px 10px;
   }
+  .low-main{
+    display: flex;
+    justify-content:flex-end;
+  }
   .low div{
     margin-left: 15px;
     cursor: pointer;
-  }
-  .TH{
   }
   .item-ul::-webkit-scrollbar{
     width: 0;
