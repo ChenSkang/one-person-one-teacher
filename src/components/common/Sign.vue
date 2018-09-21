@@ -1,26 +1,8 @@
 <template>
   <div>
+    <my-head></my-head>
     <mySpace></mySpace>
-    <el-popover
-      slot="append"
-      placement="bottom"
-      title="提示"
-      width="250"
-      trigger="manual"
-      v-model="visibleTwo">
-      <p>此处可注册或者登录帐号，只有登录后才可以添加试题到试题篮以及体验后续功能</p>
-      <div style="text-align: right; margin: 5px 0 0 0">
-        <el-button type="primary" size="mini" @click="signThree()">我知道了</el-button>
-      </div>
-      <el-button slot="reference" class="signSpace"></el-button>
-    </el-popover>
-    <el-dialog title="提示" :visible.sync="visibles" width="40%" :modal="false">
-      <span>OPOT是面向初中数学教育，包含搜题，组卷，下载的辅助学习功能性网站</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="signOne()">我知道了</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" :show-close="false">
+    <el-dialog :visible.sync="visible" width="60%" center>
       <vue-cropper ref='cropper'
                    :src="imageSrc"
                    :ready="cropImage"
@@ -31,53 +13,92 @@
                    style="width:100%;height:100%;max-height: 60vh">
       </vue-cropper>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="rotateImage()">转圈</el-button>
-        <el-button @click="cancelCrop">取消</el-button>
-        <el-button type="primary" @click="sureCrop" v-loading.fullscreen.lock="load">确定</el-button>
+        <el-button @click="rotateImage()">旋 转</el-button>
+        <el-button type="primary" @click="sureCrop" v-loading.fullscreen.lock="load">确 定</el-button>
+        <el-button @click="cancelCrop" type="warning">取 消</el-button>
       </span>
     </el-dialog>
-    <el-container>
-      <el-header height="20vh">
-      </el-header>
-      <el-main class="main">
-        <el-row class="concern">
-          <el-col :span="24"><div class="hi"><h1>opot</h1></div></el-col>
-        </el-row>
-        <el-row class="concern">
-          <el-col :span="24">
-          </el-col>
-        </el-row>
-        <el-row class="concern">
-          <el-col :span="24">
-            <el-input v-model="msg" v-on:keyup.enter="searchMsg()">
-              <el-popover
-                slot="append"
-                placement="bottom"
-                title="提示"
-                width="200"
-                trigger="manual"
-                v-model="visibleOne">
-                <p>点击可选择图片进行搜索并可添加试题至试题篮</p>
-                <div style="text-align: right; margin: 5px 0 0 0">
-                  <el-button type="primary" size="mini" @click="signTwo()">我知道了</el-button>
+
+    <div>
+      <div class="first-head">
+        <div class="transverse"></div>
+        <div class="header-concern">
+          <div>
+            <img src="./../../img/hand.png" alt="">
+          </div>
+          <div style="width: 80%">
+            <el-input v-model="msg" v-on:keyup.enter="searchMsg()"></el-input>
+          </div>
+          <div>
+            <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜索</el-button>
+          </div>
+          <div style="position: relative">
+            <el-button icon="el-icon-picture-outline" type="warning">图片搜索
+              <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" icon="el-icon-search"/>
+            </el-button>
+          </div>
+        </div>
+      </div>
+      <div class="first-middle">
+        <div style="background-color: #fff">
+          <div class="middle-up">
+            <div class="up-title upt">
+              <p>——<span>信息导航</span>——</p>
+            </div>
+            <div class="up-body">
+              <div class="up-main">
+                <img src="./../../img/base_four.png" alt=""/>
+                <p>用户登录</p>
+              </div>
+              <div class="up-main">
+                <img src="./../../img/base_one.png" alt=""/>
+                <p>历史试题</p>
+              </div>
+              <div class="up-main">
+                <img src="./../../img/base_three.png" alt=""/>
+                <p>搜索历史</p>
+              </div>
+              <div class="up-main">
+                <img src="./../../img/base_two.png" alt=""/>
+                <p>试题篮</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="down-middle">
+          <div class="middle-down">
+            <div class="up-title downt">
+              <p>——<span>热门试题推荐</span>——</p>
+            </div>
+            <div class="up-body">
+              <div class="down-main">
+                <div class="down-que left-que" v-for="item in 3">
+                  <div><p>{{hotQuestions[item - 1]}}</p></div>
                 </div>
-                <el-button slot="reference" class="crop-demo"></el-button>
-              </el-popover>
-              <el-button @click="searchMsg()" slot="append" v-if="msg" class="crop-demo-btn">搜索</el-button>
-              <el-button v-else slot="append" class="crop-demo-btn" icon="el-icon-picture-outline">
-                <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" icon="el-icon-search"/>
-              </el-button>
-            </el-input>
-          </el-col>
-        </el-row>
-      </el-main>
-    </el-container>
+              </div>
+              <div class="down-line">
+                <div class="line"></div>
+                <div class="arrow"></div>
+              </div>
+              <div class="down-main">
+                <div class="down-que right-que" v-for="item in 3">
+                  <div><p>{{hotQuestions[item + 2]}}</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <my-foot></my-foot>
   </div>
 </template>
 
 <script>
   import VueCropper from 'vue-cropperjs'
   import mySpace from './mySpace.vue'
+  import myHead from './header.vue'
+  import myFoot from './footer.vue'
   import ElRow from 'element-ui/packages/row/src/row'
   import ElCol from 'element-ui/packages/col/src/col'
   import lrz from 'lrz'
@@ -89,24 +110,17 @@
         visible: false,
         imageSrc: '',
         load: false,
-        visibles: false,
-        visibleOne: false,
-        visibleTwo: false
+        hotQuestions: [
+          '一部长篇小说的字数约为3子子子子子这种630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
+          '一部长篇小说的字数约为3630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
+          '一部长篇小说的字数约为3630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
+          '一部长篇小说的字数约为3630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
+          '一部长篇小说的字数约为3630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
+          '一部长篇小说的字数约为3630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）'
+        ]
       }
     },
     methods: {
-      signOne () {
-        this.visibles = false
-        this.visibleOne = true
-      },
-      signTwo () {
-        this.visibleOne = false
-        this.visibleTwo = true
-      },
-      signThree () {
-        this.visibleTwo = false
-        localStorage.setItem('ifFirst', 'noFirst')
-      },
       setImage (e) {
         const that = this
         const file = e.target.files[0]
@@ -216,74 +230,115 @@
       ElCol,
       ElRow,
       mySpace,
-      VueCropper
-    },
-    beforeCreate () {
-      if (!localStorage.getItem('ifFirst')) {
-        localStorage.setItem('ifFirst', 'first')
-      }
-    },
-    created () {
-      if (localStorage.getItem('ifFirst') === 'first') {
-        this.visibles = true
-      }
+      VueCropper,
+      myHead,
+      myFoot
     }
   }
 </script>
 
 <style scoped>
-  .main{
+  .first-middle{
     width: 100%;
-    text-align: center;
-  }
-  .concern{
-    width: 45%;
-    margin-left: 27.5%;
-  }
-  @media screen and (max-width: 500px) {
-    .concern {
-      width: 80%;
-      margin-left: 10%;
-    }
-  }
-  .hi > h1{
-    margin-bottom: 20px;
-    font-size: 5.4rem;
-    line-height: 1.3;
-    font-weight: 300;
-    font-family: sans-serif;
-    text-align: center;
-    color: #000;
-  }
-  .crop-demo-btn{
     position: relative;
-    width: 70px;
-    height: 40px;
-    text-align: center;
-    line-height: 40px;
-    padding: 0 20px;
+    top: 40px;
   }
-  .crop-demo{
+  .middle-up {
+    width: 68%;
+    height: 240px;
     position: relative;
-    width: 0;
-    height: 0;
-    z-index: -1;
+    left: 16%;
+    right: 16%;
   }
-  .crop-input{
-    position: absolute;
-    width: 70px;
-    height: 40px;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    cursor: pointer;
+  .up-title{
+    text-align: center;
+    font-size: 19px;
+    font-family: 微软雅黑;
   }
-  .signSpace{
-    border: none;
-    width: 0;
-    height: 0;
-    position: absolute;
-    top: 10px;
-    right: 150px;
+  .upt{
+    height: 60px;
+    color: #409EFF;
+    line-height: 60px;
+  }
+  .downt{
+    height: 60px;
+    color: #fff;
+    line-height: 60px;
+  }
+  .up-title p span{
+    margin-left: 20px;
+    letter-spacing: 20px;
+  }
+  .up-body{
+    display: flex;
+    flex-direction: row;
+  }
+  .up-main{
+    height: 180px;
+    width: 25%;
+  }
+  .up-main img{
+    width: 50%;
+    position: relative;
+    left: 25%;
+    right: 25%;
+  }
+  .up-main p{
+    text-align: center;
+    letter-spacing: 3px;
+    font-weight: 500;
+  }
+  .up-main:hover p{
+    text-decoration: underline;
+    font-style: oblique;
+  }
+  .down-middle{
+    background-image: url("./../../img/base.png");
+    background-size: cover;
+  }
+  .middle-down{
+    width: 68%;
+    height: 480px;
+    position: relative;
+    left: 16%;
+    right: 16%;
+  }
+  .down-main{
+    width: 50%;
+    height: 420px;
+    box-sizing: border-box;
+  }
+  .down-line{
+    width: 30px;
+  }
+  .line{
+    width: 3px;
+    height: 390px;
+    background-color: #fff;
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+  .down-que{
+    width: 93%;
+    height: 90px;
+    box-sizing: border-box;
+    background-color: rgba(124, 146, 203, .75);
+    padding: 10px;
+  }
+  .down-que p{
+    color: #fff;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+  }
+  .left-que{
+    margin-bottom: 50px;
+  }
+  .right-que{
+    float: right;
+    margin-top: 50px;
   }
 </style>
