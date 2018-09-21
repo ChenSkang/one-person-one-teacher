@@ -41,24 +41,24 @@
       </div>
       <div class="first-middle">
         <div style="background-color: #fff">
-          <div class="middle-up">
+          <div class="middle-up my-positions">
             <div class="up-title upt">
               <p>——<span>信息导航</span>——</p>
             </div>
             <div class="up-body">
-              <div class="up-main">
+              <div class="up-main" @click="signShows()">
                 <img src="./../../img/base_four.png" alt=""/>
                 <p>用户登录</p>
               </div>
-              <div class="up-main">
+              <div class="up-main" @click="goMyExam()">
                 <img src="./../../img/base_one.png" alt=""/>
                 <p>历史试题</p>
               </div>
-              <div class="up-main">
+              <div class="up-main" @click="searchHistory()">
                 <img src="./../../img/base_three.png" alt=""/>
                 <p>搜索历史</p>
               </div>
-              <div class="up-main">
+              <div class="up-main" @click="goBasket()">
                 <img src="./../../img/base_two.png" alt=""/>
                 <p>试题篮</p>
               </div>
@@ -66,7 +66,7 @@
           </div>
         </div>
         <div class="down-middle">
-          <div class="middle-down">
+          <div class="middle-down my-positions">
             <div class="up-title downt">
               <p>——<span>热门试题推荐</span>——</p>
             </div>
@@ -244,11 +244,7 @@
     top: 40px;
   }
   .middle-up {
-    width: 68%;
     height: 240px;
-    position: relative;
-    left: 16%;
-    right: 16%;
   }
   .up-title{
     text-align: center;
@@ -276,6 +272,7 @@
   .up-main{
     height: 180px;
     width: 25%;
+    cursor: pointer;
   }
   .up-main img{
     width: 50%;
@@ -297,16 +294,11 @@
     background-size: cover;
   }
   .middle-down{
-    width: 68%;
     height: 480px;
-    position: relative;
-    left: 16%;
-    right: 16%;
   }
   .down-main{
     width: 50%;
     height: 420px;
-    box-sizing: border-box;
   }
   .down-line{
     width: 30px;
@@ -321,7 +313,6 @@
   .down-que{
     width: 93%;
     height: 90px;
-    box-sizing: border-box;
     background-color: rgba(124, 146, 203, .75);
     padding: 10px;
   }
