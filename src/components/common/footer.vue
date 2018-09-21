@@ -22,8 +22,8 @@
     width: 100%;
     height: 50px;
     position: relative;
-    bottom: 0;
     top: 40px;
+    bottom: 0;
     background-color: #409EFF;
   }
   .main{

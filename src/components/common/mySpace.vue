@@ -1,11 +1,11 @@
 <template>
-  <div  v-loading.fullscreen.lock="loading">
+  <div  v-loading.fullscreen.lock="$store.state.history.loading">
     <div id="space">
       <div class="col" @click="$router.push('/')"><span>首页</span>丨</div>
       <div class="col" v-if="nowuser" @click="signShows()"><span>登录</span>丨</div>
       <div class="col" v-else><span>{{$store.state.userNow}}</span>丨</div>
       <div class="col" v-if="nowuser" @click="registerShows()"><span>注册</span></div>
-      <div class="col" v-else @click="signOut()"><span>搜索</span>丨</div>
+      <div class="col" v-else @click="signOut()"><span>退出</span>丨</div>
       <div class="col" v-if="!nowuser" @click="goMyExam()"><span>历史试题</span>丨</div>
       <div class="col" v-if="!nowuser" @click="searchHistory()"><span>搜索历史</span>丨</div>
       <div class="col" v-if="!nowuser" @click="goBasket()"><span>试题篮</span></div>
@@ -35,7 +35,7 @@
         <p>已经有账号，马上去<span class="to" @click="gosign()">登录</span></p>
       </el-form>
     </el-dialog>
-    <el-dialog :title="msg" :visible.sync="signShow" width="30%" :modal="false">
+    <el-dialog :title="msg" :visible.sync="$store.state.signShow" width="30%" :modal="false">
       <el-form :model="signForm" :rules="signRule" ref="signForm" class="demo-ruleForm">
         <el-form-item prop="usr">
           <el-input type="text" v-model="signForm.usr" auto-complete="off" placeholder="手机/邮箱/用户名"></el-input>
@@ -96,8 +96,6 @@
       return {
         msg: '用户名密码登录',
         checked: true,
-        loading: false,
-        signShow: false,
         signForm: {
           usr: '',
           pass: ''
@@ -172,7 +170,7 @@
                   this.clearCookie()
                 }
                 this.$message.success('登录成功')
-                this.signShow = false
+                this.$store.state.signShow = false
                 localStorage.setItem('thisUser', name)
                 localStorage.setItem('thisPass', pass)
                 this.resetForm('signForm')
@@ -262,16 +260,13 @@
       },
       gosign () {
         this.registerShow = false
-        this.signShow = true
-      },
-      signShows () {
-        this.signShow = true
+        this.$store.state.signShow = true
       },
       registerShows () {
         this.registerShow = true
       },
       goRegister () {
-        this.signShow = false
+        this.$store.state.signShow = false
         this.registerShow = true
       },
       signOut () {
@@ -292,90 +287,6 @@
           localStorage.removeItem('thisUser')
           localStorage.removeItem('thisPass')
           this.$store.state.userNow = ''
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
-      },
-      goBasket () {
-        if (sessionStorage.getItem('sessionId')) {
-          this.loading = true
-          let url = this.$store.state.urls.local + 'GetBasketServlet'
-          let userId = sessionStorage.getItem('userId')
-          let sessionId = sessionStorage.getItem('sessionId')
-          let formData = new FormData()
-          formData.append('userId', userId)
-          formData.append('sessionId', sessionId)
-          this.$axios.post(url, formData, {
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            withCredentials: true
-          }).then((response) => {
-            this.$store.state.history.basket = false
-            this.$store.state.XZ = []
-            this.$store.state.TK = []
-            this.$store.state.JD = []
-            for (let i = 0; i < response.data.length; i++) {
-              switch (response.data[i].kind) {
-                case '选择题':
-                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                case '填空题':
-                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                case '解答题':
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                default:
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-              }
-            }
-            this.loading = false
-            this.$router.push('/basket')
-          }, (response) => {
-            this.loading = false
-            this.$message.error('请求服务端失败')
-          })
-        } else {
-          this.signShows()
-          this.$message('请先登录')
-        }
-      },
-      goMyExam () {
-        let url = this.$store.state.urls.local + 'GetPaperServlet'
-        let sessionId = sessionStorage.getItem('sessionId')
-        let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.history.myexam = false
-          this.$store.state.history.exam = []
-          for (let i = 0; i < response.data.length; i++) {
-            this.$store.state.history.exam.push({time: response.data[i].time, title: response.data[i].title, id: response.data[i].id})
-          }
-          this.$router.push('/myexam')
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
-      },
-      searchHistory () {
-        let url = this.$store.state.urls.local + 'GetHistoryServlet'
-        let sessionId = sessionStorage.getItem('sessionId')
-        let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.history.find = false
-          this.$store.state.history.searched = response.data
-          this.$router.push('/searched')
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
@@ -401,7 +312,6 @@
             sessionStorage.setItem('nowUser', response.data.u.name)
             sessionStorage.setItem('userId', response.data.u.id)
             this.$store.state.userNow = response.data.u.name
-            this.signShow = false
           } else {
             this.$alert('自动登录失效', '提示', {
               confirmButtonText: '确定',
