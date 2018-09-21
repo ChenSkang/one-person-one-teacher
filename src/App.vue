@@ -23,6 +23,7 @@
 </script>
 
 <style>
+  @import "css/myapp.css";
   @import "css/mathStyles_f558024.css";
   @import "css/question_9861710.css";
   *{
@@ -35,5 +36,6 @@
     font-family: 微软雅黑, Arial, sans-serif;
     width: 100%;
     height: 100%;
+    min-width: 1200px;
   }
 </style>
