@@ -31,7 +31,7 @@
           <el-input v-model="msg" v-on:keyup.enter="searchMsg()"></el-input>
         </div>
         <div>
-          <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜索</el-button>
+          <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜 索</el-button>
         </div>
         <div style="position: relative">
           <el-button icon="el-icon-picture-outline" type="warning">图片搜索
@@ -47,7 +47,7 @@
           <ul>
             <li class="ques">
               <div class="up">
-                <span class="TH">原题：</span>
+                <span class="TH">相似题：</span>
                 <span class="QUE" v-html="$store.state.nowSub[0].que"></span>
               </div>
               <div class="low">
@@ -74,6 +74,8 @@
       </div>
       <answer></answer>
     </div>
+    <div v-else :style="{minHeight: minHeight + 'px'}"></div>
+    <my-foot></my-foot>
     <gotop></gotop>
   </div>
 </template>
@@ -102,7 +104,8 @@
         imgVisible: false,
         imageSrc: '',
         visible: false,
-        loading: false
+        loading: false,
+        minHeight: 0
       }
     },
     methods: {
@@ -245,6 +248,7 @@
       }
     },
     created () {
+      this.minHeight = document.documentElement.clientHeight - 251
       this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       if (sessionStorage.getItem('subj')) { this.$store.state.nowSub = JSON.parse(sessionStorage.getItem('subj')) }
       if (localStorage.getItem('tests')) {
@@ -266,42 +270,17 @@
   #main{
     width: 100%;
     position: relative;
+    top: 40px;
     overflow: hidden;
-  }
-  .crop-demo-btn{
-    position: relative;
-    width: 70px;
-    height: 40px;
-    text-align: center;
-    line-height: 40px;
-    padding: 0 20px;
-  }
-  .crop-input{
-    position: absolute;
-    width: 70px;
-    height: 40px;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    cursor: pointer;
   }
   .pre-img{
     max-width: 96%;
     max-height: 200px;
     border: 1px solid #eee;
     border-radius: 5px;
+    box-sizing: border-box;
     margin-left: 50%;
     transform: translateX(-50%);
-  }
-  .concern{
-     width: 45%;
-     margin-left: 27.5%;
-   }
-  @media screen and (max-width: 500px) {
-    .concern {
-      width: 80%;
-      margin-left: 10%;
-    }
   }
   .block{
     width: 68%;
@@ -310,7 +289,6 @@
   .ques{
     position: relative;
     width: 98%;
-    zoom: 1;
     clear: both;
     margin: 10px 1% 10px 1%;
     box-sizing: border-box;
@@ -330,8 +308,9 @@
     position: relative;
     bottom: 0;
     display: flex;
-    flex-direction: row;
+    justify-content: flex-end;
     line-height: 36px;
+    box-sizing: border-box;
     border-top: 1px solid #dadada;
     padding: 0 20px;
     color: #666666;
