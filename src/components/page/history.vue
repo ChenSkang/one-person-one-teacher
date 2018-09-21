@@ -1,12 +1,8 @@
 <template>
-  <div style="overflow: hidden">
+  <div>
     <my-head></my-head>
     <mySpace></mySpace>
     <div class="main">
-      <el-row class="tops">
-        <el-button type="primary" icon="el-icon-back" @click="$router.push('/myexam')" circle></el-button>
-        <el-button type="primary" @click="getPdf()" icon="el-icon-download" circle></el-button>
-      </el-row>
       <div class="concern">
         <div class="exam" id="pdfDom">
           <div class="exam_something">
@@ -49,11 +45,6 @@
               <span class="TH">{{index + 1}}</span>
               <span v-html="value.que"></span>
             </div>
-            <div class="low">
-              <div @click="deleteX(index)"></div>
-              <div @click="upX(index)"></div>
-              <div @click="downX(index)"></div>
-            </div>
           </div>
 
           <div v-if="$store.state.history.TK.length" class="TM">{{$store.state.history.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.history.TK.length}}小题）</div>
@@ -61,11 +52,6 @@
             <div class="up">
               <span class="TH">{{$store.state.history.XZ.length + index + 1}}</span>
               <span v-html="value.que"></span>
-            </div>
-            <div class="low">
-              <div @click="deleteT(index)"></div>
-              <div @click="upT(index)"></div>
-              <div @click="downT(index)"></div>
             </div>
           </div>
 
@@ -75,17 +61,12 @@
               <span class="TH">{{$store.state.history.XZ.length + $store.state.history.TK.length + index + 1}}</span>
               <span v-html="value.que"></span>
             </div>
-            <div class="low">
-              <div @click="deleteJ(index)"></div>
-              <div @click="upJ(index)"></div>
-              <div @click="downJ(index)"></div>
-            </div>
           </div>
         </div>
         <div class="concern-right">
           <div class="right">
             <div class="right_up">
-              <div class="set_title">文字提示</div>
+              <div class="set_title">试卷操作</div>
               <div><el-button class="btn" @click="$router.push('/myexam')" icon="el-icon-back" type="primary">返回</el-button></div>
               <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载</el-button></div>
              </div>
@@ -207,10 +188,10 @@
 </script>
 
 <style scoped>
-  /* @import "../../someJs/demo.css"; */
   .main {
     width: 100%;
     position: relative;
+    top: 40px;
     background-color: #F2F6FC;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -222,32 +203,8 @@
     display: flex;
     flex-direction: row
   }
-  .tops{
-    display: none;
-  }
-  @media screen and (max-width: 1100px){
-    .concern-right{
-      display: none;
-    }
-    .tops{
-      display: block;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .exam{
-      width: 100%;
-    }
-  }
   .concern-right{
     width: 25%;
-  }
-  @media screen and (max-width: 800px){
-    .exam_something{
-      display: none;
-    }
-    .exam{
-      padding: 40px 10px 40px 10px !important;
-    }
   }
   .exam{
     width: 915px;
@@ -385,8 +342,6 @@
   .low div{
     margin-left: 15px;
     cursor: pointer;
-  }
-  .TH{
   }
   .item-ul::-webkit-scrollbar{
     width: 0;
