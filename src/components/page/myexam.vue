@@ -2,11 +2,12 @@
 <div>
   <myHead></myHead>
   <mySpace></mySpace>
-  <el-container>
-    <el-main class="main">
+  <div class="main" :style="{minHeight: minHeight + 'px'}">
+    <div>
       <el-table
         :data="$store.state.history.exam"
-        class="table"
+        :header-cell-style="{color: '#409eff'}"
+        class="table my-position"
         @row-dblclick="showExams">
         <el-table-column
           prop="time"
@@ -22,14 +23,14 @@
           label="操作"
           width="240">
           <template slot-scope="scope">
-            <el-button size="small" @click="showExams(scope.row)">查看</el-button>
+            <el-button size="small" type="primary" @click="showExams(scope.row)">查看</el-button>
             <el-button size="small" type="primary" @click="downExam(scope.row)">下载</el-button>
             <el-button size="small" type="danger" @click="deleteExam(scope.$index)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-    </el-main>
-  </el-container>
+    </div>
+  </div>
   <myFoot></myFoot>
 </div>
 </template>
@@ -41,6 +42,7 @@
   export default {
     data () {
       return {
+        minHeight: 0
       }
     },
     components: {
@@ -125,6 +127,7 @@
       }
     },
     created () {
+      this.minHeight = document.documentElement.clientHeight - 91
       if (this.$store.state.userNow) {
         if (this.$store.state.history.myexam) {
           let url = this.$store.state.urls.local + 'GetPaperServlet'
@@ -152,12 +155,16 @@
 
 <style scoped>
   .main{
-    background-color: #F2F6FC;
+    width: 100%;
+    position: relative;
+    top: 40px;
   }
-.table{
-  position: relative;
-  left: 10%;
-  width: 80%;
-  border: #DCDFE6 1px solid;
-}
+  .table{
+    border: #409eff 3px solid;
+    box-sizing: border-box;
+    border-radius: 10px;
+  }
+  .table th{
+    color: #409eff !important;
+  }
 </style>
