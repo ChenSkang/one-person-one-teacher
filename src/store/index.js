@@ -10,6 +10,7 @@ import history from './history'
 
 export default new Vuex.Store({
   state: {
+    signShow: false,
     nowSub: [],
     userNow: '',
     cropImg: '', // 裁切的图片
