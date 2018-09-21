@@ -37,3 +37,16 @@
   opacity: 0;
   cursor: pointer;
 }
+.my-position{
+  width: 68%;
+  position: relative;
+  top: 40px;
+  left: 16%;
+  right: 16%;
+}
+.my-positions{
+  width: 68%;
+  position: relative;
+  left: 16%;
+  right: 16%;
+}
