@@ -2,7 +2,7 @@
   <div v-loading.fullscreen.lock="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
     <my-head></my-head>
     <mySpace></mySpace>
-    <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" :show-close="false">
+    <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" center>
       <vue-cropper ref='cropper'
                    :src="imageSrc"
                    :ready="cropImage"
@@ -13,24 +13,33 @@
                    style="width:100%;height:100%;max-height: 60vh">
       </vue-cropper>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="rotateImage()">转圈</el-button>
-        <el-button @click="cancelCrop">取 消</el-button>
+        <el-button @click="rotateImage()">旋 转</el-button>
         <el-button type="primary" @click="sureCrop">确 定</el-button>
+        <el-button @click="cancelCrop" type="warning">取 消</el-button>
       </span>
     </el-dialog>
     <el-dialog :visible.sync="imgVisible" width="70%">
       <img style="max-height: 60vh; margin-left: 50%; transform: translateX(-50%)" :src="$store.state.cropImg">
     </el-dialog>
-    <el-row class="concern">
-      <el-col :span="24">
-        <el-input v-model="msg" v-on:keyup.enter="searchMsg()">
-          <el-button @click="searchMsg()" slot="append" v-if="msg" class="crop-demo-btn">搜索</el-button>
-          <el-button v-else slot="append" class="crop-demo-btn" icon="el-icon-picture-outline">
+    <div class="first-head">
+      <div class="transverse"></div>
+      <div class="header-concern">
+        <div>
+          <img src="./../../img/hand.png" alt="">
+        </div>
+        <div style="width: 80%">
+          <el-input v-model="msg" v-on:keyup.enter="searchMsg()"></el-input>
+        </div>
+        <div>
+          <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜索</el-button>
+        </div>
+        <div style="position: relative">
+          <el-button icon="el-icon-picture-outline" type="warning">图片搜索
             <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" icon="el-icon-search"/>
           </el-button>
-        </el-input>
-      </el-col>
-    </el-row>
+        </div>
+      </div>
+    </div>
     <div id="main" v-if="$store.state.nowSub.length">
       <div class="block">
         <div>
@@ -295,8 +304,8 @@
     }
   }
   .block{
-    width: 84%;
-    margin: 20px 8% 20px 8%;
+    width: 68%;
+    margin: 20px 16% 20px 16%;
   }
   .ques{
     position: relative;
@@ -332,7 +341,5 @@
   .low div{
     margin-left: 15px;
     cursor: pointer;
-  }
-  .TH{
   }
 </style>
