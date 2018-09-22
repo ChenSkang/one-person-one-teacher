@@ -284,12 +284,14 @@
     cursor: pointer;
   }
   .up-main img{
-    width: 50%;
+    height: 130px;
     position: relative;
-    left: 25%;
-    right: 25%;
+    left: 50%;
+    transform: translateX(-50%);
   }
   .up-main p{
+    height: 50px;
+    line-height: 50px;
     text-align: center;
     letter-spacing: 3px;
     font-weight: 500;
