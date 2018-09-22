@@ -101,7 +101,6 @@
           withCredentials: true
         }).then((response) => {
           sessionStorage.setItem('paper', row.id)
-          console.log(response)
           window.location.href = response.data
         }, (response) => {
           this.$message.error('请求服务端失败')
@@ -119,7 +118,6 @@
           },
           withCredentials: true
         }).then((response) => {
-          console.log(response.data)
           this.$store.state.history.exam.splice(x, 1)
         }, (response) => {
           this.$message.error('请求服务端失败')
