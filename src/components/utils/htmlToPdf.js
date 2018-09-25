@@ -38,113 +38,139 @@ export default{
     }
     // 搜索历史
     Vue.prototype.searchHistory = function () {
-      if (this.$route.path !== '/searched') {
-        if (sessionStorage.getItem('sessionId')) {
-          let url = this.$store.state.urls.local + 'GetHistoryServlet'
-          let sessionId = sessionStorage.getItem('sessionId')
-          let formData = new FormData()
-          formData.append('sessionId', sessionId)
-          this.$axios.post(url, formData, {
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            withCredentials: true
-          }).then((response) => {
-            this.$store.state.history.find = false
-            this.$store.state.history.searched = response.data
-            this.$router.push('/searched')
-          }, (response) => {
-            this.$message.error('请求服务端失败')
-          })
-        } else {
-          this.signShows()
-          this.$message('请先登录')
-        }
+      if (sessionStorage.getItem('sessionId') || this.$route.path !== '/searched') {
+        let url = this.$store.state.urls.local + 'GetHistoryServlet'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$store.state.history.find = false
+          this.$store.state.history.searched = response.data
+          this.$router.push('/searched')
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      } else {
+        this.signShows()
+        this.$message('请先登录')
       }
     }
     // 历史试题
     Vue.prototype.goMyExam = function () {
-      if (this.$route.path !== '/myexam') {
-        if (sessionStorage.getItem('sessionId')) {
-          let url = this.$store.state.urls.local + 'GetPaperServlet'
-          let sessionId = sessionStorage.getItem('sessionId')
-          let formData = new FormData()
-          formData.append('sessionId', sessionId)
-          this.$axios.post(url, formData, {
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            withCredentials: true
-          }).then((response) => {
-            this.$store.state.history.myexam = false
-            this.$store.state.history.exam = []
-            for (let i = 0; i < response.data.length; i++) {
-              this.$store.state.history.exam.push({time: response.data[i].time, title: response.data[i].title, id: response.data[i].id})
-            }
-            this.$router.push('/myexam')
-          }, (response) => {
-            this.$message.error('请求服务端失败')
-          })
-        } else {
-          this.signShows()
-          this.$message('请先登录')
-        }
+      if (sessionStorage.getItem('sessionId') && this.$route.path !== '/myexam') {
+        let url = this.$store.state.urls.local + 'GetPaperServlet'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$store.state.history.myexam = false
+          this.$store.state.history.exam = []
+          for (let i = 0; i < response.data.length; i++) {
+            this.$store.state.history.exam.push({time: response.data[i].time, title: response.data[i].title, id: response.data[i].id})
+          }
+          this.$router.push('/myexam')
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      } else {
+        this.signShows()
+        this.$message('请先登录')
       }
     }
     // 试题篮
     Vue.prototype.goBasket = function () {
-      if (this.$route.path !== '/basket') {
-        if (sessionStorage.getItem('sessionId')) {
-          this.$store.state.history.loading = true
-          let url = this.$store.state.urls.local + 'GetBasketServlet'
-          let userId = sessionStorage.getItem('userId')
-          let sessionId = sessionStorage.getItem('sessionId')
-          let formData = new FormData()
-          formData.append('userId', userId)
-          formData.append('sessionId', sessionId)
-          this.$axios.post(url, formData, {
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            withCredentials: true
-          }).then((response) => {
-            this.$store.state.history.basket = false
-            this.$store.state.XZ = []
-            this.$store.state.TK = []
-            this.$store.state.JD = []
-            for (let i = 0; i < response.data.length; i++) {
-              switch (response.data[i].kind) {
-                case '选择题':
-                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                case '填空题':
-                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                case '解答题':
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                default:
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-              }
+      if (sessionStorage.getItem('sessionId') && this.$route.path !== '/basket') {
+        this.$store.state.history.loading = true
+        let url = this.$store.state.urls.local + 'GetBasketServlet'
+        let userId = sessionStorage.getItem('userId')
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('userId', userId)
+        formData.append('sessionId', sessionId)
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$store.state.history.basket = false
+          this.$store.state.XZ = []
+          this.$store.state.TK = []
+          this.$store.state.JD = []
+          for (let i = 0; i < response.data.length; i++) {
+            switch (response.data[i].kind) {
+              case '选择题':
+                this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
+                break
+              case '填空题':
+                this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
+                break
+              case '解答题':
+                this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
+                break
+              default:
+                this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
             }
-            this.$store.state.history.loading = false
-            this.$router.push('/basket')
-          }, (response) => {
-            this.$store.state.history.loading = false
-            this.$message.error('请求服务端失败')
-          })
-        } else {
-          this.signShows()
-          this.$message('请先登录')
-        }
+          }
+          this.$store.state.history.loading = false
+          this.$router.push('/basket')
+        }, (response) => {
+          this.$store.state.history.loading = false
+          this.$message.error('请求服务端失败')
+        })
+      } else {
+        this.signShows()
+        this.$message('请先登录')
       }
     }
+    // 登录
     Vue.prototype.signShows = function () {
       if (sessionStorage.getItem('sessionId')) {
         this.$message('请不要重复登录')
       } else {
         this.$store.state.signShow = true
       }
+    }
+    // 文字搜索
+    Vue.prototype.wordSearch = function (msg) {
+      this.$store.state.history.loading = true
+      const str = msg
+      let url = this.$store.state.urls.url + 'wordServlet'
+      this.$axios.post(url, str, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        withCredentials: true
+      }).then((response) => {
+        this.$store.state.cropImg = ''
+        sessionStorage.removeItem('defaultSrc')
+        this.$store.state.history.loading = false
+        this.$message.success('推荐成功')
+        sessionStorage.setItem('subj', JSON.stringify(response.data))
+        console.log(response.data)
+        this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
+      }, (response) => {
+        this.$store.state.history.loading = false
+        this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: '未知错误'
+            })
+          }
+        })
+      })
     }
   }
 }

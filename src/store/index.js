@@ -17,7 +17,21 @@ export default new Vuex.Store({
     tests: '', // test ID
     TK: [], // 试题篮填空题
     XZ: [], // 试题篮选择题
-    JD: [] // 试题篮解答题
+    JD: [], // 试题篮解答题
+    options: [{
+      value: '0',
+      label: '题目内容搜索',
+      holder: '请输入题干搜索更多题目'
+    }, {
+      value: '1',
+      label: '试卷信息搜索',
+      holder: '请输入试卷信息搜索试卷'
+    }, {
+      value: '2',
+      label: '知识点搜索',
+      holder: '请输入知识点搜索更多题目'
+    }],
+    value: ''
   },
   mutations: {
   },

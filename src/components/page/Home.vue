@@ -1,5 +1,5 @@
 <template>
-  <div v-loading.fullscreen.lock="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
+  <div>
     <my-head></my-head>
     <mySpace></mySpace>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" center>
@@ -27,8 +27,18 @@
         <div>
           <img src="./../../img/hand.png" alt="">
         </div>
+        <div style="width: 160px">
+          <el-select v-model="$store.state.value" placeholder="题目内容搜索">
+            <el-option
+              v-for="item in $store.state.options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
         <div style="width: 80%">
-          <el-input v-model="msg" v-on:keyup.enter="searchMsg()"></el-input>
+          <el-input v-model="msg" v-on:keyup.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder"></el-input>
         </div>
         <div>
           <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜 索</el-button>
@@ -45,27 +55,14 @@
         <div>
           <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
           <ul>
-            <li class="ques">
+            <li class="ques" v-for="(item, index) in $store.state.nowSub" :key="index">
               <div class="up">
-                <span class="TH">相似题：</span>
-                <span class="QUE" v-html="$store.state.nowSub[0].que"></span>
-              </div>
-              <div class="low">
-                <div><el-button type="primary" size="mini" @click="showJX(0)" icon="el-icon-document">查看解析</el-button></div>
-                <div v-if="!($store.state.tests.indexOf($store.state.nowSub[0].unique) + 1)"><el-button type="danger" size="mini" @click="addPaper(0)" icon="el-icon-plus">添加试题</el-button></div>
-                <div v-else><el-button @click="deletePaper(0)" type="info" size="mini" icon="el-icon-minus">试题</el-button></div>
-              </div>
-            </li>
-          </ul>
-          <ul>
-            <li class="ques" v-for="index in $store.state.nowSub.length - 1" :key="index">
-              <div class="up">
-                <span class="TH">{{index + '.'}}</span>
-                <span class="QUE" v-html="$store.state.nowSub[index].que"></span>
+                <span class="TH">{{index + 1 + '.'}}</span>
+                <span class="QUE" v-html="item.que"></span>
               </div>
               <div class="low">
                 <div @click="showJX(index)"><el-button type="primary" size="mini" @click="showJX(0)" icon="el-icon-document">查看解析</el-button></div>
-                <div v-if="!($store.state.tests.indexOf($store.state.nowSub[index].unique) + 1)"><el-button type="danger" @click="addPaper(index)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
+                <div v-if="!($store.state.tests.indexOf(item.unique) + 1)"><el-button type="danger" @click="addPaper(index)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
                 <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
               </div>
             </li>
@@ -104,7 +101,6 @@
         imgVisible: false,
         imageSrc: '',
         visible: false,
-        loading: false,
         minHeight: 0
       }
     },
@@ -140,7 +136,7 @@
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       },
       sureCrop () {
-        this.loading = true
+        this.$store.state.history.loading = true
         this.visible = false
         const page = this.$store.state.cropImg
         let arr = page.split(',')
@@ -161,7 +157,7 @@
           },
           withCredentials: true
         }).then((response) => {
-          this.loading = false
+          this.$store.state.history.loading = false
           this.$store.state.nowSub = ''
           this.$message.success('推荐成功')
           sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
@@ -169,7 +165,7 @@
           this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
           console.log(response.data)
         }, (response) => {
-          this.loading = false
+          this.$store.state.history.loading = false
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
           this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
             confirmButtonText: '确定',
@@ -183,34 +179,7 @@
         })
       },
       searchMsg () {
-        this.loading = true
-        const str = this.msg
-        let url = this.$store.state.urls.url + 'wordServlet'
-        this.$axios.post(url, str, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.cropImg = ''
-          sessionStorage.removeItem('defaultSrc')
-          this.loading = false
-          this.$message.success('推荐成功')
-          sessionStorage.setItem('subj', JSON.stringify(response.data))
-          console.log(response.data)
-          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-        }, (response) => {
-          this.loading = false
-          this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {
-            confirmButtonText: '确定',
-            callback: action => {
-              this.$message({
-                type: 'info',
-                message: '未知错误'
-              })
-            }
-          })
-        })
+        this.wordSearch(this.msg)
       },
       showJX (x) {
         let que = this.$store.state.nowSub[x].que

@@ -1,5 +1,7 @@
 <template>
-  <div  v-loading.fullscreen.lock="$store.state.history.loading">
+  <div  v-loading.fullscreen.lock="$store.state.history.loading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading">
     <div id="space">
       <div class="col" @click="$router.push('/')"><span>首页</span>丨</div>
       <div class="col" v-if="nowuser" @click="signShows()"><span>登录</span>丨</div>
@@ -12,9 +14,6 @@
     </div>
     <el-dialog :title="ms" :visible.sync="registerShow" width="30%" :modal="false">
       <el-form :model="registerForm" status-icon :rules="registerRule" ref="registerForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="昵称" prop="user">
-          <el-input v-model="registerForm.user"></el-input>
-        </el-form-item>
         <el-form-item label="用户名" prop="name">
           <el-input v-model="registerForm.name"></el-input>
         </el-form-item>
@@ -118,10 +117,6 @@
           tel: '' // 手机号
         },
         registerRule: {
-          user: [
-            { required: true, message: '请输入昵称', trigger: 'blur' },
-            { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
-          ],
           pass: [
             { required: true, validator: validatePass, trigger: 'blur' },
             { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
@@ -131,7 +126,7 @@
           ],
           name: [
             { required: true, message: '请输入用户名', trigger: 'blur' },
-            { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
+            { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
           ],
           tel: [
             { required: true, validator: telCheck, trigger: 'blur' }
@@ -148,7 +143,7 @@
             // 保存的密码
             let pass = this.signForm.pass
             let formData = new FormData()
-            formData.append('tel', name)
+            formData.append('LoginInfo', name)
             formData.append('pass', pass)
             let url = this.$store.state.urls.local + 'LoginServlet'
             this.$axios.post(url, formData, {
@@ -159,9 +154,8 @@
             }).then((response) => {
               if (response.data.sessionId) {
                 sessionStorage.setItem('sessionId', response.data.sessionId)
-                sessionStorage.setItem('nowUser', response.data.u.name)
-                sessionStorage.setItem('userId', response.data.u.id)
-                this.$store.state.userNow = response.data.u.name
+                sessionStorage.setItem('nowUser', response.data.u.username)
+                this.$store.state.userNow = response.data.u.username
                 if (this.checked === true) {
                   this.clearCookie()
                   // 传入账号名，密码，和保存天数3个参数
@@ -245,6 +239,9 @@
                 case '该手机号已存在':
                   this.$message.info('手机号已存在，请重新注册')
                   break
+                case '该用户名已存在':
+                  this.$message.info('用户名重复，请重新输入')
+                  break
                 default:
                   this.$message.success('注册成功')
                   this.registerShow = false
@@ -294,11 +291,11 @@
     },
     mounted () {
       this.getCookie()
-      if (localStorage.getItem('thisUser')) {
+      if (localStorage.getItem('thisUser') && !this.$store.state.userNow) {
         let name = localStorage.getItem('thisUser')
         let pass = localStorage.getItem('thisPass')
         let formData = new FormData()
-        formData.append('tel', name)
+        formData.append('LoginInfo', name)
         formData.append('pass', pass)
         let url = this.$store.state.urls.url + 'LoginServlet'
         this.$axios.post(url, formData, {
@@ -307,11 +304,11 @@
           },
           withCredentials: true
         }).then((response) => {
+          console.log(response)
           if (response.data.sessionId) {
             sessionStorage.setItem('sessionId', response.data.sessionId)
-            sessionStorage.setItem('nowUser', response.data.u.name)
-            sessionStorage.setItem('userId', response.data.u.id)
-            this.$store.state.userNow = response.data.u.name
+            sessionStorage.setItem('nowUser', response.data.u.username)
+            this.$store.state.userNow = response.data.u.username
           } else {
             this.$alert('自动登录失效', '提示', {
               confirmButtonText: '确定',

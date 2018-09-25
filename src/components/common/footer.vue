@@ -1,8 +1,9 @@
 <template>
   <div id="footer">
     <div class="main">
-      <div class="foot-main left"><span>关于我们</span>丨</div>
-      <div class="foot-main"><span>意见反馈</span></div>
+      <div class="foot-main" style="display: inline"><span>关于我们</span>丨</div>
+      <div class="foot-main" style="display: inline"><span>意见反馈</span></div>
+      <div class="foot-main"> ©opot.com版权所有</div>
     </div>
   </div>
 </template>
@@ -27,18 +28,15 @@
     background-color: #409EFF;
   }
   .main{
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: row;
-  }
-  .foot-main{
-    height: 25px;
-    line-height: 25px;
     font-size: 12px;
     color: #fff;
     text-align: center;
+    position: absolute;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+  }
+  .foot-main{
   }
   .foot-main:hover span{
     text-decoration: underline;

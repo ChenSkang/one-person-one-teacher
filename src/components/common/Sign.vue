@@ -14,7 +14,7 @@
       </vue-cropper>
       <span slot="footer" class="dialog-footer">
         <el-button @click="rotateImage()">旋 转</el-button>
-        <el-button type="primary" @click="sureCrop" v-loading.fullscreen.lock="load">确 定</el-button>
+        <el-button type="primary" @click="sureCrop">确 定</el-button>
         <el-button @click="cancelCrop" type="warning">取 消</el-button>
       </span>
     </el-dialog>
@@ -26,8 +26,18 @@
           <div>
             <img src="./../../img/hand.png" alt="">
           </div>
-          <div style="width: 80%">
-            <el-input v-model="msg" v-on:keyup.enter="searchMsg()"></el-input>
+          <div style="width: 160px">
+            <el-select v-model="$store.state.value" placeholder="题目内容搜索">
+              <el-option
+                v-for="item in $store.state.options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+          <div style="width: 70%">
+            <el-input v-model="msg" v-on:keyup.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder"></el-input>
           </div>
           <div>
             <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜索</el-button>
@@ -109,7 +119,6 @@
         msg: '',
         visible: false,
         imageSrc: '',
-        load: false,
         hotQuestions: [
           '一部长篇小说的字数约为3子子子子子这种630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
           '一部长篇小说的字数约为3630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
@@ -152,7 +161,7 @@
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       },
       sureCrop () {
-        this.load = true
+        this.$store.state.history.loading = true
         this.visible = false
         const page = this.$store.state.cropImg
         let arr = page.split(',')
@@ -177,12 +186,12 @@
           sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-          this.load = false
+          this.$store.state.history.loading = false
           this.$router.push('/index')
           this.$message.success('推荐成功')
         }, (res) => {
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
-          this.load = false
+          this.$store.state.history.loading = false
           this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
             confirmButtonText: '确定',
             callback: action => {
@@ -195,35 +204,8 @@
         })
       },
       searchMsg () {
-        this.load = true
-        const str = this.msg
-        let url = this.$store.state.urls.url + 'wordServlet'
-        this.$axios.post(url, str, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.cropImg = ''
-          sessionStorage.removeItem('defaultSrc')
-          this.load = false
-          this.$message.success('推荐成功')
-          sessionStorage.setItem('subj', JSON.stringify(response.data))
-          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-          console.log(response.data)
-          this.$router.push('/index')
-        }, (response) => {
-          this.load = false
-          this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {
-            confirmButtonText: '确定',
-            callback: action => {
-              this.$message({
-                type: 'info',
-                message: '未知错误'
-              })
-            }
-          })
-        })
+        this.wordSearch(this.msg)
+        this.$router.push('/index')
       }
     },
     components: {
