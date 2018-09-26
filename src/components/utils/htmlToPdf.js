@@ -144,9 +144,14 @@ export default{
     // 文字搜索
     Vue.prototype.wordSearch = function (msg) {
       this.$store.state.history.loading = true
-      const str = msg
+      const way = this.$store.state.value ? this.$store.state.value : 1
+      const kind = this.$store.state.select + '题'
+      let formData = new FormData()
+      formData.append('word', msg)
+      formData.append('way', way)
+      formData.append('kind', kind)
       let url = this.$store.state.urls.url + 'wordServlet'
-      this.$axios.post(url, str, {
+      this.$axios.post(url, formData, {
         headers: {
           'Content-Type': 'application/json;charset=utf-8'
         },
@@ -159,6 +164,9 @@ export default{
         sessionStorage.setItem('subj', JSON.stringify(response.data))
         console.log(response.data)
         this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
+        if (this.$route.path !== '/index') {
+          this.$router.push('/index')
+        }
       }, (response) => {
         this.$store.state.history.loading = false
         this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {

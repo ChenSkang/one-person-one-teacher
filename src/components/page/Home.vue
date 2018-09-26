@@ -23,6 +23,15 @@
     </el-dialog>
     <div class="first-head">
       <div class="transverse"></div>
+      <div class="kind-select">
+        <span>搜索题型</span>
+        <el-radio-group v-model="$store.state.select" size="small">
+          <el-radio-button label="全部"></el-radio-button>
+          <el-radio-button label="选择"></el-radio-button>
+          <el-radio-button label="填空"></el-radio-button>
+          <el-radio-button label="解答"></el-radio-button>
+        </el-radio-group>
+      </div>
       <div class="header-concern">
         <div>
           <img src="./../../img/hand.png" alt="">
@@ -61,7 +70,8 @@
                 <span class="QUE" v-html="item.que"></span>
               </div>
               <div class="low">
-                <div @click="showJX(index)"><el-button type="primary" size="mini" @click="showJX(0)" icon="el-icon-document">查看解析</el-button></div>
+                <div><el-button type="primary" size="mini" @click="showJX(index)" icon="el-icon-document">查看解析</el-button></div>
+                <div><el-button type="primary" size="mini" @click="wordSearch(item.que)" icon="el-icon-search">搜索题目</el-button></div>
                 <div v-if="!($store.state.tests.indexOf(item.unique) + 1)"><el-button type="danger" @click="addPaper(index)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
                 <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
               </div>
@@ -136,6 +146,7 @@
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       },
       sureCrop () {
+        const kind = this.$store.state.select + '题'
         this.$store.state.history.loading = true
         this.visible = false
         const page = this.$store.state.cropImg
@@ -150,6 +161,7 @@
         const obj = new Blob([u8arr], {type: mime})
         const fd = new FormData()
         fd.append('upfile', obj, 'image.png')
+        fd.append('kind', kind)
         let url = this.$store.state.urls.local + 'pictureServlet'
         this.$axios.post(url, fd, {
           headers: {

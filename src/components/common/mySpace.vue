@@ -37,7 +37,7 @@
     <el-dialog :title="msg" :visible.sync="$store.state.signShow" width="30%" :modal="false">
       <el-form :model="signForm" :rules="signRule" ref="signForm" class="demo-ruleForm">
         <el-form-item prop="usr">
-          <el-input type="text" v-model="signForm.usr" auto-complete="off" placeholder="手机/邮箱/用户名"></el-input>
+          <el-input type="text" v-model="signForm.usr" auto-complete="off" placeholder="手机/用户名"></el-input>
         </el-form-item>
         <el-form-item prop="pass">
           <el-input type="password" v-model="signForm.pass" auto-complete="off" placeholder="密码"></el-input>

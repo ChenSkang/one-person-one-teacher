@@ -22,6 +22,15 @@
     <div>
       <div class="first-head">
         <div class="transverse"></div>
+        <div class="kind-select">
+          <span>搜索题型</span>
+          <el-radio-group v-model="$store.state.select" size="small">
+            <el-radio-button label="全部"></el-radio-button>
+            <el-radio-button label="选择"></el-radio-button>
+            <el-radio-button label="填空"></el-radio-button>
+            <el-radio-button label="解答"></el-radio-button>
+          </el-radio-group>
+        </div>
         <div class="header-concern">
           <div>
             <img src="./../../img/hand.png" alt="">
@@ -161,6 +170,7 @@
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       },
       sureCrop () {
+        const kind = this.$store.state.select + '题'
         this.$store.state.history.loading = true
         this.visible = false
         const page = this.$store.state.cropImg
@@ -175,6 +185,7 @@
         const obj = new Blob([u8arr], {type: mime})
         const fd = new FormData()
         fd.append('upfile', obj, 'image.png')
+        fd.append('kind', kind)
         let url = this.$store.state.urls.local + 'pictureServlet'
         this.$axios.post(url, fd, {
           headers: {
@@ -205,7 +216,6 @@
       },
       searchMsg () {
         this.wordSearch(this.msg)
-        this.$router.push('/index')
       }
     },
     components: {
