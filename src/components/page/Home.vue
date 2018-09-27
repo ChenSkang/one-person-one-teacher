@@ -71,7 +71,7 @@
               </div>
               <div class="low">
                 <div><el-button type="primary" size="mini" @click="showJX(index)" icon="el-icon-document">查看解析</el-button></div>
-                <div><el-button type="primary" size="mini" @click="wordSearch(item.que)" icon="el-icon-search">搜索题目</el-button></div>
+                <div><el-button type="primary" size="mini" @click="againSearch(item.que)" icon="el-icon-search">搜索题目</el-button></div>
                 <div v-if="!($store.state.tests.indexOf(item.unique) + 1)"><el-button type="danger" @click="addPaper(index)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
                 <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
               </div>
@@ -146,7 +146,6 @@
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       },
       sureCrop () {
-        const kind = this.$store.state.select + '题'
         this.$store.state.history.loading = true
         this.visible = false
         const page = this.$store.state.cropImg
@@ -161,7 +160,6 @@
         const obj = new Blob([u8arr], {type: mime})
         const fd = new FormData()
         fd.append('upfile', obj, 'image.png')
-        fd.append('kind', kind)
         let url = this.$store.state.urls.local + 'pictureServlet'
         this.$axios.post(url, fd, {
           headers: {

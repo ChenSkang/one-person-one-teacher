@@ -170,7 +170,6 @@
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       },
       sureCrop () {
-        const kind = this.$store.state.select + '题'
         this.$store.state.history.loading = true
         this.visible = false
         const page = this.$store.state.cropImg
@@ -185,7 +184,6 @@
         const obj = new Blob([u8arr], {type: mime})
         const fd = new FormData()
         fd.append('upfile', obj, 'image.png')
-        fd.append('kind', kind)
         let url = this.$store.state.urls.local + 'pictureServlet'
         this.$axios.post(url, fd, {
           headers: {

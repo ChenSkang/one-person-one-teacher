@@ -144,8 +144,47 @@ export default{
     // 文字搜索
     Vue.prototype.wordSearch = function (msg) {
       this.$store.state.history.loading = true
-      const way = this.$store.state.value ? this.$store.state.value : 1
+      const way = this.$store.state.value ? this.$store.state.value + 1 : 1
       const kind = this.$store.state.select + '题'
+      let formData = new FormData()
+      formData.append('word', msg)
+      formData.append('way', way)
+      formData.append('kind', kind)
+      let url = this.$store.state.urls.url + 'wordServlet'
+      this.$axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        withCredentials: true
+      }).then((response) => {
+        this.$store.state.cropImg = ''
+        sessionStorage.removeItem('defaultSrc')
+        this.$store.state.history.loading = false
+        this.$message.success('推荐成功')
+        sessionStorage.setItem('subj', JSON.stringify(response.data))
+        console.log(response.data)
+        this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
+        if (this.$route.path !== '/index') {
+          this.$router.push('/index')
+        }
+      }, (response) => {
+        this.$store.state.history.loading = false
+        this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: '未知错误'
+            })
+          }
+        })
+      })
+    }
+    // 重新推题
+    Vue.prototype.againSearch = function (msg) {
+      this.$store.state.history.loading = true
+      const way = 1
+      const kind = '全部'
       let formData = new FormData()
       formData.append('word', msg)
       formData.append('way', way)
