@@ -10,7 +10,7 @@
     </el-dialog>
     <div>
       <div class="main" :style="{minHeight: minHeight + 'px'}">
-        <el-table
+         <el-table
           class="table my-position"
           :header-cell-style="{color: '#409eff'}"
           :data="$store.state.history.searched"
@@ -125,7 +125,7 @@
       }
     },
     created () {
-      this.minHeight = document.documentElement.clientHeight - 91
+      this.minHeight = document.documentElement.clientHeight - 151
       if (this.$store.state.userNow) {
         if (this.$store.state.history.find) {
           let url = this.$store.state.urls.local + 'GetHistoryServlet'
@@ -153,6 +153,7 @@
     width: 100%;
     position: relative;
     top: 40px;
+    margin-bottom: 60px;
   }
   .table{
     border: #409eff 3px solid;

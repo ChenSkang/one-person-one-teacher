@@ -357,6 +357,9 @@
     line-height: 40px;
     cursor: pointer;
   }
+  .col:hover > span{
+    background-color: #909399;
+  }
   .demo-ruleForm{
     text-align: center;
   }
