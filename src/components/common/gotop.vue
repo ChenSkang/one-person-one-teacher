@@ -14,19 +14,6 @@
     },
     methods: {
       gotop () {
-        /* let gotoTop = function () {
-          let currentPosition = document.documentElement.scrollTop || document.body.scrollTop
-          currentPosition -= 10
-          if (currentPosition > 0) {
-            window.scrollTo(0, currentPosition)
-          } else {
-            window.scrollTo(0, 0)
-            clearInterval(timer)
-            timer = null
-          }
-        }
-        let timer = setInterval(gotoTop, 0.1)
-      } */
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
       }

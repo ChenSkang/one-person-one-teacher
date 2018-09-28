@@ -203,6 +203,8 @@ export default{
         sessionStorage.setItem('subj', JSON.stringify(response.data))
         console.log(response.data)
         this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
         if (this.$route.path !== '/index') {
           this.$router.push('/index')
         }

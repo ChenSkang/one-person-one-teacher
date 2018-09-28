@@ -32,7 +32,8 @@ export default new Vuex.Store({
       holder: '请输入知识点搜索更多题目'
     }],
     value: '',
-    select: '全部'
+    select: '全部',
+    input_message: ''
   },
   mutations: {
   },

@@ -46,7 +46,7 @@
             </el-select>
           </div>
           <div style="width: 70%">
-            <el-input v-model="msg" v-on:keyup.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder"></el-input>
+            <el-input v-model="$store.state.input_message" v-on:keyup.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder"></el-input>
           </div>
           <div>
             <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜索</el-button>
@@ -125,7 +125,6 @@
   export default {
     data () {
       return {
-        msg: '',
         visible: false,
         imageSrc: '',
         hotQuestions: [
@@ -213,7 +212,7 @@
         })
       },
       searchMsg () {
-        this.wordSearch(this.msg)
+        this.wordSearch(this.$store.state.input_message)
       }
     },
     components: {
