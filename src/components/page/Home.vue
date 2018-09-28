@@ -66,7 +66,7 @@
           <ul>
             <li class="ques" v-for="(item, index) in $store.state.nowSub" :key="index">
               <div class="up">
-                <span class="TH">{{index + 1 + '.'}}</span>
+                <span class="TH">{{titleNumber(index)}}</span>
                 <span class="QUE" v-html="item.que"></span>
               </div>
               <div class="low">
@@ -222,7 +222,16 @@
           this.$message('请先登录，谢谢')
         }
       },
-      deletePaper (x) {
+      titleNumber: function (index) {
+        if (sessionStorage.getItem('title_number') === 'false') {
+          return index + 1 + '.'
+        } else {
+          if (index === 0) {
+            return '相似题:'
+          } else {
+            return index + '.'
+          }
+        }
       }
     },
     created () {
@@ -234,12 +243,6 @@
       } else {
         localStorage.setItem('tests', 'tests')
       }
-    },
-    updated () {
-      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
-    },
-    mounted () {
-      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
     }
   }
 </script>

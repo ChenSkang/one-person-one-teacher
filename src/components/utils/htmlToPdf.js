@@ -164,6 +164,11 @@ export default{
         sessionStorage.setItem('subj', JSON.stringify(response.data))
         console.log(response.data)
         this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
+        if (way === 1) {
+          sessionStorage.setItem('title_number', 'true')
+        } else {
+          sessionStorage.setItem('title_number', 'false')
+        }
         if (this.$route.path !== '/index') {
           this.$router.push('/index')
         }
@@ -205,6 +210,7 @@ export default{
         this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
+        sessionStorage.setItem('title_number', 'true')
         if (this.$route.path !== '/index') {
           this.$router.push('/index')
         }
