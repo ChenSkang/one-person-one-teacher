@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <div id="main" v-if="$store.state.nowSub.length">
+    <div id="main" v-if="$store.state.nowSub.length" :style="{minHeight: minHeight + 'px'}">
       <div class="block">
         <div>
           <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
@@ -71,7 +71,7 @@
               </div>
               <div class="low">
                 <div><el-button type="primary" size="mini" @click="showJX(index)" icon="el-icon-document">查看解析</el-button></div>
-                <div><el-button type="primary" size="mini" @click="againSearch(item.que)" icon="el-icon-search">搜索题目</el-button></div>
+                <div><el-button type="primary" size="mini" @click="againSearch(item.que)" icon="el-icon-search">相似推荐</el-button></div>
                 <div v-if="!($store.state.tests.indexOf(item.unique) + 1)"><el-button type="danger" @click="addPaper(index)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
                 <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
               </div>
@@ -81,7 +81,9 @@
       </div>
       <answer></answer>
     </div>
-    <div v-else :style="{minHeight: minHeight + 'px'}"></div>
+    <div v-else :style="{minHeight: minHeight + 'px'}">
+      <p style="position: absolute; top: 250px; left: 50%; transform: translateX(-50%)">暂没有与搜索内容相关的题目</p>
+    </div>
     <my-foot></my-foot>
     <gotop></gotop>
   </div>
