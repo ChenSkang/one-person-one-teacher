@@ -189,7 +189,7 @@ export default{
     Vue.prototype.againSearch = function (msg) {
       this.$store.state.history.loading = true
       const way = 1
-      const kind = '全部'
+      const kind = '全部题'
       let formData = new FormData()
       formData.append('word', msg)
       formData.append('way', way)

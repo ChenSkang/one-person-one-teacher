@@ -20,16 +20,16 @@ export default new Vuex.Store({
     JD: [], // 试题篮解答题
     options: [{
       value: 0,
-      label: '题目内容搜索',
-      holder: '请输入题干搜索更多题目'
+      label: '题干',
+      holder: '请输入题干'
     }, {
       value: 1,
-      label: '试卷信息搜索',
-      holder: '请输入试卷信息搜索试卷'
+      label: '试卷',
+      holder: '请输入试卷信息，例：2017潍坊'
     }, {
       value: 2,
-      label: '知识点搜索',
-      holder: '请输入知识点搜索更多题目'
+      label: '知识点',
+      holder: '请输入知识点，例：数轴二次函数'
     }],
     value: '',
     select: '全部',

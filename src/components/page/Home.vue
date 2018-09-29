@@ -37,7 +37,7 @@
           <img src="./../../img/hand.png" alt="">
         </div>
         <div style="width: 160px">
-          <el-select v-model="$store.state.value" placeholder="题目内容搜索">
+          <el-select v-model="$store.state.value" placeholder="题干">
             <el-option
               v-for="item in $store.state.options"
               :key="item.value"
