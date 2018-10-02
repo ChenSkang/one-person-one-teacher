@@ -23,9 +23,8 @@
       <div class="first-head">
         <div class="transverse"></div>
         <div class="kind-select">
-          <span>搜索题型</span>
-          <el-radio-group v-model="$store.state.select" size="small">
-            <el-radio-button label="全部"></el-radio-button>
+          <el-radio-group v-model="$store.state.select" size="mini">
+            <el-radio-button label="全部" border="false"></el-radio-button>
             <el-radio-button label="选择"></el-radio-button>
             <el-radio-button label="填空"></el-radio-button>
             <el-radio-button label="解答"></el-radio-button>
@@ -35,7 +34,7 @@
           <div>
             <img src="./../../img/hand.png" alt="">
           </div>
-          <div style="width: 160px">
+          <div style="width: 120px">
             <el-select v-model="$store.state.value" placeholder="题干">
               <el-option
                 v-for="item in $store.state.options"
@@ -92,16 +91,24 @@
             <div class="up-body">
               <div class="down-main">
                 <div class="down-que left-que" v-for="item in 3">
-                  <div><p>{{hotQuestions[item - 1]}}</p></div>
+                  <div>
+                    <p><img src="./../../img/fire.png" />{{hotQuestions[item - 1]}}</p>
+                    <button class="fire-btn">详情</button>
+                  </div>
                 </div>
               </div>
               <div class="down-line">
                 <div class="line"></div>
-                <div class="arrow"></div>
+                <div class="arrow">
+                  <img src="./../../img/ico-two-down-arrow.png" alt="">
+                </div>
               </div>
               <div class="down-main">
                 <div class="down-que right-que" v-for="item in 3">
-                  <div><p>{{hotQuestions[item + 2]}}</p></div>
+                  <div>
+                    <p><img src="./../../img/fire.png" />{{hotQuestions[item + 2]}}</p>
+                    <button class="fire-btn">详情</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -304,31 +311,51 @@
     width: 30px;
   }
   .line{
-    width: 3px;
+    width: 2px;
     height: 390px;
     background-color: #fff;
     margin-left: 50%;
     transform: translateX(-50%);
   }
   .down-que{
+    position: relative;
     width: 93%;
     height: 90px;
     background-color: rgba(124, 146, 203, .75);
   }
+  .down-que img{
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
   .down-que p{
+    font-size: 14px;
     color: #fff;
     display: -webkit-box;
     overflow: hidden;
+    margin: 15px 20px 10px 20px;
     text-overflow: ellipsis;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-break: break-all;
   }
   .left-que{
+    float: left;
     margin-bottom: 50px;
   }
   .right-que{
     float: right;
     margin-top: 50px;
+  }
+  .fire-btn{
+    width: 40px;
+    font-size: 12px;
+    position: absolute;
+    right: 20px;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  .fire-btn:hover{
+    background-color: #409eff;
   }
 </style>

@@ -7,9 +7,10 @@
 }
 .kind-select{
   position: absolute;
-  left: 16%;
-  top: 20px;
-  transform: translateX(115px);
+  right: 16%;
+  top: 80px;
+  transform: translate(-230px, -50%);
+  z-index: 1;
 }
 .kind-select > span {
   height: 40px;

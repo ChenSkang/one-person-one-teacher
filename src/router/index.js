@@ -46,6 +46,11 @@ export default new Router({
         requireAuth: true // 配置此条，进入页面前判断是否需要登陆
       },
       component: resolve => require(['@/components/page/searchHistory'], resolve)
+    },
+    {
+      path: '/enter',
+      name: 'Enter',
+      component: resolve => require(['@/components/page/aboutUs'], resolve)
     }
   ]
 })
