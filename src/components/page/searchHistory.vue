@@ -67,7 +67,7 @@
         this.imgVisible = true
       },
       searchAgain (md5) {
-        let url = this.$store.state.urls.local + 'SearchAgainServlet'
+        let url = this.$store.state.urls.url + 'SearchAgainServlet'
         this.imgVisible = false
         this.loading = true
         let formData = new FormData()
@@ -93,7 +93,7 @@
         })
       },
       clearSearched () {
-        let url = this.$store.state.urls.local + 'CleanHistoryServlet'
+        let url = this.$store.state.urls.url + 'CleanHistoryServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
@@ -109,7 +109,7 @@
         })
       },
       deleteHistory (x) {
-        let url = this.$store.state.urls.local + 'RemoveHistoryServlet'
+        let url = this.$store.state.urls.url + 'RemoveHistoryServlet'
         let formData = new FormData()
         formData.append('id', this.$store.state.history.searched[x].id)
         this.$axios.post(url, formData, {
@@ -128,7 +128,7 @@
       this.minHeight = document.documentElement.clientHeight - 151
       if (this.$store.state.userNow) {
         if (this.$store.state.history.find) {
-          let url = this.$store.state.urls.local + 'GetHistoryServlet'
+          let url = this.$store.state.urls.url + 'GetHistoryServlet'
           let sessionId = sessionStorage.getItem('sessionId')
           let formData = new FormData()
           formData.append('sessionId', sessionId)

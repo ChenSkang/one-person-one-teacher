@@ -279,7 +279,7 @@
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('questions', arr)
-        let url = this.$store.state.urls.local + 'MoveBasketServlet'
+        let url = this.$store.state.urls.url + 'MoveBasketServlet'
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -321,7 +321,7 @@
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('uniqueId', ida)
-        let url = this.$store.state.urls.local + 'RemoveQueServlet'
+        let url = this.$store.state.urls.url + 'RemoveQueServlet'
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -340,7 +340,7 @@
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('uniqueId', ida)
-        let url = this.$store.state.urls.local + 'RemoveQueServlet'
+        let url = this.$store.state.urls.url + 'RemoveQueServlet'
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -359,7 +359,7 @@
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('uniqueId', ida)
-        let url = this.$store.state.urls.local + 'RemoveQueServlet'
+        let url = this.$store.state.urls.url + 'RemoveQueServlet'
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -442,7 +442,7 @@
           formData.append('sessionId', sessionId)
           formData.append('title', value)
           formData.append('questions', arr)
-          let url = this.$store.state.urls.local + 'AddPaperServlet'
+          let url = this.$store.state.urls.url + 'AddPaperServlet'
           this.$axios.post(url, formData, {
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -493,7 +493,7 @@
       },
       deleteAll () {
         this.deleteall = false
-        let url = this.$store.state.urls.local + 'CleanBasketServlet'
+        let url = this.$store.state.urls.url + 'CleanBasketServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
@@ -518,7 +518,7 @@
       creat () {
         if (sessionStorage.getItem('sessionId')) {
           if (this.$store.state.history.basket) {
-            let url = this.$store.state.urls.local + 'GetBasketServlet'
+            let url = this.$store.state.urls.url + 'GetBasketServlet'
             let userId = sessionStorage.getItem('userId')
             let sessionId = sessionStorage.getItem('sessionId')
             let formData = new FormData()

@@ -128,7 +128,7 @@
       this.minHeight = document.documentElement.clientHeight - 91
       if (this.$store.state.userNow) {
         if (this.$store.state.history.myexam) {
-          let url = this.$store.state.urls.local + 'GetPaperServlet'
+          let url = this.$store.state.urls.url + 'GetPaperServlet'
           let sessionId = sessionStorage.getItem('sessionId')
           let formData = new FormData()
           formData.append('sessionId', sessionId)

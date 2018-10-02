@@ -145,7 +145,7 @@
             let formData = new FormData()
             formData.append('LoginInfo', name)
             formData.append('pass', pass)
-            let url = this.$store.state.urls.local + 'LoginServlet'
+            let url = this.$store.state.urls.url + 'LoginServlet'
             this.$axios.post(url, formData, {
               headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -225,7 +225,7 @@
             formData.append('username', this.registerForm.name)
             formData.append('pass', this.registerForm.pass)
             formData.append('tel', this.registerForm.tel)
-            let url = this.$store.state.urls.local + 'RegisterServlet'
+            let url = this.$store.state.urls.url + 'RegisterServlet'
             this.$axios.post(url, formData, {
               headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -267,7 +267,7 @@
         this.registerShow = true
       },
       signOut () {
-        let url = this.$store.state.urls.local + 'LogoutServlet'
+        let url = this.$store.state.urls.url + 'LogoutServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)

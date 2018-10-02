@@ -39,7 +39,7 @@ export default{
     // 搜索历史
     Vue.prototype.searchHistory = function () {
       if (sessionStorage.getItem('sessionId') || this.$route.path !== '/searched') {
-        let url = this.$store.state.urls.local + 'GetHistoryServlet'
+        let url = this.$store.state.urls.url + 'GetHistoryServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
@@ -63,7 +63,7 @@ export default{
     // 历史试题
     Vue.prototype.goMyExam = function () {
       if (sessionStorage.getItem('sessionId') && this.$route.path !== '/myexam') {
-        let url = this.$store.state.urls.local + 'GetPaperServlet'
+        let url = this.$store.state.urls.url + 'GetPaperServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
@@ -91,7 +91,7 @@ export default{
     Vue.prototype.goBasket = function () {
       if (sessionStorage.getItem('sessionId') && this.$route.path !== '/basket') {
         this.$store.state.history.loading = true
-        let url = this.$store.state.urls.local + 'GetBasketServlet'
+        let url = this.$store.state.urls.url + 'GetBasketServlet'
         let userId = sessionStorage.getItem('userId')
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()

@@ -161,7 +161,7 @@
         const obj = new Blob([u8arr], {type: mime})
         const fd = new FormData()
         fd.append('upfile', obj, 'image.png')
-        let url = this.$store.state.urls.local + 'pictureServlet'
+        let url = this.$store.state.urls.url + 'pictureServlet'
         this.$axios.post(url, fd, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -209,7 +209,7 @@
           formData.append('userId', userId)
           formData.append('sessionId', sessionId)
           formData.append('unique', ida)
-          let url = this.$store.state.urls.local + 'AddQueServlet'
+          let url = this.$store.state.urls.url + 'AddQueServlet'
           this.$axios.post(url, formData, {
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
