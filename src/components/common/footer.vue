@@ -1,7 +1,7 @@
 <template>
   <div id="footer">
     <div class="main">
-      <div class="foot-main" style="display: inline"><span>关于我们</span>丨</div>
+      <div class="foot-main" style="display: inline" @click="about()"><span>关于我们</span>丨</div>
       <div class="foot-main" style="display: inline" @click="toSay()"><span>意见反馈</span></div>
       <div class="foot-main">冀ICP备18020905号 ©opot.com版权所有</div>
     </div>
@@ -16,6 +16,9 @@
       }
     },
     methods: {
+      about () {
+        window.open('#/enter')
+      },
       toSay () {
         window.open('http://support.qq.com/product/38530')
       }
