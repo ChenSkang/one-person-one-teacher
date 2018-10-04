@@ -279,7 +279,6 @@
         }).then((response) => {
           console.log(response)
           sessionStorage.removeItem('sessionId')
-          sessionStorage.removeItem('userId')
           sessionStorage.removeItem('nowUser')
           localStorage.removeItem('thisUser')
           localStorage.removeItem('thisPass')

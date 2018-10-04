@@ -24,7 +24,7 @@
         <div class="transverse"></div>
         <div class="kind-select">
           <el-radio-group v-model="$store.state.select" size="mini">
-            <el-radio-button label="全部" border="false"></el-radio-button>
+            <el-radio-button label="全部"></el-radio-button>
             <el-radio-button label="选择"></el-radio-button>
             <el-radio-button label="填空"></el-radio-button>
             <el-radio-button label="解答"></el-radio-button>
@@ -93,7 +93,7 @@
                 <div class="down-que left-que" v-for="item in 3">
                   <div>
                     <p><img src="./../../img/fire.png" />{{hotQuestions[item - 1]}}</p>
-                    <button class="fire-btn">详情</button>
+                    <button class="fire-btn" @click="getHot()">详情</button>
                   </div>
                 </div>
               </div>
@@ -220,6 +220,18 @@
       },
       searchMsg () {
         this.wordSearch(this.$store.state.input_message)
+      },
+      getHot () {
+        let url = this.$store.state.urls.url + 'GetHotServlet'
+        this.$axios.get(url, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response)
+        }, (res) => {
+        })
       }
     },
     components: {

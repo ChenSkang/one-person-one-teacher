@@ -178,7 +178,7 @@
               <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
               <div><el-button class="btn" @click="saveExam()" type="primary" icon="el-icon-download">保存试题</el-button></div>
               <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
-              <div><el-button class="btn" @click="wordDown()" type="primary" icon="el-icon-delete">word测试</el-button></div>
+              <!--<div><el-button class="btn" @click="wordDown()" type="primary" icon="el-icon-delete">word测试</el-button></div>-->
             </div>
             <div class="right_down">
               <div class="set_title">试卷信息</div>
@@ -463,7 +463,7 @@
           })
         })
       },
-      wordDown () {
+     /* wordDown () {
         let arr = []
         for (let i = 0; i < this.$store.state.XZ.length; i++) {
           arr.push(this.$store.state.XZ[i].unique)
@@ -490,7 +490,7 @@
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
-      },
+      }, */
       deleteAll () {
         this.deleteall = false
         let url = this.$store.state.urls.url + 'CleanBasketServlet'
@@ -519,10 +519,8 @@
         if (sessionStorage.getItem('sessionId')) {
           if (this.$store.state.history.basket) {
             let url = this.$store.state.urls.url + 'GetBasketServlet'
-            let userId = sessionStorage.getItem('userId')
             let sessionId = sessionStorage.getItem('sessionId')
             let formData = new FormData()
-            formData.append('userId', userId)
             formData.append('sessionId', sessionId)
             this.$axios.post(url, formData, {
               headers: {

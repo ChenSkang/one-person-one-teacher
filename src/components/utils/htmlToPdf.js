@@ -92,10 +92,8 @@ export default{
       if (sessionStorage.getItem('sessionId') && this.$route.path !== '/basket') {
         this.$store.state.history.loading = true
         let url = this.$store.state.urls.url + 'GetBasketServlet'
-        let userId = sessionStorage.getItem('userId')
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
-        formData.append('userId', userId)
         formData.append('sessionId', sessionId)
         this.$axios.post(url, formData, {
           headers: {

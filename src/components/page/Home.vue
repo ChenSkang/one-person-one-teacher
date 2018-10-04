@@ -24,8 +24,7 @@
     <div class="first-head">
       <div class="transverse"></div>
       <div class="kind-select">
-        <span>搜索题型</span>
-        <el-radio-group v-model="$store.state.select" size="small">
+        <el-radio-group v-model="$store.state.select" size="mini">
           <el-radio-button label="全部"></el-radio-button>
           <el-radio-button label="选择"></el-radio-button>
           <el-radio-button label="填空"></el-radio-button>
