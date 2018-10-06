@@ -40,7 +40,7 @@
           <el-input type="text" v-model="signForm.usr" auto-complete="off" placeholder="手机/用户名"></el-input>
         </el-form-item>
         <el-form-item prop="pass">
-          <el-input type="password" v-model="signForm.pass" auto-complete="off" placeholder="密码"></el-input>
+          <el-input type="password" v-model="signForm.pass" @keyup.native.enter="submitSignForm('signForm')" auto-complete="off" placeholder="密码"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitSignForm('signForm')">登录</el-button>
@@ -303,7 +303,6 @@
           },
           withCredentials: true
         }).then((response) => {
-          console.log(response)
           if (response.data.sessionId) {
             sessionStorage.setItem('sessionId', response.data.sessionId)
             sessionStorage.setItem('nowUser', response.data.u.username)

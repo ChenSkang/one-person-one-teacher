@@ -46,7 +46,7 @@
           </el-select>
         </div>
         <div style="width: 80%">
-          <el-input v-model="$store.state.input_message" v-on:keyup.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder"></el-input>
+          <el-input v-model="$store.state.input_message" @keyup.native.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder"></el-input>
         </div>
         <div>
           <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜 索</el-button>
