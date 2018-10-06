@@ -2,6 +2,11 @@
   <div>
     <my-head></my-head>
     <mySpace></mySpace>
+    <el-dialog title="试题解析" :visible.sync="IFJX" width="70%">
+      <div class="ST TI" v-html="myTest[0].que"></div>
+      <div class="JX TI"><span class="jx">解析：</span><span v-html="myTest[0].jx"></span></div>
+      <div class="JX TI"><span class="jx">解答：</span><span v-html="myTest[0].answer"></span></div>
+    </el-dialog>
     <el-dialog :visible.sync="visible" width="60%" center>
       <vue-cropper ref='cropper'
                    :src="imageSrc"
@@ -89,28 +94,32 @@
               <p>——<span>热门试题推荐</span>——</p>
             </div>
             <div class="up-body">
-              <div class="down-main">
+              <div class="down-main" v-if="hotQuestions.length">
                 <div class="down-que left-que" v-for="item in 3">
                   <div>
-                    <p><img src="./../../img/fire.png" />{{hotQuestions[item - 1]}}</p>
-                    <button class="fire-btn" @click="getHot()">详情</button>
+                    <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item - 1].que"></span></p>
+                    <button class="fire-btn" @click="againSearch(hotQuestions[item + 2].que)">推荐</button>
+                    <button class="fire-two-btn" @click="showMore(item + 2)">解析</button>
                   </div>
                 </div>
               </div>
+              <div class="down-main" v-else></div>
               <div class="down-line">
                 <div class="line"></div>
                 <div class="arrow">
-                  <img src="./../../img/ico-two-down-arrow.png" alt="">
+                  <img src="./../../img/ico-two-down-arrow.png">
                 </div>
               </div>
-              <div class="down-main">
-                <div class="down-que right-que" v-for="item in 3">
+              <div class="down-main" v-if="hotQuestions.length">
+                <div class="down-que right-que" v-for="item in hotQuestions.length-3">
                   <div>
-                    <p><img src="./../../img/fire.png" />{{hotQuestions[item + 2]}}</p>
-                    <button class="fire-btn">详情</button>
+                    <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item + 2].que"></span></p>
+                    <button class="fire-btn" @click="againSearch(hotQuestions[item + 2].que)">推荐</button>
+                    <button class="fire-two-btn" @click="showMore(item + 2)">解析</button>
                   </div>
                 </div>
               </div>
+              <div class="down-main" v-else></div>
             </div>
           </div>
         </div>
@@ -134,13 +143,12 @@
       return {
         visible: false,
         imageSrc: '',
-        hotQuestions: [
-          '一部长篇小说的字数约为3子子子子子这种630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
-          '一部长篇小说的字数约为3630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
-          '一部长篇小说的字数约为3630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
-          '一部长篇小说的字数约为3630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
-          '一部长篇小说的字数约为3630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）',
-          '一部长篇小说的字数约为3630000字，用科学记数法表示为______字；1纳米=0.000000001米，用科学记数法表示为______（单位：米）'
+        hotQuestions: [],
+        IFJX: false,
+        myTest: [
+          { que: '' },
+          { answer: '' },
+          { jx: '' }
         ]
       }
     },
@@ -221,6 +229,12 @@
       searchMsg () {
         this.wordSearch(this.$store.state.input_message)
       },
+      showMore (num) {
+        this.myTest[0].que = this.hotQuestions[num].que
+        this.myTest[0].answer = this.hotQuestions[num].answer
+        this.myTest[0].jx = this.hotQuestions[num].jx
+        this.IFJX = true
+      },
       getHot () {
         let url = this.$store.state.urls.url + 'GetHotServlet'
         this.$axios.get(url, {
@@ -230,9 +244,13 @@
           withCredentials: true
         }).then((response) => {
           console.log(response)
+          this.hotQuestions = response.data
         }, (res) => {
         })
       }
+    },
+    created () {
+      this.getHot()
     },
     components: {
       ElCol,
@@ -368,6 +386,18 @@
     cursor: pointer;
   }
   .fire-btn:hover{
+    background-color: #409eff;
+  }
+  .fire-two-btn{
+    width: 40px;
+    font-size: 12px;
+    position: absolute;
+    right: 70px;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  .fire-two-btn:hover{
     background-color: #409eff;
   }
 </style>
