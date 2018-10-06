@@ -186,13 +186,9 @@ export default{
     // 重新推题
     Vue.prototype.againSearch = function (msg) {
       this.$store.state.history.loading = true
-      const way = 1
-      const kind = '全部题'
       let formData = new FormData()
-      formData.append('word', msg)
-      formData.append('way', way)
-      formData.append('kind', kind)
-      let url = this.$store.state.urls.url + 'wordServlet'
+      formData.append('md5', msg)
+      let url = this.$store.state.urls.url + 'GetSimilarServlet'
       this.$axios.post(url, formData, {
         headers: {
           'Content-Type': 'application/json;charset=utf-8'

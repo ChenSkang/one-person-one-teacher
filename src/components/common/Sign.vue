@@ -98,8 +98,8 @@
                 <div class="down-que left-que" v-for="item in 3">
                   <div>
                     <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item - 1].que"></span></p>
-                    <button class="fire-btn" @click="againSearch(hotQuestions[item + 2].que)">推荐</button>
-                    <button class="fire-two-btn" @click="showMore(item + 2)">解析</button>
+                    <button class="fire-btn" @click="againSearch(hotQuestions[item - 1].unique)">推荐</button>
+                    <button class="fire-two-btn" @click="showMore(item - 1)">解析</button>
                   </div>
                 </div>
               </div>
@@ -114,7 +114,7 @@
                 <div class="down-que right-que" v-for="item in hotQuestions.length-3">
                   <div>
                     <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item + 2].que"></span></p>
-                    <button class="fire-btn" @click="againSearch(hotQuestions[item + 2].que)">推荐</button>
+                    <button class="fire-btn" @click="againSearch(hotQuestions[item + 2].unique)">推荐</button>
                     <button class="fire-two-btn" @click="showMore(item + 2)">解析</button>
                   </div>
                 </div>
