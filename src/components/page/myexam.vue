@@ -21,10 +21,10 @@
         <el-table-column
           fixed="right"
           label="操作"
-          width="240">
+          width="300">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="showExams(scope.row)">查看</el-button>
-            <!--<el-button size="small" type="primary" @click="downExam(scope.row)">下载</el-button>-->
+            <el-button size="small" type="primary" @click="downExam(scope.row)">下载</el-button>
             <el-button size="small" type="danger" @click="deleteExam(scope.$index)">删除</el-button>
           </template>
         </el-table-column>
@@ -88,7 +88,7 @@
           this.$message.error('请求服务端失败')
         })
       },
-     /* downExam (row) {
+      downExam (row) {
         let url = this.$store.state.urls.url + 'PaperDownJump'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
@@ -105,7 +105,7 @@
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
-      }, */
+      },
       deleteExam (x) {
         let url = this.$store.state.urls.url + 'DeletePaperServlet'
         let sessionId = sessionStorage.getItem('sessionId')

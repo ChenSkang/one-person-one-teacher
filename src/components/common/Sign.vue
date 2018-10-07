@@ -98,8 +98,10 @@
                 <div class="down-que left-que" v-for="item in 3">
                   <div>
                     <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item - 1].que"></span></p>
-                    <button class="fire-btn" @click="againSearch(hotQuestions[item - 1].unique)">推荐</button>
-                    <button class="fire-two-btn" @click="showMore(item - 1)">解析</button>
+                    <div class="fire-foot">
+                      <div class="fire-foot-div" @click="againSearch(hotQuestions[item - 1].unique)">推荐</div>
+                      <div class="fire-foot-div" @click="showMore(item - 1)">解析</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -114,8 +116,10 @@
                 <div class="down-que right-que" v-for="item in hotQuestions.length-3">
                   <div>
                     <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item + 2].que"></span></p>
-                    <button class="fire-btn" @click="againSearch(hotQuestions[item + 2].unique)">推荐</button>
-                    <button class="fire-two-btn" @click="showMore(item + 2)">解析</button>
+                    <div class="fire-foot">
+                      <div class="fire-foot-div" @click="againSearch(hotQuestions[item - 1].unique)">推荐</div>
+                      <div class="fire-foot-div" @click="showMore(item - 1)">解析</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -376,28 +380,24 @@
     float: right;
     margin-top: 50px;
   }
-  .fire-btn{
-    width: 40px;
-    font-size: 12px;
+  .down-que:hover .fire-foot{
+    opacity: 1;
+  }
+  .fire-foot{
+    width: 100%;
+    height: 20px;
     position: absolute;
-    right: 20px;
-    background-color: #fff;
-    border: none;
+    bottom: 0;
+    display: flex;
+    flex-direction: row-reverse;
+    opacity: 0;
+    transition: .5s;
+  }
+  .fire-foot-div{
+    margin-right: 20px;
+    line-height: 20px;
+    font-size: 13px;
+    color: #fff;
     cursor: pointer;
-  }
-  .fire-btn:hover{
-    background-color: #409eff;
-  }
-  .fire-two-btn{
-    width: 40px;
-    font-size: 12px;
-    position: absolute;
-    right: 70px;
-    background-color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  .fire-two-btn:hover{
-    background-color: #409eff;
   }
 </style>

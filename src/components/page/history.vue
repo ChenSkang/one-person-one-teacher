@@ -68,7 +68,7 @@
             <div class="right_up">
               <div class="set_title">试卷操作</div>
               <div><el-button class="btn" @click="$router.push('/myexam')" icon="el-icon-back" type="primary">返回</el-button></div>
-              <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载</el-button></div>
+              <div><el-button class="btn" @click="downExam()" type="primary" icon="el-icon-download">下载</el-button></div>
              </div>
             <div class="right_down">
               <div class="set_title">试卷信息</div>
@@ -130,6 +130,23 @@
       gotop
     },
     methods: {
+      downExam () {
+        let url = this.$store.state.urls.url + 'PaperDownJump'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('paperId', sessionStorage.getItem('paper'))
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          window.location.href = response.data
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      }
     },
     created () {
       if (this.$store.state.history.paper) {

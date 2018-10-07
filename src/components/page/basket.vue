@@ -175,10 +175,9 @@
             <div class="right_up">
               <div class="set_title">试卷操作</div>
               <div><el-button class="btn" @click="$router.push('/index')" icon="el-icon-back" type="primary">继续选题</el-button></div>
-              <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
+              <div><el-button class="btn" @click="wordDown()" type="primary" icon="el-icon-delete">下载试题</el-button></div>
               <div><el-button class="btn" @click="saveExam()" type="primary" icon="el-icon-download">保存试题</el-button></div>
               <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
-              <!--<div><el-button class="btn" @click="wordDown()" type="primary" icon="el-icon-delete">word测试</el-button></div>-->
             </div>
             <div class="right_down">
               <div class="set_title">试卷信息</div>
@@ -463,7 +462,7 @@
           })
         })
       },
-     /* wordDown () {
+      wordDown () {
         let arr = []
         for (let i = 0; i < this.$store.state.XZ.length; i++) {
           arr.push(this.$store.state.XZ[i].unique)
@@ -490,7 +489,7 @@
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
-      }, */
+      },
       deleteAll () {
         this.deleteall = false
         let url = this.$store.state.urls.url + 'CleanBasketServlet'
