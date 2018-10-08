@@ -5,7 +5,13 @@
     <el-dialog :visible.sync="imgVisible" width="60%">
       <img style="max-height: 55vh; margin-left: 50%; transform: translateX(-50%)" :src="searchImage">
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="searchAgain(searchMd5)">重新搜索</el-button>
+        <el-button type="primary" @click="searchAgain(searchQue, searchWay, searchKind)">重新搜索</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :visible.sync="imgVisibles" width="60%">
+      <p v-html="searchQue"></p>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="searchAgain(searchQue, searchWay, searchKind)">重新搜索</el-button>
       </span>
     </el-dialog>
     <div>
@@ -49,8 +55,11 @@
     data () {
       return {
         imgVisible: false,
+        imgVisibles: false,
         searchImage: '',
-        searchMd5: '',
+        searchQue: '',
+        searchWay: '',
+        searchKind: '',
         loading: false,
         minHeight: 0
       }
@@ -62,16 +71,28 @@
     },
     methods: {
       showExams (row) {
-        this.searchMd5 = row.queMD5
-        this.searchImage = row.image
-        this.imgVisible = true
+        console.log(row)
+        if (row.image) {
+          this.searchQue = row.que
+          this.searchWay = row.way
+          this.searchKind = row.kind
+          this.searchImage = row.image
+          this.imgVisible = true
+        } else {
+          this.searchQue = row.que
+          this.searchWay = row.way
+          this.searchKind = row.kind
+          this.imgVisibles = true
+        }
       },
-      searchAgain (md5) {
+      searchAgain (que, way, kind) {
         let url = this.$store.state.urls.url + 'SearchAgainServlet'
         this.imgVisible = false
         this.loading = true
         let formData = new FormData()
-        formData.append('md5', md5)
+        formData.append('que', que)
+        formData.append('way', way)
+        formData.append('kind', kind)
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
