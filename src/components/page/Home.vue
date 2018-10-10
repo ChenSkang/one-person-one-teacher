@@ -70,9 +70,9 @@
               </div>
               <div class="low">
                 <div><el-button type="primary" size="mini" @click="showJX(index)" icon="el-icon-document">查看解析</el-button></div>
-                <div><el-button type="primary" size="mini" @click="againSearch(item.unique)" icon="el-icon-search">相似推荐</el-button></div>
-                <div v-if="!($store.state.tests.indexOf(item.unique) + 1)"><el-button type="danger" @click="addPaper(index)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
+                <div v-if="!($store.state.tests.indexOf(item.unique) + 1)"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
                 <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
+                <div><el-button type="danger" size="mini" @click="againSearch(item.unique)" icon="el-icon-search">相似推荐</el-button></div>
               </div>
             </li>
           </ul>
