@@ -117,8 +117,8 @@
                   <div>
                     <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item + 2].que"></span></p>
                     <div class="fire-foot">
-                      <div class="fire-foot-div" @click="againSearch(hotQuestions[item - 1].unique)">推荐</div>
-                      <div class="fire-foot-div" @click="showMore(item - 1)">解析</div>
+                      <div class="fire-foot-div" @click="againSearch(hotQuestions[item + 2].unique)">推荐</div>
+                      <div class="fire-foot-div" @click="showMore(item + 2)">解析</div>
                     </div>
                   </div>
                 </div>
