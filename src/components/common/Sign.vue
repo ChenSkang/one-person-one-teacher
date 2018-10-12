@@ -67,7 +67,7 @@
           <div>
             <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜索</el-button>
           </div>
-          <div>
+          <div style="position: relative">
             <el-button icon="el-icon-picture-outline" type="warning">图片搜索
               <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" icon="el-icon-search"/>
             </el-button>
@@ -120,7 +120,7 @@
               <div class="down-main" v-else></div>
               <div class="down-line">
                 <div class="line"></div>
-                <div class="arrow">
+                <div class="arrow" @click="getHot()" style="cursor: pointer">
                   <img src="./../../img/ico-two-down-arrow.png">
                 </div>
               </div>
@@ -302,8 +302,8 @@
 <style scoped>
   #mask{
     width: 100%;
+    height: 100%;
     min-width: 1200px;
-    height: 500px;
     background-color: rgba(0, 0, 0, .5);
     top: 0;
     left: 0;
