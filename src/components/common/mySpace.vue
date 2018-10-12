@@ -34,7 +34,7 @@
         <p>已经有账号，马上去<span class="to" @click="gosign()">登录</span></p>
       </el-form>
     </el-dialog>
-    <el-dialog :title="msg" :visible.sync="$store.state.signShow" width="30%" :modal="false">
+    <el-dialog :title="msg" :visible.sync="$store.state.signShow" width="30%">
       <el-form :model="signForm" :rules="signRule" ref="signForm" class="demo-ruleForm">
         <el-form-item prop="usr">
           <el-input type="text" v-model="signForm.usr" auto-complete="off" placeholder="手机/用户名"></el-input>
@@ -256,15 +256,15 @@
         })
       },
       gosign () {
-        this.registerShow = false
         this.$store.state.signShow = true
+        this.registerShow = false
       },
       registerShows () {
         this.registerShow = true
       },
       goRegister () {
-        this.$store.state.signShow = false
         this.registerShow = true
+        this.$store.state.signShow = false
       },
       signOut () {
         let url = this.$store.state.urls.url + 'LogoutServlet'
@@ -341,7 +341,7 @@
     position: fixed;
     right: 16%;
     top: 0;
-    z-index: 999;
+    z-index: 990;
     display: flex;
     flex-direction: row;
   }

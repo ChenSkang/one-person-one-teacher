@@ -1,5 +1,17 @@
 <template>
   <div>
+    <div id="mask" :style="{minHeight: minHeight + 'px'}" v-if="popoverFirst || popoverTwo">
+      <div class="popoverOne" v-if="popoverFirst">
+        <div class="popoverOne-arrow"></div>
+        <p class="popover-p">点击可输入图片，搜索题目并且推荐同类型题目</p>
+        <div><el-button type="warning" size="small" plain style="margin-left: 300px" @click="popoverClickOne()">我知道了</el-button></div>
+      </div>
+      <div class="popoverTwo" v-if="popoverTwo">
+        <div class="popoverTwo-arrow"></div>
+        <p class="popover-p">点击根据输入文字搜索题目，可在左侧选择输入类型，在右边选择输入题型</p>
+        <div><el-button type="warning" size="small" plain style="margin-left: 500px" @click="popoverClickTwo()">我知道了</el-button></div>
+      </div>
+    </div>
     <my-head></my-head>
     <mySpace></mySpace>
     <el-dialog title="试题解析" :visible.sync="IFJX" width="70%">
@@ -55,7 +67,7 @@
           <div>
             <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜索</el-button>
           </div>
-          <div style="position: relative">
+          <div>
             <el-button icon="el-icon-picture-outline" type="warning">图片搜索
               <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" icon="el-icon-search"/>
             </el-button>
@@ -153,7 +165,10 @@
           { que: '' },
           { answer: '' },
           { jx: '' }
-        ]
+        ],
+        minHeight: 0,
+        popoverFirst: false,
+        popoverTwo: false
       }
     },
     methods: {
@@ -251,10 +266,27 @@
           this.hotQuestions = response.data
         }, (res) => {
         })
+      },
+      popoverClickOne () {
+        this.popoverFirst = false
+        this.popoverTwo = true
+      },
+      popoverClickTwo () {
+        this.popoverTwo = false
+        localStorage.setItem('ifFirst', 'false')
+      }
+    },
+    beforeCreate () {
+      if (!localStorage.getItem('ifFirst')) {
+        localStorage.setItem('ifFirst', 'true')
       }
     },
     created () {
       this.getHot()
+      this.minHeight = document.documentElement.clientHeight
+      if (localStorage.getItem('ifFirst') === 'true') {
+        this.popoverFirst = true
+      }
     },
     components: {
       ElCol,
@@ -268,6 +300,61 @@
 </script>
 
 <style scoped>
+  #mask{
+    width: 100%;
+    min-width: 1200px;
+    height: 500px;
+    background-color: rgba(0, 0, 0, .5);
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 998;
+  }
+  .popoverOne{
+    border-radius: 10px;
+    width: 400px;
+    height: 120px;
+    background-color: rgba(0, 0, 0, .5);
+    position: absolute;
+    top: 160px;
+    right: 16%;
+  }
+  .popoverOne-arrow{
+    width: 0;
+    height: 0;
+    border: 20px solid;
+    border-color: transparent transparent black transparent;
+    opacity: .5;
+    position: absolute;
+    top: -40px;
+    right: 50px;
+  }
+  .popover-p{
+    line-height: 80px;
+    color: #fff;
+    letter-spacing: 1px;
+    text-indent: 20px;
+  }
+  .popoverTwo{
+    border-radius: 10px;
+    width: 600px;
+    height: 120px;
+    background-color: rgba(0, 0, 0, .5);
+    position: absolute;
+    top: 160px;
+    right: 16%;
+    transform: translateX(-250px);
+  }
+  .popoverTwo-arrow{
+    width: 0;
+    height: 0;
+    border: 20px solid;
+    border-color: transparent transparent black transparent;
+    opacity: .5;
+    position: absolute;
+    top: -40px;
+    right: 300px;
+  }
   .first-head{
     width: 100%;
     height: 160px;

@@ -21,7 +21,7 @@
 
 <style scoped>
   .head{
-    z-index: 999;
+    z-index: 990;
     position: fixed;
     width: 100%;
     height: 40px;

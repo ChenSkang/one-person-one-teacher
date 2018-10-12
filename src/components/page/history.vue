@@ -184,12 +184,6 @@
         })
       }
     },
-    mounted () {
-      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
-    },
-    updated () {
-      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
-    },
     computed: {
       strjd: function () {
         if (this.$store.state.history.XZ.length && this.$store.state.history.TK.length) {

@@ -550,22 +550,11 @@
             })
           }
         }
-      },
-      mathJax () {
-        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
       }
     },
     created () {
       if (this.$store.state.history.basket) {
         this.creat()
-      }
-    },
-    updated () {
-      this.mathJax()
-    },
-    mounted () {
-      if (this.$store.state.XZ || this.$store.state.XZ || this.$store.state.XZ) {
-        this.mathJax()
       }
     },
     computed: {

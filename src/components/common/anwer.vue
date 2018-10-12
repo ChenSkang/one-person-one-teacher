@@ -34,9 +34,6 @@
         this.myTest[0].jx = jx
         this.IFJX = true
       })
-    },
-    updated () {
-      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])
     }
   }
 </script>
