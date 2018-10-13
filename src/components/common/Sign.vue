@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @scroll.prevent>
     <div id="mask" :style="{minHeight: minHeight + 'px'}" v-if="popoverFirst || popoverTwo">
       <div class="popoverOne" v-if="popoverFirst">
         <div class="popoverOne-arrow"></div>
@@ -14,6 +14,7 @@
     </div>
     <my-head></my-head>
     <mySpace></mySpace>
+    <zsd-tree></zsd-tree>
     <el-dialog title="试题解析" :visible.sync="IFJX" width="70%">
       <div class="ST TI" v-html="myTest[0].que"></div>
       <div class="JX TI"><span class="jx">解析：</span><span v-html="myTest[0].jx"></span></div>
@@ -149,6 +150,7 @@
   import VueCropper from 'vue-cropperjs'
   import mySpace from './mySpace.vue'
   import myHead from './header.vue'
+  import zsdTree from './zsdTree.vue'
   import myFoot from './footer.vue'
   import ElRow from 'element-ui/packages/row/src/row'
   import ElCol from 'element-ui/packages/col/src/col'
@@ -274,6 +276,9 @@
       popoverClickTwo () {
         this.popoverTwo = false
         localStorage.setItem('ifFirst', 'false')
+        const mo = function (e) { e.preventDefault() }
+        document.body.style.overflow = ''
+        document.addEventListener('touchmove', mo, false)
       }
     },
     beforeCreate () {
@@ -286,6 +291,9 @@
       this.minHeight = document.documentElement.clientHeight
       if (localStorage.getItem('ifFirst') === 'true') {
         this.popoverFirst = true
+        const mo = function (e) { e.preventDefault() }
+        document.body.style.overflow = 'hidden'
+        document.addEventListener('touchmove', mo, false)
       }
     },
     components: {
@@ -294,7 +302,8 @@
       mySpace,
       VueCropper,
       myHead,
-      myFoot
+      myFoot,
+      zsdTree
     }
   }
 </script>
