@@ -38,7 +38,7 @@ export default{
     }
     // 搜索历史
     Vue.prototype.searchHistory = function () {
-      if (sessionStorage.getItem('sessionId') || this.$route.path !== '/searched') {
+      if (sessionStorage.getItem('sessionId')) {
         let url = this.$store.state.urls.url + 'GetHistoryServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
@@ -51,7 +51,9 @@ export default{
         }).then((response) => {
           this.$store.state.history.find = false
           this.$store.state.history.searched = response.data
-          this.$router.push('/searched')
+          if (this.$route.path !== '/searched') {
+            this.$router.push('/searched')
+          }
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
@@ -62,7 +64,7 @@ export default{
     }
     // 历史试题
     Vue.prototype.goMyExam = function () {
-      if (sessionStorage.getItem('sessionId') && this.$route.path !== '/myexam') {
+      if (sessionStorage.getItem('sessionId')) {
         let url = this.$store.state.urls.url + 'GetPaperServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
@@ -78,7 +80,9 @@ export default{
           for (let i = 0; i < response.data.length; i++) {
             this.$store.state.history.exam.push({time: response.data[i].time, title: response.data[i].title, id: response.data[i].id})
           }
-          this.$router.push('/myexam')
+          if (this.$route.path !== '/myexam') {
+            this.$router.push('/myexam')
+          }
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
@@ -89,7 +93,7 @@ export default{
     }
     // 试题篮
     Vue.prototype.goBasket = function () {
-      if (sessionStorage.getItem('sessionId') && this.$route.path !== '/basket') {
+      if (sessionStorage.getItem('sessionId')) {
         this.$store.state.history.loading = true
         let url = this.$store.state.urls.url + 'GetBasketServlet'
         let sessionId = sessionStorage.getItem('sessionId')
@@ -121,7 +125,9 @@ export default{
             }
           }
           this.$store.state.history.loading = false
-          this.$router.push('/basket')
+          if (this.$route.path !== '/basket') {
+            this.$router.push('/basket')
+          }
         }, (response) => {
           this.$store.state.history.loading = false
           this.$message.error('请求服务端失败')
