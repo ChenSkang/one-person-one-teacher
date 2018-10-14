@@ -1,20 +1,24 @@
 <template>
-  <div id="zsd">
-    <div class="arrow"><p>知<br/>识<br/>点</p></div>
-    <div class="tree">
-      <el-input
-        placeholder="输入关键字进行过滤"
-        v-model="zsdText">
-      </el-input>
-      <el-tree
-        class="zsd-tree"
-        :data="zsdTree"
-        :props="defaultProps"
-        :filter-node-method="filterNode"
-        @node-click="handleNodeClick"
-        ref="zsdTree">
-      </el-tree>
-    </div>
+  <div>
+    <el-collapse-transition>
+      <div id="zsd" :class="{ movezsd: zsdTranslate }">
+        <div class="arrow" @click="zsdTranslate = !zsdTranslate"><p>知<br/>识<br/>点</p></div>
+        <div class="tree">
+          <el-input
+            placeholder="输入知识点进行过滤"
+            v-model="zsdText">
+          </el-input>
+          <el-tree
+            class="zsd-tree"
+            :data="zsdTree"
+            :props="defaultProps"
+            :filter-node-method="filterNode"
+            @node-click="handleNodeClick"
+            ref="zsdTree">
+          </el-tree>
+        </div>
+      </div>
+    </el-collapse-transition>
   </div>
 </template>
 
@@ -22,6 +26,7 @@
   export default {
     data () {
       return {
+        zsdTranslate: true,
         zsdText: '',
         zsdTree: [{
           label: '数与式',
@@ -1254,21 +1259,25 @@
     position: fixed;
     left: 0;
     top: 100px;
-    border: 1px solid;
+    border: 1px solid #E6A23C;
     z-index: 999;
     background-color: #fff;
     overflow-x: visible;
+    transition: .5s;
+  }
+  .movezsd{
+    transform: translateX(-100%);
   }
   .arrow{
+    color: #fff;
     text-align: center;
     width: 40px;
     height: 100px;
     position: absolute;
     right: -40px;
     top: 200px;
-    border: 1px solid;
     display: table;
-    background-color: #fff;
+    background-color: #E6A23C;
   }
   .arrow p{
     display: table-cell;
@@ -1277,6 +1286,7 @@
   .tree{
     max-height: 500px;
     overflow-y: scroll;
+    margin: 0 2px;
   }
   .tree::-webkit-scrollbar {display:none}
 </style>
