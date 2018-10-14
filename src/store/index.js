@@ -29,7 +29,7 @@ export default new Vuex.Store({
     }, {
       value: 2,
       label: '知识点',
-      holder: '请输入知识点，例：数轴二次函数'
+      holder: '请输入知识点，可在左侧进行选择'
     }],
     value: '',
     select: '全部',
