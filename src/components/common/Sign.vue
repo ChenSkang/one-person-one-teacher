@@ -40,14 +40,6 @@
     <div>
       <div class="first-head">
         <div class="transverse"></div>
-        <div class="kind-select">
-          <el-radio-group v-model="$store.state.select" size="mini">
-            <el-radio-button label="全部"></el-radio-button>
-            <el-radio-button label="选择"></el-radio-button>
-            <el-radio-button label="填空"></el-radio-button>
-            <el-radio-button label="解答"></el-radio-button>
-          </el-radio-group>
-        </div>
         <div class="header-concern">
           <div>
             <img src="./../../img/hand.png" alt="">
@@ -63,7 +55,16 @@
             </el-select>
           </div>
           <div style="width: 70%">
-            <el-input v-model="$store.state.input_message" @keyup.native.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder"></el-input>
+            <el-input v-model="$store.state.input_message" @keyup.native.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder">
+              <template slot="append">
+                <el-radio-group v-model="$store.state.select" size="mini">
+                  <el-radio-button label="全部"></el-radio-button>
+                  <el-radio-button label="选择"></el-radio-button>
+                  <el-radio-button label="填空"></el-radio-button>
+                  <el-radio-button label="解答"></el-radio-button>
+                </el-radio-group>
+              </template>
+            </el-input>
           </div>
           <div>
             <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜索</el-button>

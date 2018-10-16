@@ -5,19 +5,6 @@
   top: 0;
   background: rgba(256, 256, 256, .5);
 }
-.kind-select{
-  position: absolute;
-  right: 16%;
-  top: 80px;
-  transform: translate(-110%, -50%);
-  z-index: 1;
-}
-.kind-select > span {
-  height: 40px;
-  line-height: 40px;
-  color: #fff;
-  margin-right: 10px;
-}
 .header-concern{
   width: 68%;
   position: absolute;
