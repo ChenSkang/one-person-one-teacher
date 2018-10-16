@@ -33,7 +33,8 @@ export default new Vuex.Store({
     }],
     value: '',
     select: '全部',
-    input_message: ''
+    input_message: '',
+    zsdTreeTags: []
   },
   mutations: {
   },

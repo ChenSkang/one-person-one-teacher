@@ -151,7 +151,12 @@ export default{
       const way = this.$store.state.value ? this.$store.state.value + 1 : 1
       const kind = this.$store.state.select + '题'
       let formData = new FormData()
-      formData.append('word', msg)
+      if (way === 3) {
+        let zsd = this.$store.state.zsdTreeTags.join('；')
+        formData.append('word', zsd)
+      } else {
+        formData.append('word', msg)
+      }
       formData.append('way', way)
       formData.append('kind', kind)
       let url = this.$store.state.urls.url + 'wordServlet'
@@ -226,6 +231,9 @@ export default{
           }
         })
       })
+    }
+    Vue.prototype.zsdTagsClose = function (tag) {
+      this.$store.state.zsdTreeTags.splice(this.$store.state.zsdTreeTags.indexOf(tag), 1)
     }
   }
 }

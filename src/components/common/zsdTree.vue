@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-collapse-transition>
-      <div id="zsd" :class="{ movezsd: zsdTranslate }">
+      <div id="zsd" :class="{ movezsd: zsdTransition }">
         <div class="arrow" @click="zsdTranslate = !zsdTranslate"><p>知<br/>识<br/>点</p></div>
         <div class="tree">
           <el-input
@@ -26,6 +26,7 @@
   export default {
     data () {
       return {
+        nowValue: this.$store.state.value,
         zsdTranslate: true,
         zsdText: '',
         zsdTree: [{
@@ -1238,8 +1239,13 @@
         console.log(data)
         if (!data.children) {
           this.$store.state.value = 2
-          this.$store.state.input_message = this.$store.state.input_message + data.label + '；'
+          this.$store.state.zsdTreeTags.push(data.label)
         }
+      }
+    },
+    computed: {
+      zsdTransition () {
+        return !(this.zsdTranslate === false || this.$store.state.value === 2)
       }
     },
     watch: {

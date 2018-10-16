@@ -19,6 +19,23 @@
   transform: rotateZ(90deg);
   margin-right: 10px;
 }
+.zsd-tags {
+  background-color: #fff;
+  position: absolute;
+  left: 160px;
+  top: 5px;
+  z-index: 9;
+  height: 30px;
+  width:-webkit-calc(100% - 630px);
+  width:-moz-calc(100% - 630px);
+  width:calc(100% - 630px);
+}
+@media screen and (max-width: 1260px) {
+  .zsd-tags {
+    position: absolute;
+    left: 150px;
+  }
+}
 .crop-input{
   position: absolute;
   width: 100%;

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <zsd-tree></zsd-tree>
     <my-head></my-head>
     <mySpace></mySpace>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" center>
@@ -24,6 +25,16 @@
     <div class="first-head">
       <div class="transverse"></div>
       <div class="header-concern">
+        <div v-if="$store.state.zsdTreeTags.length && $store.state.value === 2" class="zsd-tags">
+          <el-tag
+            color="#fff"
+            :key="tag"
+            v-for="tag in $store.state.zsdTreeTags"
+            closable
+            @close="zsdTagsClose(tag)">
+            {{tag}}
+          </el-tag>
+        </div>
         <div>
           <img src="./../../img/hand.png" alt="">
         </div>
@@ -38,7 +49,7 @@
           </el-select>
         </div>
         <div style="width: 70%">
-          <el-input v-model="$store.state.input_message" @keyup.native.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder">
+          <el-input v-model="$store.state.input_message" :disabled="$store.state.value === 2" @keyup.native.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder">
             <template slot="append">
               <el-radio-group v-model="$store.state.select" size="mini">
                 <el-radio-button label="全部"></el-radio-button>
@@ -50,7 +61,7 @@
           </el-input>
         </div>
         <div>
-          <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜 索</el-button>
+          <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-5px)">搜 索</el-button>
         </div>
         <div style="position: relative">
           <el-button icon="el-icon-picture-outline" type="warning">图片搜索
@@ -90,6 +101,7 @@
 </template>
 
 <script>
+  import zsdTree from '../common/zsdTree.vue'
   import gotop from '../common/gotop.vue'
   import mySpace from '../common/mySpace.vue'
   import VueCropper from 'vue-cropperjs'
@@ -105,7 +117,8 @@
       answer,
       myFoot,
       mySpace,
-      gotop
+      gotop,
+      zsdTree
     },
     data () {
       return {
