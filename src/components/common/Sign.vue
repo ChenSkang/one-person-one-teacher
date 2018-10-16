@@ -67,7 +67,7 @@
             </el-input>
           </div>
           <div>
-            <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-10px)">搜索</el-button>
+            <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-5px)">搜索</el-button>
           </div>
           <div style="position: relative">
             <el-button icon="el-icon-picture-outline" type="warning">图片搜索
