@@ -29,7 +29,7 @@ export default new Vuex.Store({
     }, {
       value: 2,
       label: '知识点',
-      holder: '请输入知识点，可在左侧进行选择'
+      holder: '请在左侧选择知识点'
     }],
     value: '',
     select: '全部',

@@ -5,7 +5,7 @@
         <div class="arrow" @click="zsdTranslate = !zsdTranslate"><p>知<br/>识<br/>点</p></div>
         <div class="tree">
           <el-input
-            placeholder="输入知识点进行过滤"
+            placeholder="搜索知识点"
             v-model="zsdText">
           </el-input>
           <el-tree
@@ -1236,10 +1236,13 @@
         return data.label.indexOf(value) !== -1
       },
       handleNodeClick (data) {
-        console.log(data)
-        if (!data.children) {
-          this.$store.state.value = 2
-          this.$store.state.zsdTreeTags.push(data.label)
+        if (!data.children && this.$store.state.zsdTreeTags.indexOf(data.label) === -1) {
+          if (this.$store.state.zsdTreeTags.length < 5) {
+            this.$store.state.value = 2
+            this.$store.state.zsdTreeTags.push(data.label)
+          } else {
+            this.$message.warning('最多选择5个知识点')
+          }
         }
       }
     },
@@ -1262,7 +1265,7 @@
     min-width: 200px;
     height: 500px;
     max-height: 500px;
-    position: fixed;
+    position: absolute;
     left: 0;
     top: 100px;
     border: 1px solid #E6A23C;
