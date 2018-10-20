@@ -147,50 +147,54 @@ export default{
     }
     // 文字搜索
     Vue.prototype.wordSearch = function (msg) {
-      this.$store.state.history.loading = true
       const way = this.$store.state.value ? this.$store.state.value + 1 : 1
-      const kind = this.$store.state.select + '题'
-      let formData = new FormData()
-      if (way === 3) {
-        let zsd = this.$store.state.zsdTreeTags.join('；')
-        formData.append('word', zsd)
+      if (way !== 3 && msg === '') {
+        this.$message.warning('请输入搜索内容')
       } else {
-        formData.append('word', msg)
-      }
-      formData.append('way', way)
-      formData.append('kind', kind)
-      let url = this.$store.state.urls.url + 'wordServlet'
-      this.$axios.post(url, formData, {
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        withCredentials: true
-      }).then((response) => {
-        this.$store.state.cropImg = ''
-        sessionStorage.removeItem('defaultSrc')
-        this.$store.state.history.loading = false
-        this.$message.success('推荐成功')
-        sessionStorage.setItem('subj', JSON.stringify(response.data))
-        console.log(response.data)
-        this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-        if (way === 1) {
-          sessionStorage.setItem('title_number', 'true')
+        this.$store.state.history.loading = true
+        const kind = this.$store.state.select + '题'
+        let formData = new FormData()
+        if (way === 3) {
+          let zsd = this.$store.state.zsdTreeTags.join('；')
+          formData.append('word', zsd)
         } else {
-          sessionStorage.setItem('title_number', 'false')
+          formData.append('word', msg)
         }
-        this.$router.push({path: '/index', query: msg})
-      }, (response) => {
-        this.$store.state.history.loading = false
-        this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {
-          confirmButtonText: '确定',
-          callback: action => {
-            this.$message({
-              type: 'error',
-              message: '未知错误'
-            })
+        formData.append('way', way)
+        formData.append('kind', kind)
+        let url = this.$store.state.urls.url + 'wordServlet'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$store.state.cropImg = ''
+          sessionStorage.removeItem('defaultSrc')
+          this.$store.state.history.loading = false
+          this.$message.success('推荐成功')
+          sessionStorage.setItem('subj', JSON.stringify(response.data))
+          console.log(response.data)
+          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
+          if (way === 1) {
+            sessionStorage.setItem('title_number', 'true')
+          } else {
+            sessionStorage.setItem('title_number', 'false')
           }
+          this.$router.push({path: '/index', query: msg})
+        }, (response) => {
+          this.$store.state.history.loading = false
+          this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {
+            confirmButtonText: '确定',
+            callback: action => {
+              this.$message({
+                type: 'error',
+                message: '未知错误'
+              })
+            }
+          })
         })
-      })
+      }
     }
     // 重新推题
     Vue.prototype.againSearch = function (msg) {
