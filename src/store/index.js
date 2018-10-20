@@ -25,7 +25,7 @@ export default new Vuex.Store({
     }, {
       value: 1,
       label: '试卷',
-      holder: '请输入试卷信息，例：2017潍坊'
+      holder: '请输入中考试卷信息，例：2017潍坊'
     }, {
       value: 2,
       label: '知识点',
