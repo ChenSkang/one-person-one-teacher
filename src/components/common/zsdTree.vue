@@ -1,25 +1,23 @@
 <template>
   <div>
     <span v-if="zsdTemp" style="opacity: 0"></span>
-    <el-collapse-transition>
-      <div id="zsd" :class="{ movezsd: zsdTransition }">
-        <div class="arrow" @click="zsdTranslate = !zsdTranslate"><p>知<br/>识<br/>点</p></div>
-        <div class="tree">
-          <el-input
-            placeholder="搜索知识点"
-            v-model="zsdText">
-          </el-input>
-          <el-tree
-            class="zsd-tree"
-            :data="zsdTree"
-            :props="defaultProps"
-            :filter-node-method="filterNode"
-            @node-click="handleNodeClick"
-            ref="zsdTree">
-          </el-tree>
-        </div>
-      </div>
-    </el-collapse-transition>
+    <div id="zsd" :class="{ movezsd: zsdTransition }">
+      <div class="arrow" @click="zsdTranslate = !zsdTranslate"><p>知<br/>识<br/>点</p></div>
+      <div class="tree">
+        <el-input
+          placeholder="搜索知识点"
+          v-model="zsdText">
+        </el-input>
+        <el-tree
+          class="zsd-tree"
+          :data="zsdTree"
+          :props="defaultProps"
+          :filter-node-method="filterNode"
+          @node-click="handleNodeClick"
+          ref="zsdTree">
+        </el-tree> 
+      </div>      
+    </div>
   </div>
 </template>
 
@@ -1302,9 +1300,18 @@
     vertical-align: middle;
   }
   .tree{
+    height: 500px;
     max-height: 500px;
-    overflow-y: scroll;
-    margin: 0 2px;
+    overflow: scroll;
+    box-sizing: border-box
   }
-  .tree::-webkit-scrollbar {display:none}
+  .tree::-webkit-scrollbar{
+    width: 6px;
+    height: 0;
+    background: rgba(255, 255, 255, .5);
+  }
+  .tree::-webkit-scrollbar-thumb{
+    border-radius: 6px;
+    background-color: #EBEEF5;
+  }
 </style>
