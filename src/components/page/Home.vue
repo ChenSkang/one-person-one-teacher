@@ -75,19 +75,27 @@
         <div>
           <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
           <ul>
-            <li class="ques" v-for="(item, index) in $store.state.nowSub" :key="index">
+            <li class="ques" v-for="item in nowQues" :key="$store.state.nowSub[item + nowPage - 1].unique">
               <div class="up">
-                <span class="TH">{{titleNumber(index)}}</span>
-                <span class="QUE" v-html="item.que"></span>
+                <span class="TH">{{titleNumber(item + nowPage)}}</span>
+                <span class="QUE" v-html="$store.state.nowSub[item + nowPage - 1].que"></span>
               </div>
               <div class="low">
-                <div><el-button type="primary" size="mini" @click="showJX(index)" icon="el-icon-document">查看解析</el-button></div>
-                <div v-if="!($store.state.tests.indexOf(item.unique) + 1)"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
-                <div v-else><el-button @click="deletePaper(index)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
-                <div><el-button type="danger" size="mini" @click="againSearch(item.unique)" icon="el-icon-search">相似推荐</el-button></div>
+                <div><el-button type="primary" size="mini" @click="showJX(item + nowPage - 1)" icon="el-icon-document">查看解析</el-button></div>
+                <div v-if="!($store.state.tests.indexOf(item + nowPage - 1) + 1)"><el-button type="primary" @click="addPaper(index)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
+                <div v-else><el-button @click="deletePaper(item + nowPage - 1)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
+                <div><el-button type="danger" size="mini" @click="againSearch($store.state.nowSub[item + nowPage - 1].unique)" icon="el-icon-search">相似推荐</el-button></div>
               </div>
             </li>
           </ul>
+          <el-pagination
+            class="que-page"
+            background
+            layout="prev, pager, next"
+            :page-size="10"
+            @current-change="nextPage"
+            :total="$store.state.nowSub.length">
+          </el-pagination>
         </div>
       </div>
       <answer></answer>
@@ -125,7 +133,9 @@
         imgVisible: false,
         imageSrc: '',
         visible: false,
-        minHeight: 0
+        minHeight: 0,
+        nowPages: 1,
+        nowPage: 0
       }
     },
     methods: {
@@ -239,13 +249,28 @@
       },
       titleNumber: function (index) {
         if (sessionStorage.getItem('title_number') === 'false') {
-          return index + 1 + '.'
+          return index + '.'
         } else {
-          if (index === 0) {
+          if (index === 1) {
             return '相似题:'
           } else {
             return index + '.'
           }
+        }
+      },
+      nextPage (val) {
+        this.nowPages = val
+        this.nowPage = (this.nowPages - 1) * 10
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+      }
+    },
+    computed: {
+      nowQues: function () {
+        if (this.nowPages <= this.$store.state.nowSub.length / 10) {
+          return 10
+        } else {
+          return this.$store.state.nowSub.length % 10
         }
       }
     },
@@ -325,5 +350,8 @@
   .low div{
     margin-left: 15px;
     cursor: pointer;
+  }
+  .que-page{
+    text-align: center;
   }
 </style>
