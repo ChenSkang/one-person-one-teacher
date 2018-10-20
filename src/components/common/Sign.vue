@@ -132,9 +132,6 @@
               <div class="down-main" v-else></div>
               <div class="down-line">
                 <div class="line"></div>
-                <div class="arrow" @click="getHot()" style="cursor: pointer">
-                  <img src="./../../img/ico-two-down-arrow.png">
-                </div>
               </div>
               <div class="down-main" v-if="hotQuestions.length">
                 <div class="down-que right-que" v-for="item in hotQuestions.length-3">
@@ -453,7 +450,7 @@
   }
   .line{
     width: 2px;
-    height: 390px;
+    height: 420px;
     background-color: #fff;
     margin-left: 50%;
     transform: translateX(-50%);
