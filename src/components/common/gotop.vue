@@ -24,7 +24,7 @@
 <style scoped>
 .btn{
   text-align: center;
-  font-size: 1.05rem;
+  font-size: 30px;
   position: fixed;
   bottom: 50px;
   right: 2%;

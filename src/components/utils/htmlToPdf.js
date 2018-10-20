@@ -185,7 +185,7 @@ export default{
           confirmButtonText: '确定',
           callback: action => {
             this.$message({
-              type: 'info',
+              type: 'error',
               message: '未知错误'
             })
           }
