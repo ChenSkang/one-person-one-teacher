@@ -196,6 +196,9 @@
                 </el-row>
               </div>
             </div>
+            <div class="right-foot">
+              <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
+            </div>
           </div>
         </div>
       </div>
@@ -218,6 +221,14 @@
   const secondOptions = ['副标题', '试卷信息', '装订线', '显示答案', '答案后置']
   export default {
     data () {
+      this.chartSettings = {
+        radius: 80,
+        offsetY: 150,
+        label: {
+          show: true,
+          position: 'inside'
+        }
+      }
       return {
         deleteall: false,
         cities: firstOptions,
@@ -249,8 +260,7 @@
           scroll: true,
           group: 'sortlist3',
           ghostClass: 'ghost-style'
-        },
-        htmlTitle: 'test'
+        }
       }
     },
     components: {
@@ -566,6 +576,17 @@
         } else {
           return '一'
         }
+      },
+      chartData: function () {
+        let str = {
+          columns: ['题型', '题目数量'],
+          rows: [
+            { '题型': '选择题', '题目数量': this.$store.state.XZ.length },
+            { '题型': '填空题', '题目数量': this.$store.state.TK.length },
+            { '题型': '解答题', '题目数量': this.$store.state.JD.length }
+          ]
+        }
+        return str
       }
     }
   }
@@ -612,6 +633,11 @@
     margin-top: 20px;
     width: 100%;
     background-color: #fff;
+    padding-bottom: 20px;
+  }
+  .right-foot{
+    margin-top: 20px;
+    width: 100%;
     padding-bottom: 20px;
   }
   .set_exam{
