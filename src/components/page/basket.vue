@@ -601,6 +601,7 @@
   .right{
     width: 90%;
     margin-left: 5%;
+    min-width: 240px;
   }
   .right_up{
     width: 100%;
