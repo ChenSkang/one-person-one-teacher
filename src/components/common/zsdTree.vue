@@ -1,5 +1,6 @@
 <template>
   <div>
+    <span v-if="zsdTemp" style="opacity: 0"></span>
     <el-collapse-transition>
       <div id="zsd" :class="{ movezsd: zsdTransition }">
         <div class="arrow" @click="zsdTranslate = !zsdTranslate"><p>知<br/>识<br/>点</p></div>
@@ -1247,13 +1248,21 @@
       }
     },
     computed: {
+      zsdTemp () {
+        return this.$store.state.value
+      },
       zsdTransition () {
-        return !(this.zsdTranslate === false || this.$store.state.value === 2)
+        return this.zsdTranslate
       }
     },
     watch: {
       zsdText (val) {
         this.$refs.zsdTree.filter(val)
+      },
+      zsdTemp (val) {
+        if (val === 2) {
+          this.zsdTranslate = false
+        }
       }
     }
   }
