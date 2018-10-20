@@ -178,9 +178,7 @@ export default{
         } else {
           sessionStorage.setItem('title_number', 'false')
         }
-        if (this.$route.path !== '/index') {
-          this.$router.push('/index')
-        }
+        this.$router.push({path: '/index', query: msg})
       }, (response) => {
         this.$store.state.history.loading = false
         this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {
@@ -216,9 +214,7 @@ export default{
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
         sessionStorage.setItem('title_number', 'true')
-        if (this.$route.path !== '/index') {
-          this.$router.push('/index')
-        }
+        this.$router.push({path: '/index', query: msg})
       }, (response) => {
         this.$store.state.history.loading = false
         this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {

@@ -119,7 +119,7 @@
             </div>
             <div class="up-body">
               <div class="down-main" v-if="hotQuestions.length">
-                <div class="down-que left-que" v-for="item in 3">
+                <div class="down-que left-que" v-for="item in 3" :key="item - 1">
                   <div>
                     <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item - 1].que"></span></p>
                     <div class="fire-foot">
@@ -134,7 +134,7 @@
                 <div class="line"></div>
               </div>
               <div class="down-main" v-if="hotQuestions.length">
-                <div class="down-que right-que" v-for="item in hotQuestions.length-3">
+                <div class="down-que right-que" v-for="item in hotQuestions.length-3" :key="item + 2">
                   <div>
                     <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item + 2].que"></span></p>
                     <div class="fire-foot">
