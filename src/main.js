@@ -11,6 +11,7 @@ import Vuex from 'vuex'
 import store from './store/index'
 import htmlToPdf from '@/components/utils/htmlToPdf'
 import axios from 'axios'
+import VePie from 'v-charts/lib/pie.common'
 
 Vue.config.productionTip = false
 axios.defaults.withCredentials = true
@@ -18,6 +19,7 @@ Vue.prototype.$axios = axios
 Vue.use(ElementUI)
 Vue.use(Vuex)
 Vue.use(htmlToPdf)
+Vue.component(VePie.name, VePie)
 
 /* eslint-disable no-new */
 new Vue({
