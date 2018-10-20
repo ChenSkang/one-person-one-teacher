@@ -1237,6 +1237,8 @@
       handleNodeClick (data) {
         if (!data.children && this.$store.state.zsdTreeTags.indexOf(data.label) === -1) {
           if (this.$store.state.zsdTreeTags.length < 5) {
+            document.body.scrollTop = 0
+            document.documentElement.scrollTop = 0
             this.$store.state.value = 2
             this.$store.state.zsdTreeTags.push(data.label)
           } else {
@@ -1272,7 +1274,7 @@
     min-width: 200px;
     height: 500px;
     max-height: 500px;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 100px;
     border: 1px solid #E6A23C;
@@ -1294,6 +1296,8 @@
     top: 200px;
     display: table;
     background-color: #E6A23C;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
   .arrow p{
     display: table-cell;
