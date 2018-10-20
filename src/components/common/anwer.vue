@@ -39,14 +39,4 @@
 </script>
 
 <style scoped>
-  .TI{
-    line-height: 25px;
-    font-size: 14px;
-    padding: 10px 20px 10px 20px;
-    letter-spacing: 1px;
-  }
-  .jx{
-    color: #409EFF;
-    font-weight: bold;
-  }
 </style>
