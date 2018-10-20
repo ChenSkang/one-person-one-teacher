@@ -234,7 +234,7 @@
             this.$message.error('请求服务端失败')
           })
         } else {
-          this.$message('请先登录，谢谢')
+          this.signShows()
         }
       },
       titleNumber: function (index) {
