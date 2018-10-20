@@ -277,12 +277,12 @@
           },
           withCredentials: true
         }).then((response) => {
-          console.log(response)
           sessionStorage.removeItem('sessionId')
           sessionStorage.removeItem('nowUser')
           localStorage.removeItem('thisUser')
           localStorage.removeItem('thisPass')
           this.$store.state.userNow = ''
+          this.$router.push('/')
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
