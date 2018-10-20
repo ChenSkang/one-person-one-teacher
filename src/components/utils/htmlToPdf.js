@@ -184,14 +184,8 @@ export default{
           this.$router.push({path: '/index', query: msg})
         }, (response) => {
           this.$store.state.history.loading = false
-          this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {
-            confirmButtonText: '确定',
-            callback: action => {
-              this.$message({
-                type: 'error',
-                message: '未知错误'
-              })
-            }
+          this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
+            confirmButtonText: '确定'
           })
         })
       }
@@ -221,14 +215,8 @@ export default{
         this.$router.push({path: '/index', query: msg})
       }, (response) => {
         this.$store.state.history.loading = false
-        this.$alert('请检查文本内容并确认网络是否正常', '未知错误', {
-          confirmButtonText: '确定',
-          callback: action => {
-            this.$message({
-              type: 'info',
-              message: '未知错误'
-            })
-          }
+        this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
+          confirmButtonText: '确定'
         })
       })
     }
