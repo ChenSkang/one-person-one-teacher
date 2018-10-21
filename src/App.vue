@@ -24,8 +24,8 @@
 
 <style>
   @import "css/myapp.css";
-  @import "css/mathStyles_f558024.css";
-  @import "css/question_9861710.css";
+  @import "css/math.css";
+  @import "css/que.css";
   *{
     margin:0;
     padding:0;
