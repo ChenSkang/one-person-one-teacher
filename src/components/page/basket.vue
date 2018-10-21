@@ -487,6 +487,7 @@
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('questions', arr)
+        formData.append('name', this.examName)
         let url = this.$store.state.urls.url + 'BasketDownJump'
         this.$axios.post(url, formData, {
           headers: {
@@ -494,8 +495,7 @@
           },
           withCredentials: true
         }).then((response) => {
-          console.log(response)
-          window.location.href = response.data
+          window.open(response.data)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })

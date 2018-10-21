@@ -111,7 +111,6 @@
         mations: secondOptions,
         showSet: [true, false, true, true],
         showSets: [true, false, true],
-        examName: '初中数学测试试卷',
         examSecondName: '试卷副标题',
         examThirdName: '考试范围：xxx；考试时间：100分钟；命题人：xxx',
         examFourName: '学校：________姓名：________班级：________学号：________',
@@ -136,13 +135,14 @@
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('paperId', sessionStorage.getItem('paper'))
+        formData.append('name', sessionStorage.getItem('paperName'))
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
           },
           withCredentials: true
         }).then((response) => {
-          window.location.href = response.data
+          window.open(response.data)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
@@ -193,6 +193,9 @@
         } else {
           return '一'
         }
+      },
+      examName: function () {
+        return sessionStorage.getItem('paperName')
       }
     }
   }

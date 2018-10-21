@@ -64,6 +64,7 @@
           withCredentials: true
         }).then((response) => {
           sessionStorage.setItem('paper', row.id)
+          sessionStorage.setItem('paperName', row.title)
           this.$store.state.history.paper = false
           this.$store.state.history.XZ = []
           this.$store.state.history.TK = []
@@ -94,6 +95,7 @@
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('paperId', row.id)
+        formData.append('name', row.title)
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -101,7 +103,8 @@
           withCredentials: true
         }).then((response) => {
           sessionStorage.setItem('paper', row.id)
-          window.location.href = response.data
+          sessionStorage.setItem('paperName', row.title)
+          window.open(response.data)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
