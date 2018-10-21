@@ -1,5 +1,5 @@
 <template>
-  <div  v-loading.fullscreen.lock="loading" element-loading-spinner="el-icon-loading" element-loading-text="正在推荐中">
+  <div>
     <myHead></myHead>
     <mySpace></mySpace>
     <el-dialog :visible.sync="imgVisible" width="60%">
@@ -60,7 +60,6 @@
         searchQue: '',
         searchWay: '',
         searchKind: '',
-        loading: false,
         minHeight: 0
       }
     },
@@ -88,7 +87,8 @@
       searchAgain (que, way, kind) {
         let url = this.$store.state.urls.url + 'SearchAgainServlet'
         this.imgVisible = false
-        this.loading = true
+        this.imgVisibles = false
+        this.$store.state.history.loading = true
         let formData = new FormData()
         formData.append('que', que)
         formData.append('way', way)
@@ -99,17 +99,16 @@
           },
           withCredentials: true
         }).then((response) => {
-          console.log(response)
           this.$store.state.nowSub = []
           sessionStorage.setItem('defaultSrc', this.searchImage)
           this.$store.state.cropImg = this.searchImage
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-          this.loading = false
+          this.$store.state.history.loading = false
           this.$router.push('/index')
           this.$message.success('推荐成功')
         }, (response) => {
-          this.loading = false
+          this.$store.state.history.loading = false
           this.$message.error('请求服务端失败')
         })
       },
