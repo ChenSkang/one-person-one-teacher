@@ -155,8 +155,8 @@ export default{
         const kind = this.$store.state.select + '题'
         let formData = new FormData()
         if (way === 3) {
-          let zsd = this.$store.state.zsdTreeTags.join('；')
-          formData.append('word', zsd)
+          msg = this.$store.state.zsdTreeTags.join('；')
+          formData.append('word', msg)
         } else {
           formData.append('word', msg)
         }
@@ -181,6 +181,7 @@ export default{
           } else {
             sessionStorage.setItem('title_number', 'false')
           }
+          this.$store.state.history.nowHomePage = 1
           this.$router.push({path: '/index', query: msg})
         }, (response) => {
           this.$store.state.history.loading = false
@@ -212,6 +213,7 @@ export default{
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
         sessionStorage.setItem('title_number', 'true')
+        this.$store.state.history.nowHomePage = 1
         this.$router.push({path: '/index', query: msg})
       }, (response) => {
         this.$store.state.history.loading = false

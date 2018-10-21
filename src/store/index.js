@@ -14,7 +14,6 @@ export default new Vuex.Store({
     nowSub: [],
     userNow: '',
     cropImg: '', // 裁切的图片
-    tests: '', // test ID
     TK: [], // 试题篮填空题
     XZ: [], // 试题篮选择题
     JD: [], // 试题篮解答题

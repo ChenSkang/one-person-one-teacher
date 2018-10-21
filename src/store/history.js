@@ -12,6 +12,7 @@ export default {
     paper: true,
     find: true,
     searched: [],
-    loading: false
+    loading: false,
+    nowHomePage: 1
   }
 }

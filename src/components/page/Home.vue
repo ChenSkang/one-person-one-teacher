@@ -82,8 +82,7 @@
               </div>
               <div class="low">
                 <div><el-button type="primary" size="mini" @click="showJX(item + nowPage - 1)" icon="el-icon-document">查看解析</el-button></div>
-                <div v-if="!($store.state.tests.indexOf(item + nowPage - 1) + 1)"><el-button type="primary" @click="addPaper(item + nowPage - 1)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
-                <div v-else><el-button @click="deletePaper(item + nowPage - 1)" type="info" size="mini" icon="el-icon-minus" round>试题</el-button></div>
+                <div><el-button type="primary" @click="addPaper(item + nowPage - 1)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
                 <div><el-button type="danger" size="mini" @click="againSearch($store.state.nowSub[item + nowPage - 1].unique)" icon="el-icon-search">相似推荐</el-button></div>
               </div>
             </li>
@@ -93,6 +92,7 @@
             background
             layout="prev, pager, next"
             :page-size="10"
+            :current-page.sync="$store.state.history.nowHomePage"
             @current-change="nextPage"
             :total="$store.state.nowSub.length">
           </el-pagination>
@@ -133,9 +133,7 @@
         imgVisible: false,
         imageSrc: '',
         visible: false,
-        minHeight: 0,
-        nowPages: 1,
-        nowPage: 0
+        minHeight: 0
       }
     },
     methods: {
@@ -259,15 +257,16 @@
         }
       },
       nextPage (val) {
-        this.nowPages = val
-        this.nowPage = (this.nowPages - 1) * 10
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
       }
     },
     computed: {
+      nowPage: function () {
+        return (this.$store.state.history.nowHomePage - 1) * 10
+      },
       nowQues: function () {
-        if (this.nowPages <= this.$store.state.nowSub.length / 10) {
+        if (this.$store.state.history.nowHomePage <= this.$store.state.nowSub.length / 10) {
           return 10
         } else {
           return this.$store.state.nowSub.length % 10
@@ -278,11 +277,6 @@
       this.minHeight = document.documentElement.clientHeight - 251
       this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       if (sessionStorage.getItem('subj')) { this.$store.state.nowSub = JSON.parse(sessionStorage.getItem('subj')) }
-      if (localStorage.getItem('tests')) {
-        this.$store.state.tests = localStorage.getItem('tests')
-      } else {
-        localStorage.setItem('tests', 'tests')
-      }
     }
   }
 </script>
