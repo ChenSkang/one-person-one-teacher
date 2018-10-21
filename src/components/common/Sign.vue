@@ -239,7 +239,7 @@
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
           this.$store.state.history.loading = false
-          this.$router.push('/index')
+          this.$router.push({path: '/index', query: {servlet: 'pictureServlet', msg: this.$store.state.cropImg}})
           this.$message.success('推荐成功')
         }, (res) => {
           this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')

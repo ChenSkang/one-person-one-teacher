@@ -182,7 +182,7 @@ export default{
             sessionStorage.setItem('title_number', 'false')
           }
           this.$store.state.history.nowHomePage = 1
-          this.$router.push({path: '/index', query: msg})
+          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: msg, kind: this.$store.state.select, way: this.$store.state.value}})
         }, (response) => {
           this.$store.state.history.loading = false
           this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
@@ -214,7 +214,7 @@ export default{
         document.documentElement.scrollTop = 0
         sessionStorage.setItem('title_number', 'true')
         this.$store.state.history.nowHomePage = 1
-        this.$router.push({path: '/index', query: msg})
+        this.$router.push({path: '/index', query: {servlet: 'againSearch', msg: msg}})
       }, (response) => {
         this.$store.state.history.loading = false
         this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
