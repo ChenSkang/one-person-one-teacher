@@ -244,7 +244,7 @@
         })
       },
       againSearchs (x) {
-        this.$router.push({path: '/index', query: {msg: x}})
+        this.$router.push({path: '/index', query: {servlet: 'againSearch', msg: x}})
       },
       popoverClickOne () {
         this.popoverFirst = false
