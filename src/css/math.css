@@ -162,7 +162,7 @@ span.emptyblank {
   border-bottom: 1px solid #000
 }
 
-.MathZyb {
+.Mathopot {
   letter-spacing: 1px;
   white-space: nowrap;
   word-spacing: normal;
@@ -170,20 +170,20 @@ span.emptyblank {
   display: inline-block
 }
 
-.MathZyb div,
-.MathZyb span {
+.Mathopot div,
+.Mathopot span {
   height: auto;
   white-space: normal
 }
 
-.MathZyb table {
+.Mathopot table {
   border-collapse: collapse;
   display: inline-block;
   text-align: center;
   vertical-align: middle;
 }
 
-.MathZyb table td {
+.Mathopot table td {
   line-height: normal;
   white-space: nowrap;
   border: 0 none;
@@ -191,7 +191,7 @@ span.emptyblank {
   padding: 0
 }
 
-.MathZybm {
+.Mathopotm {
   font-style: italic
 }
 
@@ -245,11 +245,11 @@ table.edittable>tbody>tr>td {
   transform: scaleX(-1)
 }
 
-.zyb_option * {
+.opot_option * {
   vertical-align: middle
 }
 
-.zyb_option .zyb_option_titie {
+.opot_option .opot_option_titie {
   display: inline-block;
   margin-right: 1em
 }
