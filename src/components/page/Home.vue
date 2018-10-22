@@ -248,11 +248,9 @@
         if (this.$route.path === '/index') {
           switch (val.servlet) {
             case 'againSearch':
-              console.log(val)
               this.againSearch(val.msg)
               break
             case 'wordSearch':
-              console.log(val)
               this.$store.state.select = val.kind
               this.$store.state.value = parseInt(val.way)
               if (this.$store.state.value === 2) {
@@ -263,7 +261,6 @@
               this.wordSearch(val.msg)
               break
             case 'imgSearch':
-              console.log(val)
               this.$store.state.cropImg = val.msg
               this.imgSearch()
               break
