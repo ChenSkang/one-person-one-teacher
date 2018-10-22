@@ -30,7 +30,7 @@ export default new Vuex.Store({
       label: '知识点',
       holder: '请在左侧选择知识点'
     }],
-    value: '',
+    value: 0,
     select: '全部',
     input_message: '',
     zsdTreeTags: []

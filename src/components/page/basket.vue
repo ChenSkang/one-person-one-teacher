@@ -71,7 +71,7 @@
                     <div @click="deleteX(index)">删除</div>
                     <div @click="upX(index)">上移</div>
                     <div @click="downX(index)">下移</div>
-                    <div @click="againSearch(value.unique)">相似推荐</div>
+                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
                     <div @click="value.area += 50">增加答题区</div>
                     <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
                   </div>
@@ -101,7 +101,7 @@
                     <div @click="deleteT(index)">删除</div>
                     <div @click="upT(index)">上移</div>
                     <div @click="downT(index)">下移</div>
-                    <div @click="againSearch(value.unique)">相似推荐</div>
+                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
                     <div @click="value.area += 50">增加答题区</div>
                     <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
                   </div>
@@ -131,7 +131,7 @@
                     <div @click="deleteJ(index)">删除</div>
                     <div @click="upJ(index)">上移</div>
                     <div @click="downJ(index)">下移</div>
-                    <div @click="againSearch(value.unique)">相似推荐</div>
+                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
                     <div @click="value.area += 50">增加答题区</div>
                     <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
                   </div>
@@ -174,7 +174,7 @@
           <div class="right">
             <div class="right_up">
               <div class="set_title">试卷操作</div>
-              <div><el-button class="btn" @click="$router.push('/index')" icon="el-icon-back" type="primary">继续选题</el-button></div>
+              <div><el-button class="btn" @click="goIndex()" icon="el-icon-back" type="primary">继续选题</el-button></div>
               <div><el-button class="btn" @click="wordDown()" type="primary" icon="el-icon-delete">下载试题</el-button></div>
               <div><el-button class="btn" @click="saveExam()" type="primary" icon="el-icon-download">保存试题</el-button></div>
               <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
@@ -523,6 +523,9 @@
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
+      },
+      goIndex () {
+        this.$router.push('/index')
       },
       creat () {
         if (sessionStorage.getItem('sessionId')) {

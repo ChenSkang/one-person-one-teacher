@@ -5,13 +5,13 @@
     <el-dialog :visible.sync="imgVisible" width="60%">
       <img style="max-height: 55vh; margin-left: 50%; transform: translateX(-50%)" :src="searchImage">
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="searchAgain(searchQue, searchWay, searchKind)">重新搜索</el-button>
+        <el-button type="primary" @click="searchAgainImg(searchQue, searchWay, searchKind)">重新搜索</el-button>
       </span>
     </el-dialog>
     <el-dialog :visible.sync="imgVisibles" width="60%">
       <p v-html="searchQue"></p>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="searchAgain(searchQue, searchWay, searchKind)">重新搜索</el-button>
+        <el-button type="primary" @click="searchAgainWord(searchQue, searchWay, searchKind)">重新搜索</el-button>
       </span>
     </el-dialog>
     <div>
@@ -84,8 +84,30 @@
           this.imgVisibles = true
         }
       },
-      searchAgain (que, way, kind) {
-        let url = this.$store.state.urls.url + 'SearchAgainServlet'
+      searchAgainImg (que, way, kind) {
+        this.imgVisible = false
+        this.imgVisibles = false
+        let k = '全部'
+        let w = way
+        this.$store.state.select = k
+        this.$store.state.value = parseInt(w)
+        if (w === 2) {
+          this.$store.state.zsdTreeTags = que.split('；')
+        }
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', kind: k, msg: que, way: w}})
+      },
+      searchAgainWord (que, way, kind) {
+        this.imgVisible = false
+        this.imgVisibles = false
+        let k = kind.slice(0, 2)
+        let w = way - 1
+        this.$store.state.select = k
+        this.$store.state.value = w
+        if (w === 2) {
+          this.$store.state.zsdTreeTags = que.split('；')
+        }
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', kind: k, msg: que, way: w}})
+        /* let url = this.$store.state.urls.url + 'SearchAgainServlet'
         this.imgVisible = false
         this.imgVisibles = false
         this.$store.state.history.loading = true
@@ -110,7 +132,7 @@
         }, (response) => {
           this.$store.state.history.loading = false
           this.$message.error('请求服务端失败')
-        })
+        }) */
       },
       clearSearched () {
         let url = this.$store.state.urls.url + 'CleanHistoryServlet'

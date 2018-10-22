@@ -155,8 +155,8 @@ export default{
         const kind = this.$store.state.select + '题'
         let formData = new FormData()
         if (way === 3) {
-          msg = this.$store.state.zsdTreeTags.join('；')
-          formData.append('word', msg)
+          let ms = this.$store.state.zsdTreeTags.join('；')
+          formData.append('word', ms)
         } else {
           formData.append('word', msg)
         }
@@ -182,7 +182,12 @@ export default{
             sessionStorage.setItem('title_number', 'false')
           }
           this.$store.state.history.nowHomePage = 1
-          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: msg, kind: this.$store.state.select, way: this.$store.state.value}})
+          if (way === 3) {
+            let ms = this.$store.state.zsdTreeTags.join('；')
+            this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: ms, kind: this.$store.state.select, way: 2}})
+          } else {
+            this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: msg, kind: this.$store.state.select, way: this.$store.state.value}})
+          }
         }, (response) => {
           this.$store.state.history.loading = false
           this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
@@ -206,7 +211,6 @@ export default{
         this.$store.state.cropImg = ''
         sessionStorage.removeItem('defaultSrc')
         this.$store.state.history.loading = false
-        this.$message.success('推荐成功')
         sessionStorage.setItem('subj', JSON.stringify(response.data))
         console.log(response.data)
         this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
@@ -224,6 +228,43 @@ export default{
     }
     Vue.prototype.zsdTagsClose = function (tag) {
       this.$store.state.zsdTreeTags.splice(this.$store.state.zsdTreeTags.indexOf(tag), 1)
+    }
+    Vue.prototype.imgSearch = function () {
+      this.$store.state.history.loading = true
+      const page = this.$store.state.cropImg
+      let arr = page.split(',')
+      let mime = arr[0].match(/:(.*?);/)[1]
+      let bstr = atob(arr[1])
+      let n = bstr.length
+      let u8arr = new Uint8Array(n)
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+      }
+      const obj = new Blob([u8arr], {type: mime})
+      const fd = new FormData()
+      fd.append('upfile', obj, 'image.png')
+      let url = this.$store.state.urls.url + 'pictureServlet'
+      this.$axios.post(url, fd, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        withCredentials: true
+      }).then((response) => {
+        this.$store.state.history.loading = false
+        this.$store.state.nowSub = ''
+        this.$message.success('推荐成功')
+        sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
+        sessionStorage.setItem('subj', JSON.stringify(response.data))
+        this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
+        this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}})
+        console.log(response.data)
+      }, (response) => {
+        this.$store.state.history.loading = false
+        this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
+        this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
+          confirmButtonText: '确定'
+        })
+      })
     }
   }
 }

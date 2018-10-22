@@ -123,7 +123,7 @@
                   <div>
                     <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item - 1].que"></span></p>
                     <div class="fire-foot">
-                      <div class="fire-foot-div" @click="againSearch(hotQuestions[item - 1].unique)">推荐</div>
+                      <div class="fire-foot-div" @click="againSearchs(hotQuestions[item - 1].unique)">推荐</div>
                       <div class="fire-foot-div" @click="showMore(item - 1)">解析</div>
                     </div>
                   </div>
@@ -138,7 +138,7 @@
                   <div>
                     <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item + 2].que"></span></p>
                     <div class="fire-foot">
-                      <div class="fire-foot-div" @click="againSearch(hotQuestions[item + 2].unique)">推荐</div>
+                      <div class="fire-foot-div" @click="againSearchs(hotQuestions[item + 2].unique)">推荐</div>
                       <div class="fire-foot-div" @click="showMore(item + 2)">解析</div>
                     </div>
                   </div>
@@ -213,50 +213,16 @@
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       },
       sureCrop () {
-        this.$store.state.history.loading = true
         this.visible = false
-        const page = this.$store.state.cropImg
-        let arr = page.split(',')
-        let mime = arr[0].match(/:(.*?);/)[1]
-        let bstr = atob(arr[1])
-        let n = bstr.length
-        let u8arr = new Uint8Array(n)
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n)
-        }
-        const obj = new Blob([u8arr], {type: mime})
-        const fd = new FormData()
-        fd.append('upfile', obj, 'image.png')
-        let url = this.$store.state.urls.url + 'pictureServlet'
-        this.$axios.post(url, fd, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.nowSub = []
-          sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
-          sessionStorage.setItem('subj', JSON.stringify(response.data))
-          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-          this.$store.state.history.loading = false
-          this.$router.push({path: '/index', query: {servlet: 'pictureServlet', msg: this.$store.state.cropImg}})
-          this.$message.success('推荐成功')
-        }, (res) => {
-          this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
-          this.$store.state.history.loading = false
-          this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
-            confirmButtonText: '确定',
-            callback: action => {
-              this.$message({
-                type: 'info',
-                message: '未知错误'
-              })
-            }
-          })
-        })
+        this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}})
       },
       searchMsg () {
-        this.wordSearch(this.$store.state.input_message)
+        if (this.$store.state.value === 2) {
+          let ms = this.$store.state.zsdTreeTags.join('；')
+          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: ms, kind: this.$store.state.select, way: 2}})
+        } else {
+          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, kind: this.$store.state.select, way: this.$store.state.value}})
+        }
       },
       showMore (num) {
         this.myTest[0].que = this.hotQuestions[num].que
@@ -276,6 +242,9 @@
           this.hotQuestions = response.data
         }, (res) => {
         })
+      },
+      againSearchs (x) {
+        this.$router.push({path: '/index', query: {msg: x}})
       },
       popoverClickOne () {
         this.popoverFirst = false

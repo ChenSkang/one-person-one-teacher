@@ -22,6 +22,7 @@
     <el-dialog :visible.sync="imgVisible" width="70%">
       <img style="max-height: 60vh; margin-left: 50%; transform: translateX(-50%)" :src="$store.state.cropImg">
     </el-dialog>
+    <div style="width: 0; height: 0; opacity: 0">{{nowQuery}}</div>
     <div class="first-head">
       <div class="transverse"></div>
       <div class="header-concern">
@@ -83,7 +84,7 @@
               <div class="low">
                 <div><el-button type="primary" size="mini" @click="showJX(item + nowPage - 1)" icon="el-icon-document">查看解析</el-button></div>
                 <div><el-button type="primary" @click="addPaper(item + nowPage - 1)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
-                <div><el-button type="danger" size="mini" @click="againSearch($store.state.nowSub[item + nowPage - 1].unique)" icon="el-icon-search">相似推荐</el-button></div>
+                <div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:$store.state.nowSub[item + nowPage - 1].unique}})" icon="el-icon-search">相似推荐</el-button></div>
               </div>
             </li>
           </ul>
@@ -168,51 +169,16 @@
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       },
       sureCrop () {
-        this.$store.state.history.loading = true
         this.visible = false
-        const page = this.$store.state.cropImg
-        let arr = page.split(',')
-        let mime = arr[0].match(/:(.*?);/)[1]
-        let bstr = atob(arr[1])
-        let n = bstr.length
-        let u8arr = new Uint8Array(n)
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n)
-        }
-        const obj = new Blob([u8arr], {type: mime})
-        const fd = new FormData()
-        fd.append('upfile', obj, 'image.png')
-        let url = this.$store.state.urls.url + 'pictureServlet'
-        this.$axios.post(url, fd, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.history.loading = false
-          this.$store.state.nowSub = ''
-          this.$message.success('推荐成功')
-          sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
-          sessionStorage.setItem('subj', JSON.stringify(response.data))
-          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-          this.$router.push({path: '/index', query: {servlet: 'pictureServlet', msg: this.$store.state.cropImg}})
-          console.log(response.data)
-        }, (response) => {
-          this.$store.state.history.loading = false
-          this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
-          this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
-            confirmButtonText: '确定',
-            callback: action => {
-              this.$message({
-                type: 'info',
-                message: '未知错误'
-              })
-            }
-          })
-        })
+        this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}})
       },
       searchMsg () {
-        this.wordSearch(this.$store.state.input_message)
+        if (this.$store.state.value === 2) {
+          let ms = this.$store.state.zsdTreeTags.join('；')
+          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: ms, kind: this.$store.state.select, way: 2}})
+        } else {
+          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, kind: this.$store.state.select, way: this.$store.state.value}})
+        }
       },
       showJX (x) {
         let que = this.$store.state.nowSub[x].que
@@ -272,12 +238,62 @@
         } else {
           return this.$store.state.nowSub.length % 10
         }
+      },
+      nowQuery: function () {
+        return this.$route.query
+      }
+    },
+    watch: {
+      nowQuery: function (val) {
+        if (this.$route.path === '/index') {
+          switch (val.servlet) {
+            case 'againSearch':
+              console.log(val)
+              this.againSearch(val.msg)
+              break
+            case 'wordSearch':
+              console.log(val)
+              this.$store.state.select = val.kind
+              this.$store.state.value = parseInt(val.way)
+              if (this.$store.state.value === 2) {
+                this.$store.state.zsdTreeTags = val.msg.split('；')
+              } else {
+                this.$store.state.input_message = val.msg
+              }
+              this.wordSearch(val.msg)
+              break
+            case 'imgSearch':
+              console.log(val)
+              this.$store.state.cropImg = val.msg
+              this.imgSearch()
+              break
+          }
+        }
       }
     },
     created () {
       this.minHeight = document.documentElement.clientHeight - 251
       this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       if (sessionStorage.getItem('subj')) { this.$store.state.nowSub = JSON.parse(sessionStorage.getItem('subj')) }
+      switch (this.$route.query.servlet) {
+        case 'againSearch':
+          this.againSearch(this.$route.query.msg)
+          break
+        case 'wordSearch':
+          this.$store.state.select = this.$route.query.kind
+          this.$store.state.value = parseInt(this.$route.query.way)
+          if (this.$store.state.value === 2) {
+            this.$store.state.zsdTreeTags = this.$route.query.msg.split('；')
+          } else {
+            this.$store.state.input_message = this.$route.query.msg
+          }
+          this.wordSearch(this.$route.query.msg)
+          break
+        case 'imgSearch':
+          this.$store.state.cropImg = this.$route.query.msg
+          this.imgSearch()
+          break
+      }
     }
   }
 </script>
