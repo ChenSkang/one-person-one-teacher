@@ -58,7 +58,7 @@
                   <span class="TH">{{index + 1}}.</span>
                   <span v-html="value.que"></span>
                   <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
-                  <div v-if="showSet[4]">
+                  <div v-if="showSets[3]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
                   <div v-if="showSets[3]">
@@ -88,7 +88,7 @@
                   <span class="TH">{{$store.state.XZ.length + index + 1}}.</span>
                   <span v-html="value.que"></span>
                   <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
-                  <div v-if="showSet[4]">
+                  <div v-if="showSets[3]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
                   <div v-if="showSets[3]">
@@ -118,7 +118,7 @@
                   <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>
                   <span v-html="value.que"></span>
                   <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
-                  <div v-if="showSet[4]">
+                  <div v-if="showSets[3]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
                   <div v-if="showSets[3]">
@@ -139,36 +139,6 @@
               </div>
             </transition-group>
           </draggable>
-
-          <div v-if="showSet[5] || showSets[4]">
-            <div v-for="(value, index) in $store.state.XZ" class="ques" :key="value.answer">
-              <div class="up">
-                <div>
-                  <span>{{index + 1}}.</span>
-                  <span v-if="showSet[5]">解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-if="showSets[4]">解答：<span v-html="value.answer"></span></span>
-                </div>
-              </div>
-            </div>
-            <div v-for="(value, index) in $store.state.TK" class="ques" :key="value.answer">
-              <div class="up">
-                <div>
-                  <span>{{index + 1}}.</span>
-                  <span v-if="showSet[5]">解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-if="showSets[4]">解答：<span v-html="value.answer"></span></span>
-                </div>
-              </div>
-            </div>
-            <div v-for="(value, index) in $store.state.JD" class="ques" :key="value.answer">
-              <div class="up">
-                <div>
-                  <span>{{index + 1}}.</span>
-                  <span v-if="showSet[5]">解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-if="showSets[4]">解答：<span v-html="value.answer"></span></span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         <div class="concern-right">
           <div class="right">
@@ -217,8 +187,8 @@
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   import answer from '../common/anwer.vue'
   import bus from '../../bus'
-  const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项', '显示解析', '解析后置']
-  const secondOptions = ['副标题', '试卷信息', '装订线', '显示答案', '答案后置']
+  const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项']
+  const secondOptions = ['副标题', '试卷信息', '装订线', '显示答案']
   export default {
     data () {
       this.chartSettings = {
@@ -233,8 +203,8 @@
         deleteall: false,
         cities: firstOptions,
         mations: secondOptions,
-        showSet: [true, false, true, true, false, false],
-        showSets: [true, false, true, false, false],
+        showSet: [true, false, false, false],
+        showSets: [false, false, true, true],
         examName: '初中数学测试试卷',
         examSecondName: '试卷副标题',
         examThirdName: '考试范围：xxx；考试时间：100分钟；命题人：xxx',
@@ -474,20 +444,27 @@
       },
       wordDown () {
         let arr = []
+        let arrTwo = []
         for (let i = 0; i < this.$store.state.XZ.length; i++) {
           arr.push(this.$store.state.XZ[i].unique)
+          arrTwo.push(this.$store.state.XZ[i].area)
         }
         for (let i = 0; i < this.$store.state.TK.length; i++) {
           arr.push(this.$store.state.TK[i].unique)
+          arrTwo.push(this.$store.state.TK[i].area)
         }
         for (let i = 0; i < this.$store.state.JD.length; i++) {
           arr.push(this.$store.state.JD[i].unique)
+          arrTwo.push(this.$store.state.JD[i].area)
         }
+        let needAnswer = this.showSets[3] ? 'yes' : 'no'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('questions', arr)
         formData.append('name', this.examName)
+        formData.append('needAnswer', needAnswer)
+        formData.append('hangju', arrTwo)
         let url = this.$store.state.urls.url + 'BasketDownJump'
         this.$axios.post(url, formData, {
           headers: {
