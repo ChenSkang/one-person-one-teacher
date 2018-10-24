@@ -3,6 +3,6 @@
  */
 export default {
   state: {
-    url: 'https://39.105.56.207:8080/OPOT1/servlet/'
+    url: 'http://39.105.56.207:8080/OPOT1/servlet/'
   }
 }

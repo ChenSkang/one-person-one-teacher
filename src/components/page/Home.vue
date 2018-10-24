@@ -25,7 +25,7 @@
     <div style="width: 0; height: 0; opacity: 0">{{nowQuery}}</div>
     <div class="first-head">
       <div class="transverse"></div>
-      <div class="header-concern">
+      <div class="header-concern" :class="{topfix: topFixed}">
         <div v-if="$store.state.zsdTreeTags.length && $store.state.value === 2" class="zsd-tags">
           <el-tag
             color="#fff"
@@ -134,7 +134,8 @@
         imgVisible: false,
         imageSrc: '',
         visible: false,
-        minHeight: 0
+        minHeight: 0,
+        topFixed: false
       }
     },
     methods: {
@@ -226,7 +227,18 @@
       nextPage (val) {
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
+      },
+      handleScroll () {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        if (scrollTop >= 200) {
+          this.topFixed = true
+        } else {
+          this.topFixed = false
+        }
       }
+    },
+    mounted () {
+      window.addEventListener('scroll', this.handleScroll)
     },
     computed: {
       nowPage: function () {
@@ -361,5 +373,11 @@
   }
   .que-page{
     text-align: center;
+  }
+  .topfix {
+    position: fixed !important;
+    top: 60px;
+    z-index: 999;
+    background-color: #fff;
   }
 </style>
