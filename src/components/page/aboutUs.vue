@@ -36,7 +36,7 @@
     methods: {
     },
     created () {
-      this.minHeight = document.documentElement.clientHeight - 50
+      this.minHeight = document.documentElement.clientHeight - 100
     }
   }
 </script>
@@ -95,11 +95,13 @@
     color: #909399;
     letter-spacing: 1px;
   }
-  .foot {
+   .foot {
+    width: 100%;
     position: absolute;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #909399;
+    bottom: 0;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: #F2F6FC;
   }
 </style>

@@ -51,6 +51,11 @@ export default new Router({
       path: '/enter',
       name: 'Enter',
       component: resolve => require(['@/components/page/aboutUs'], resolve)
+    },
+    {
+      path: '/safe',
+      name: 'Safe',
+      component: resolve => require(['@/components/page/safe'], resolve)
     }
   ]
 })

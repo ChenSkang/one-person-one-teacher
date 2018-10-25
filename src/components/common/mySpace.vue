@@ -50,7 +50,7 @@
           <span class="lf" style="color:#0489cc;">帮助</span>
           <div class="rt">
             <el-checkbox v-model="checked" style="color:#a0a0a0;">一周内自动登录</el-checkbox>
-            <span @click="clearCookie" style="cursor: pointer;color: #f19149;font-size: 0.75rem;margin-left: 5px;">忘记密码？</span>
+            <span @click="forgetPass()" style="cursor: pointer;color: #f19149;font-size: 0.75rem;margin-left: 5px;">忘记密码？</span>
           </div>
         </div>
         <p>还没有账号，马上去<span class="to" @click="goRegister()">注册</span></p>
@@ -286,6 +286,10 @@
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
+      },
+      forgetPass () {
+        this.$store.state.signShow = false
+        this.$router.push({path: '/safe', query: {now: 'phone', step: 0}})
       }
     },
     mounted () {
