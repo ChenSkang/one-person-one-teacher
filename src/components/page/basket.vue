@@ -15,11 +15,8 @@
     </el-dialog>
     <div class="main">
       <div class="concern">
-        <div class="exam" id="pdfDom">
+        <div class="exam">
           <div class="exam_something">
-            <div class="exam_left" v-if="showSets[2]" title="装订线">
-              <img src="../../img/peal_line.png" alt="">
-            </div>
             <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName"></div>
             <div v-if="showSets[0]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
             <div v-if="showSets[1]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
@@ -42,7 +39,7 @@
                 </tr>
               </table>
             </div>
-            <div class="attentions" v-if="showSet[3]" title="注意事项">
+            <div class="attentions" v-if="showSets[2]" title="注意事项">
               <span>注意事项：</span>
               <p v-for="(attention, index) in attentions" :key="attention">
                 {{index + 1 + '.'+ '&nbsp;' + attention}}
@@ -58,10 +55,10 @@
                   <span class="TH">{{index + 1}}.</span>
                   <span v-html="value.que"></span>
                   <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
-                  <div v-if="showSets[3]">
+                  <div v-if="showSet[4]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
-                  <div v-if="showSets[3]">
+                  <div v-if="showSet[3]">
                     <span class="jx">解答：</span><span v-html="value.answer"></span>
                   </div>
                 </div>
@@ -88,10 +85,10 @@
                   <span class="TH">{{$store.state.XZ.length + index + 1}}.</span>
                   <span v-html="value.que"></span>
                   <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
-                  <div v-if="showSets[3]">
+                  <div v-if="showSet[4]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
-                  <div v-if="showSets[3]">
+                  <div v-if="showSet[3]">
                     <span class="jx">解答：</span><span v-html="value.answer"></span>
                   </div>
                 </div>
@@ -118,10 +115,10 @@
                   <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>
                   <span v-html="value.que"></span>
                   <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
-                  <div v-if="showSets[3]">
+                  <div v-if="showSet[4]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
-                  <div v-if="showSets[3]">
+                  <div v-if="showSet[3]">
                     <span class="jx">解答：</span><span v-html="value.answer"></span>
                   </div>
                 </div>
@@ -139,6 +136,36 @@
               </div>
             </transition-group>
           </draggable>
+
+          <div v-if="showSets[3] || showSets[4]">
+            <div v-for="(value, index) in $store.state.XZ" class="ques" :key="value.answer">
+              <div class="up">
+                <div>
+                  <span>{{index + 1}}.</span>
+                  <span v-if="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-if="showSets[3]">解答：<span v-html="value.answer"></span></span>
+                </div>
+              </div>
+            </div>
+            <div v-for="(value, index) in $store.state.TK" class="ques" :key="value.answer">
+              <div class="up">
+                <div>
+                  <span>{{index + 1}}.</span>
+                  <span v-if="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-if="showSets[3]">解答：<span v-html="value.answer"></span></span>
+                </div>
+              </div>
+            </div>
+            <div v-for="(value, index) in $store.state.JD" class="ques" :key="value.answer">
+              <div class="up">
+                <div>
+                  <span>{{index + 1}}.</span>
+                  <span v-if="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-if="showSets[3]">解答：<span v-html="value.answer"></span></span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="concern-right">
           <div class="right">
@@ -187,8 +214,8 @@
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   import answer from '../common/anwer.vue'
   import bus from '../../bus'
-  const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项']
-  const secondOptions = ['副标题', '试卷信息', '装订线', '显示答案']
+  const firstOptions = ['主标题', '考生信息', '总分栏', '显示答案', '显示解析']
+  const secondOptions = ['副标题', '试卷信息', '注意事项', '答案后置', '解析后置']
   export default {
     data () {
       this.chartSettings = {
@@ -203,8 +230,8 @@
         deleteall: false,
         cities: firstOptions,
         mations: secondOptions,
-        showSet: [true, false, false, false],
-        showSets: [false, false, true, true],
+        showSet: [true, false, false, true, true],
+        showSets: [false, false, false, false, false],
         examName: '初中数学测试试卷',
         examSecondName: '试卷副标题',
         examThirdName: '考试范围：xxx；考试时间：100分钟；命题人：xxx',
@@ -601,7 +628,7 @@
     width: 915px;
     background-color: #fff;
     position: relative;
-    padding: 40px 40px 40px 100px;
+    padding: 40px 50px 40px 50px;
     min-height: 910px;
   }
   .right{
@@ -641,11 +668,6 @@
     background-color: #EBEEF5;
     border-bottom: 1px solid #E4E7ED;
     margin-bottom: 10px;
-  }
-  .exam_left img{
-    position: absolute;
-    left: 7px;
-    top: 0;
   }
   .exam_name{
     width: 100%;

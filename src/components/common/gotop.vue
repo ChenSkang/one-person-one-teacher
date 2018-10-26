@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button class="btn" size="small" @click="gotop">⇑</el-button>
+    <el-button class="btn" size="small" type="primary" @click="gotop">⇑</el-button>
   </div>
 </template>
 
