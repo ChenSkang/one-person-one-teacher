@@ -24,7 +24,8 @@
       <div class="four-step" v-if="nowStep == 1">
         <div class="step-main">
             <p>您的帐号为：{{phone}}</p>
-            <el-button type="primary" style="margin-top: 15px;" @click="prove()">点击获取验证码</el-button>
+            <el-button v-if="getCode" type="primary" style="margin-top: 15px;" @click="prove()">点击获取验证码</el-button>
+            <el-button v-else type="primary" style="margin-top: 15px;">{{total}}</el-button>
             <br/>
             <el-input v-model="code" placeholder="请输入验证码" @keyup.native.enter="proveOver()" value="number" style="margin-top: 15px; width: 200px;"></el-input>
             <br/>
@@ -101,7 +102,10 @@
           ifPass: [
             { required: true, validator: validatePass2, trigger: 'blur' }
           ]
-        }
+        },
+        getCode: true,
+        totalTime: 300,
+        total: ''
       }
     },
     methods: {
@@ -128,8 +132,14 @@
             },
             withCredentials: true
           }).then((response) => {
-            sessionStorage.setItem('session', response.data.sessionId)
-            this.$router.push({path: '/safe', query: {now: 'identity', step: 1}})
+            if (response.data.status === 0) {
+              this.$message.error('当前用户不存在')
+            } else {
+              this.$message.success('验证码已发送')
+              this.getCode = false
+              this.timeTo()
+              sessionStorage.setItem('session', response.data.sessionId)
+            }
           }, (response) => {
             this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
               confirmButtonText: '确定'
@@ -152,8 +162,13 @@
             },
             withCredentials: true
           }).then((response) => {
-            console.log(response)
-            this.$router.push({path: '/safe', query: {now: 'pass_input', step: 2}})
+            if (response.data.status === 0) {
+              console.log(response)
+              this.$message.error('请输入正确的验证码')
+            } else {
+              console.log(response)
+              this.$router.push({path: '/safe', query: {now: 'pass_input', step: 2}})
+            }
           }, (response) => {
             this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
               confirmButtonText: '确定'
@@ -175,8 +190,12 @@
               },
               withCredentials: true
             }).then((response) => {
-              console.log(response)
-              this.$router.push({path: '/safe', query: {now: 'finish', step: 4}})
+              if (response.data.status === 0) {
+                this.$message.error('超时，请重试')
+                this.$router.push({path: '/safe', query: {now: 'phone', step: 0}})
+              } else {
+                this.$router.push({path: '/safe', query: {now: 'finish', step: 4}})
+              }
             }, (response) => {
               this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
                 confirmButtonText: '确定'
@@ -195,6 +214,17 @@
         this.$router.push('/')
         sessionStorage.removeItem('session')
         this.$store.state.signShow = true
+      },
+      timeTo () {
+        this.total = this.totalTime + 's后重新获取'
+        let clock = window.setInterval(() => {
+          this.totalTime --
+          this.total = this.totalTime + 's后重新获取'
+          if (this.totalTime <= 0) {
+            window.clearInterval(clock)
+            this.getCode = true
+          }
+        }, 1000)
       }
     },
     computed: {
