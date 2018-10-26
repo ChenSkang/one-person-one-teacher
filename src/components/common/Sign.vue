@@ -429,6 +429,7 @@
     width: 93%;
     height: 90px;
     background-color: rgba(124, 146, 203, .75);
+    overflow: hidden;
   }
   .down-que img{
     margin-right: 5px;

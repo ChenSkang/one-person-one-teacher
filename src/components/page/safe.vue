@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="my-head">
-      <div class="logo">一人一名师</div>
+      <div class="logo" @click="$router.push('/')">一人一名师</div>
     </div>
     <div class="main" :style="{minHeight: minHeight + 'px'}">
       <div class="step">
