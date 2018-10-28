@@ -22,7 +22,7 @@
     <el-dialog :visible.sync="imgVisible" width="70%">
       <img style="max-height: 60vh; margin-left: 50%; transform: translateX(-50%)" :src="$store.state.cropImg">
     </el-dialog>
-    <div style="width: 0; height: 0; opacity: 0">{{nowQuery}}</div>
+    <div class="query" :class="{topfix2: topFixed}">{{nowQuery}}</div>
     <div class="first-head">
       <div class="transverse"></div>
       <div class="header-concern" :class="{topfix: topFixed}">
@@ -35,9 +35,6 @@
             @close="zsdTagsClose(tag)">
             {{tag}}
           </el-tag>
-        </div>
-        <div>
-          <img src="./../../img/hand.png" alt="">
         </div>
         <div style="width: 120px">
           <el-select v-model="$store.state.value" placeholder="题干">
@@ -322,6 +319,7 @@
     box-sizing: border-box;
     background-image: url("./../../img/base_head.png");
     background-size: cover;
+    z-index: 9;
   }
   .pre-img{
     max-width: 96%;
@@ -379,5 +377,14 @@
     top: 60px;
     z-index: 999;
     background-color: #fff;
+  }
+  .query {
+    color:#F2F6FC;
+    width: 100%;
+    background-color: #F2F6FC;
+    text-align: center;
+    position: fixed;
+    top: 40px;
+    height: 40px;
   }
 </style>
