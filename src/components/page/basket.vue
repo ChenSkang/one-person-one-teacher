@@ -455,7 +455,6 @@
           formData.append('title', value)
           formData.append('nameTwo', this.examSecondName)
           formData.append('shijuanxinxi', this.examThirdName)
-          formData.append('shijuanxinxi', this.examThirdName)
           formData.append('config', config)
           formData.append('questions', arr)
           formData.append('hangju', arrTwo)
