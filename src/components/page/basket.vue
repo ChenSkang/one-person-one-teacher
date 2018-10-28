@@ -431,7 +431,8 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /\S/,
-          inputErrorMessage: '不能为空'
+          inputErrorMessage: '不能为空',
+          inputValue: this.examName
         }).then(({ value }) => {
           let arr = []
           let arrTwo = []
@@ -447,10 +448,15 @@
             arr.push(this.$store.state.JD[i].unique)
             arrTwo.push(this.$store.state.JD[i].area)
           }
+          let config = this.showSet.concat(this.showSets)
           let sessionId = sessionStorage.getItem('sessionId')
           let formData = new FormData()
           formData.append('sessionId', sessionId)
           formData.append('title', value)
+          formData.append('nameTwo', this.examSecondName)
+          formData.append('shijuanxinxi', this.examThirdName)
+          formData.append('shijuanxinxi', this.examThirdName)
+          formData.append('config', config)
           formData.append('questions', arr)
           formData.append('hangju', arrTwo)
           let url = this.$store.state.urls.url + 'AddPaperServlet'
@@ -489,13 +495,15 @@
           arr.push(this.$store.state.JD[i].unique)
           arrTwo.push(this.$store.state.JD[i].area)
         }
-        let needAnswer = this.showSets[3] ? 'yes' : 'no'
         let sessionId = sessionStorage.getItem('sessionId')
+        let config = this.showSet.concat(this.showSets)
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('questions', arr)
         formData.append('name', this.examName)
-        formData.append('needAnswer', needAnswer)
+        formData.append('nameTwo', this.examSecondName)
+        formData.append('shijuanxinxi', this.examThirdName)
+        formData.append('config', config)
         formData.append('hangju', arrTwo)
         let url = this.$store.state.urls.url + 'BasketDownJump'
         this.$axios.post(url, formData, {
