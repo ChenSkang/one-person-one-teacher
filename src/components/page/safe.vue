@@ -104,7 +104,7 @@
           ]
         },
         getCode: true,
-        totalTime: 300,
+        totalTime: 60,
         total: ''
       }
     },

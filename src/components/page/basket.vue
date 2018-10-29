@@ -452,7 +452,7 @@
           let sessionId = sessionStorage.getItem('sessionId')
           let formData = new FormData()
           formData.append('sessionId', sessionId)
-          formData.append('title', value)
+          formData.append('name', value)
           formData.append('nameTwo', this.examSecondName)
           formData.append('shijuanxinxi', this.examThirdName)
           formData.append('config', config)

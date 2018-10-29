@@ -8,7 +8,7 @@
       </div>
       <div class="popoverTwo" v-if="popoverTwo">
         <div class="popoverTwo-arrow"></div>
-        <p class="popover-p">点击根据输入文字搜索题目，可在左侧选择输入类型，在右边选择输入题型</p>
+        <p class="popover-p">输入需要搜索的内容，在左侧选择搜索类型，在右侧选择题型</p>
         <div><el-button type="warning" size="small" plain style="margin-left: 500px" @click="popoverClickTwo()">我知道了</el-button></div>
       </div>
     </div>
