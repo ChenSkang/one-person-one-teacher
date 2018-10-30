@@ -213,7 +213,6 @@
   import myFoot from '../common/footer.vue'
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   import answer from '../common/anwer.vue'
-  import bus from '../../bus'
   const firstOptions = ['主标题', '考生信息', '总分栏', '显示答案', '显示解析']
   const secondOptions = ['副标题', '试卷信息', '注意事项', '答案后置', '解析后置']
   export default {
@@ -298,28 +297,28 @@
         })
       },
       showJX1 (x) {
-        let que = this.$store.state.XZ[x].que
-        let kddp = ''
-        let zsd = ''
-        let answer = this.$store.state.XZ[x].answer
-        let jx = this.$store.state.XZ[x].jx
-        bus.$emit('JX', que, kddp, zsd, answer, jx)
+        this.$store.state.myTest[0].que = this.$store.state.XZ[x].que
+        this.$store.state.myTest[0].kddp = ''
+        this.$store.state.myTest[0].zsd = ''
+        this.$store.state.myTest[0].answer = this.$store.state.XZ[x].answer
+        this.$store.state.myTest[0].jx = this.$store.state.XZ[x].jx
+        this.$store.state.IFJX = true
       },
       showJX2 (x) {
-        let que = this.$store.state.TK[x].que
-        let kddp = ''
-        let zsd = ''
-        let answer = this.$store.state.TK[x].answer
-        let jx = this.$store.state.TK[x].jx
-        bus.$emit('JX', que, kddp, zsd, answer, jx)
+        this.$store.state.myTest[0].que = this.$store.state.TK[x].que
+        this.$store.state.myTest[0].kddp = ''
+        this.$store.state.myTest[0].zsd = ''
+        this.$store.state.myTest[0].answer = this.$store.state.TK[x].answer
+        this.$store.state.myTest[0].jx = this.$store.state.TK[x].jx
+        this.$store.state.IFJX = true
       },
       showJX3 (x) {
-        let que = this.$store.state.JD[x].que
-        let kddp = ''
-        let zsd = ''
-        let answer = this.$store.state.JD[x].answer
-        let jx = this.$store.state.JD[x].jx
-        bus.$emit('JX', que, kddp, zsd, answer, jx)
+        this.$store.state.myTest[0].que = this.$store.state.JD[x].que
+        this.$store.state.myTest[0].kddp = ''
+        this.$store.state.myTest[0].zsd = ''
+        this.$store.state.myTest[0].answer = this.$store.state.JD[x].answer
+        this.$store.state.myTest[0].jx = this.$store.state.JD[x].jx
+        this.$store.state.IFJX = true
       },
       deleteT (x) {
         let sessionId = sessionStorage.getItem('sessionId')

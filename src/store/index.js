@@ -33,7 +33,15 @@ export default new Vuex.Store({
     value: 0,
     select: '全部',
     input_message: '',
-    zsdTreeTags: []
+    zsdTreeTags: [],
+    myTest: [
+      { que: '' },
+      { kddp: '' },
+      { zsd: '' },
+      { answer: '' },
+      { jx: '' }
+    ],
+    IFJX: false
   },
   mutations: {
   },

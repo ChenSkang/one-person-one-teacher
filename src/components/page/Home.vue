@@ -118,7 +118,6 @@
   import myHead from '../common/header.vue'
   import myFoot from '../common/footer.vue'
   import answer from '../common/anwer.vue'
-  import bus from '../../bus'
   import lrz from 'lrz'
   export default {
     components: {
@@ -183,12 +182,12 @@
         }
       },
       showJX (x) {
-        let que = this.$store.state.nowSub[x].que
-        let kddp = this.$store.state.nowSub[x].kddp
-        let zsd = this.$store.state.nowSub[x].zsd
-        let answer = this.$store.state.nowSub[x].answer
-        let jx = this.$store.state.nowSub[x].jx
-        bus.$emit('JX', que, kddp, zsd, answer, jx)
+        this.$store.state.myTest[0].que = this.$store.state.nowSub[x].que
+        this.$store.state.myTest[0].kddp = this.$store.state.nowSub[x].kddp
+        this.$store.state.myTest[0].zsd = this.$store.state.nowSub[x].zsd
+        this.$store.state.myTest[0].answer = this.$store.state.nowSub[x].answer
+        this.$store.state.myTest[0].jx = this.$store.state.nowSub[x].jx
+        this.$store.state.IFJX = true
       },
       addPaper (x) {
         let userId = sessionStorage.getItem('userId')
