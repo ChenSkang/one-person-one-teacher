@@ -68,9 +68,9 @@
                     <div @click="deleteX(index)">删除</div>
                     <div @click="upX(index)">上移</div>
                     <div @click="downX(index)">下移</div>
-                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
-                    <div @click="value.area += 50">增加答题区</div>
+                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>        
                     <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                    <div @click="value.area += 50">增加答题区</div>
                   </div>
                 </div>
               </div>
@@ -98,9 +98,9 @@
                     <div @click="deleteT(index)">删除</div>
                     <div @click="upT(index)">上移</div>
                     <div @click="downT(index)">下移</div>
-                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
-                    <div @click="value.area += 50">增加答题区</div>
+                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>          
                     <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                    <div @click="value.area += 50">增加答题区</div>
                   </div>
                 </div>
               </div>
@@ -129,8 +129,8 @@
                     <div @click="upJ(index)">上移</div>
                     <div @click="downJ(index)">下移</div>
                     <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
-                    <div @click="value.area += 50">增加答题区</div>
                     <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                    <div @click="value.area += 50">增加答题区</div>
                   </div>
                 </div>
               </div>
@@ -150,7 +150,7 @@
             <div v-for="(value, index) in $store.state.TK" class="ques" :key="value.answer">
               <div class="up">
                 <div>
-                  <span>{{index + 1}}.</span>
+                  <span>{{$store.state.XZ.length + index + 1}}.</span>
                   <span v-if="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
                   <span v-if="showSets[3]">解答：<span v-html="value.answer"></span></span>
                 </div>
@@ -159,7 +159,7 @@
             <div v-for="(value, index) in $store.state.JD" class="ques" :key="value.answer">
               <div class="up">
                 <div>
-                  <span>{{index + 1}}.</span>
+                  <span>{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>
                   <span v-if="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
                   <span v-if="showSets[3]">解答：<span v-html="value.answer"></span></span>
                 </div>
