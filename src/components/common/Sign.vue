@@ -43,6 +43,7 @@
         <div class="header-concern">
           <div v-if="$store.state.zsdTreeTags.length && $store.state.value === 2" class="zsd-tags">
             <el-tag
+              style="margin-top: 5px"
               color="#fff"
               :key="tag"
               v-for="tag in $store.state.zsdTreeTags"

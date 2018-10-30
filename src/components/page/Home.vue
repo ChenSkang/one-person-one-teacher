@@ -28,6 +28,7 @@
       <div class="header-concern" :class="{topfix: topFixed}">
         <div v-if="$store.state.zsdTreeTags.length && $store.state.value === 2" class="zsd-tags">
           <el-tag
+            style="margin-top: 5px"
             color="#fff"
             :key="tag"
             v-for="tag in $store.state.zsdTreeTags"
@@ -35,6 +36,9 @@
             @close="zsdTagsClose(tag)">
             {{tag}}
           </el-tag>
+        </div>
+        <div>
+          <img src="./../../img/hand.png" alt="">
         </div>
         <div style="width: 120px">
           <el-select v-model="$store.state.value" placeholder="题干">
