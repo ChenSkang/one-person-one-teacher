@@ -182,12 +182,6 @@ export default{
             sessionStorage.setItem('title_number', 'false')
           }
           this.$store.state.history.nowHomePage = 1
-          if (way === 3) {
-            let ms = this.$store.state.zsdTreeTags.join('；')
-            this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: ms, kind: this.$store.state.select, way: 2}})
-          } else {
-            this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: msg, kind: this.$store.state.select, way: this.$store.state.value}})
-          }
         }, (response) => {
           this.$store.state.history.loading = false
           this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {

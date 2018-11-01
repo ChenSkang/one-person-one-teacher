@@ -174,11 +174,12 @@
         this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}})
       },
       searchMsg () {
+        let num = Math.random() * 10000
         if (this.$store.state.value === 2) {
           let ms = this.$store.state.zsdTreeTags.join('；')
-          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: ms, kind: this.$store.state.select, way: 2}})
+          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: ms, kind: this.$store.state.select, way: 2, num: num}})
         } else {
-          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, kind: this.$store.state.select, way: this.$store.state.value}})
+          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, kind: this.$store.state.select, way: this.$store.state.value, num: num}})
         }
       },
       showJX (x) {
