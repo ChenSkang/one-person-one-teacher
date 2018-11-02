@@ -172,7 +172,6 @@ export default{
           this.$store.state.cropImg = ''
           sessionStorage.removeItem('defaultSrc')
           this.$store.state.history.loading = false
-          this.$message.success('推荐成功')
           sessionStorage.setItem('subj', JSON.stringify(response.data))
           console.log(response.data)
           this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
@@ -246,7 +245,6 @@ export default{
       }).then((response) => {
         this.$store.state.history.loading = false
         this.$store.state.nowSub = ''
-        this.$message.success('推荐成功')
         sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
         sessionStorage.setItem('subj', JSON.stringify(response.data))
         this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
