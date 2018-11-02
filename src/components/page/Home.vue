@@ -4,7 +4,7 @@
     <zsd-tree></zsd-tree>
     <my-head></my-head>
     <mySpace></mySpace>
-    <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" center>
+    <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" center :append-to-body="true">
       <vue-cropper ref='cropper'
                    :src="imageSrc"
                    :ready="cropImage"
@@ -20,7 +20,7 @@
         <el-button @click="cancelCrop" type="warning">取 消</el-button>
       </span>
     </el-dialog>
-    <el-dialog :visible.sync="imgVisible" width="70%">
+    <el-dialog :visible.sync="imgVisible" width="70%" :append-to-body="true">
       <img style="max-height: 60vh; margin-left: 50%; transform: translateX(-50%)" :src="$store.state.cropImg">
     </el-dialog>
     <div class="query" :class="{topfix2: topFixed}">{{nowQuery}}</div>

@@ -15,12 +15,12 @@
     <my-head></my-head>
     <mySpace></mySpace>
     <zsd-tree></zsd-tree>
-    <el-dialog title="试题解析" :visible.sync="IFJX" width="70%">
+    <el-dialog title="试题解析" :visible.sync="IFJX" width="70%" :append-to-body="true">
       <div class="ST TI" v-html="myTest[0].que"></div>
       <div class="JX TI"><span class="jx">解析：</span><span v-html="myTest[0].jx"></span></div>
       <div class="JX TI"><span class="jx">解答：</span><span v-html="myTest[0].answer"></span></div>
     </el-dialog>
-    <el-dialog :visible.sync="visible" width="60%" center>
+    <el-dialog :visible.sync="visible" width="60%" center :append-to-body="true">
       <vue-cropper ref='cropper'
                    :src="imageSrc"
                    :ready="cropImage"

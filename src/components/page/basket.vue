@@ -6,7 +6,7 @@
     <el-dialog
       title="提示"
       :visible.sync="deleteall"
-      width="30vmax">
+      width="30vmax" :append-to-body="true">
       <span>清空后不可恢复，确认清空？</span>
       <span slot="footer" class="dialog-footer">
               <el-button @click="deleteall = false" size="small">取 消</el-button>

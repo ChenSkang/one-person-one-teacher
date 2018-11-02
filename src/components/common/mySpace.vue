@@ -12,7 +12,7 @@
       <div class="col" v-if="!nowuser" @click="searchHistory()"><span>搜索历史</span>丨</div>
       <div class="col" v-if="!nowuser" @click="goBasket()"><span>试题篮</span></div>
     </div>
-    <el-dialog :title="ms" :visible.sync="registerShow" width="30%" :modal="false">
+    <el-dialog :title="ms" :visible.sync="registerShow" width="30%" :modal="false" :append-to-body="true">
       <el-form :model="registerForm" status-icon :rules="registerRule" ref="registerForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="用户名" prop="name">
           <el-input v-model="registerForm.name"></el-input>
@@ -34,7 +34,7 @@
         <p>已经有账号，马上去<span class="to" @click="gosign()">登录</span></p>
       </el-form>
     </el-dialog>
-    <el-dialog :title="msg" :visible.sync="$store.state.signShow" width="30%">
+    <el-dialog :title="msg" :visible.sync="$store.state.signShow" width="30%" :append-to-body="true">
       <el-form :model="signForm" :rules="signRule" ref="signForm" class="demo-ruleForm">
         <el-form-item prop="usr">
           <el-input type="text" v-model="signForm.usr" auto-complete="off" placeholder="手机/用户名"></el-input>
