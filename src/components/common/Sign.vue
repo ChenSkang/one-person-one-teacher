@@ -1,5 +1,5 @@
 <template>
-  <div @scroll.prevent>
+  <div>
     <div id="mask" :style="{minHeight: minHeight + 'px'}" v-if="popoverFirst || popoverTwo">
       <div class="popoverOne" v-if="popoverFirst">
         <div class="popoverOne-arrow"></div>

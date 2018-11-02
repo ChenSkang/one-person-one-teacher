@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div id="mask" :style="{minHeights: minHeights + 'px'}" v-if="popoverFirst"></div>
     <zsd-tree></zsd-tree>
     <my-head></my-head>
     <mySpace></mySpace>
@@ -82,6 +83,11 @@
                 <span class="TH">{{titleNumber(item + nowPage)}}</span>
                 <span class="QUE" v-html="$store.state.nowSub[item + nowPage - 1].que"></span>
               </div>
+              <div class="popoverOne" v-if="popoverFirst && item === 1">
+                <div class="popoverOne-arrow"></div>
+                <p class="popover-p">点击推荐本题的同类型题目</p>
+                <div><el-button type="warning" size="mini" plain style="margin-left: 200px" @click="popoverClickOne()">我知道了</el-button></div>
+              </div>
               <div class="low">
                 <div><el-button type="primary" size="mini" @click="showJX(item + nowPage - 1)" icon="el-icon-document">查看解析</el-button></div>
                 <div><el-button type="primary" @click="addPaper(item + nowPage - 1)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
@@ -135,7 +141,9 @@
         imageSrc: '',
         visible: false,
         minHeight: 0,
-        topFixed: false
+        minHeights: 0,
+        topFixed: false,
+        popoverFirst: false
       }
     },
     methods: {
@@ -236,6 +244,13 @@
         } else {
           this.topFixed = false
         }
+      },
+      popoverClickOne () {
+        this.popoverFirst = false
+        localStorage.setItem('ifFirsts', 'false')
+        const mo = function (e) { e.preventDefault() }
+        document.body.style.overflow = ''
+        document.addEventListener('touchmove', mo, false)
       }
     },
     mounted () {
@@ -281,6 +296,11 @@
         }
       }
     },
+    beforeCreate () {
+      if (!localStorage.getItem('ifFirsts')) {
+        localStorage.setItem('ifFirsts', 'true')
+      }
+    },
     created () {
       this.minHeight = document.documentElement.clientHeight - 251
       this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
@@ -304,11 +324,53 @@
           this.imgSearch()
           break
       }
+      if (localStorage.getItem('ifFirsts') === 'true') {
+        this.popoverFirst = true
+        const mo = function (e) { e.preventDefault() }
+        document.body.style.overflow = 'hidden'
+        document.addEventListener('touchmove', mo, false)
+      }
     }
   }
 </script>
 
 <style scoped>
+  #mask{
+    width: 100%;
+    height: 100%;
+    min-width: 1200px;
+    background-color: rgba(0, 0, 0, .5);
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 998;
+  }
+  .popoverOne{
+    border-radius: 10px;
+    width: 300px;
+    height: 120px;
+    background-color: rgba(0, 0, 0, .5);
+    position: absolute;
+    bottom: 60px;
+    right: 10px;
+    z-index: 999;
+  }
+  .popoverOne-arrow{
+    width: 0;
+    height: 0;
+    border: 20px solid;
+    border-color: black transparent transparent transparent;
+    opacity: .5;
+    position: absolute;
+    bottom: -40px;
+    right: 50px;
+  }
+  .popover-p{
+    line-height: 80px;
+    color: #fff;
+    letter-spacing: 1px;
+    text-indent: 20px;
+  }
   #main{
     width: 100%;
     position: relative;
