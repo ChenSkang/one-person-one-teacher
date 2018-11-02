@@ -172,8 +172,8 @@
             <div class="right_up">
               <div class="set_title">试卷操作</div>
               <div><el-button class="btn" @click="goIndex()" icon="el-icon-back" type="primary">继续选题</el-button></div>
-              <div><el-button class="btn" @click="wordDown()" type="primary" icon="el-icon-delete">下载试题</el-button></div>
-              <div><el-button class="btn" @click="saveExam()" type="primary" icon="el-icon-download">保存试题</el-button></div>
+              <div><el-button class="btn" @click="wordDown()" type="primary" icon="el-icon-download">下载试题</el-button></div>
+              <div><el-button class="btn" @click="saveExam()" type="primary" icon="el-icon-tickets">保存试题</el-button></div>
               <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
             </div>
             <div class="right_down">
