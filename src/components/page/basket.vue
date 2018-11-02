@@ -543,47 +543,43 @@
         this.$router.push('/index')
       },
       creat () {
-        if (sessionStorage.getItem('sessionId')) {
-          if (this.$store.state.history.basket) {
-            let url = this.$store.state.urls.url + 'GetBasketServlet'
-            let sessionId = sessionStorage.getItem('sessionId')
-            let formData = new FormData()
-            formData.append('sessionId', sessionId)
-            this.$axios.post(url, formData, {
-              headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-              },
-              withCredentials: true
-            }).then((response) => {
-              this.$store.state.XZ = []
-              this.$store.state.TK = []
-              this.$store.state.JD = []
-              for (let i = 0; i < response.data.length; i++) {
-                switch (response.data[i].kind) {
-                  case '选择题':
-                    this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                    break
-                  case '填空题':
-                    this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                    break
-                  case '解答题':
-                    this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                    break
-                  default:
-                    this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                }
+        if (this.$store.state.history.basket) {
+          let url = this.$store.state.urls.url + 'GetBasketServlet'
+          let sessionId = sessionStorage.getItem('sessionId')
+          let formData = new FormData()
+          formData.append('sessionId', sessionId)
+          this.$axios.post(url, formData, {
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            withCredentials: true
+          }).then((response) => {
+            this.$store.state.XZ = []
+            this.$store.state.TK = []
+            this.$store.state.JD = []
+            for (let i = 0; i < response.data.length; i++) {
+              switch (response.data[i].kind) {
+                case '选择题':
+                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
+                  break
+                case '填空题':
+                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
+                  break
+                case '解答题':
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
+                  break
+                default:
+                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
               }
-            }, (response) => {
-              this.$message.error('请求服务端失败')
-            })
-          }
+            }
+          }, (response) => {
+            this.$message.error('请求服务端失败')
+          })
         }
       }
     },
     created () {
-      if (this.$store.state.history.basket) {
-        this.creat()
-      }
+      this.creat()
     },
     computed: {
       strjd: function () {
@@ -669,7 +665,7 @@
     width: 100%;
     height: 45px;
     line-height: 45px;
-    font-size: 1rem;
+    font-size: 16px;
     text-align: center;
     background-color: #EBEEF5;
     border-bottom: 1px solid #E4E7ED;
@@ -689,21 +685,21 @@
     border: 1px solid #fff;
   }
   .exam_name1{
-    font: 1.375rem Arial bold;
+    font: 22px Arial bold;
     line-height: 40px;
   }
   .exam_name2{
-    font: 1.125rem Arial;
-    line-height: 1.5em;
+    font: 18px Arial;
+    line-height: 15px;
   }
   .exam_name3{
-    font: 0.875rem 微软雅黑;
+    font: 14px 微软雅黑;
     height: 50px;
     line-height: 50px;
   }
   .exam_name4{
-    font: 0.875rem 微软雅黑;
-    line-height: 1.5em;
+    font: 14px 微软雅黑;
+    line-height: 15px;
   }
   .scores{
     margin: 15px 0;
@@ -716,16 +712,16 @@
     width: 50px;
     height: 25px;
     text-align: center;
-    font-size: 0.75rem;
+    font-size: 12px;
   }
   .attentions{
     width: 100%;
     color: #999999;
-    font-size: 0.75rem;
+    font-size: 12px;
     margin-bottom: 5mm;
   }
   .attentions span{
-    font-size: 0.9375rem;
+    font-size: 15px;
   }
   .attentions p{
     line-height: 20px;
@@ -749,7 +745,7 @@
   }
   .up{
     line-height: 25px;
-    font-size: 0.875rem;
+    font-size: 14px;
     padding: 20px 20px 10px 20px;
   }
   .jx{
@@ -763,7 +759,7 @@
     line-height: 36px;
     padding: 0 20px;
     color: #fff;
-    font-size: 0.75rem;
+    font-size: 12px;
     border-radius: 0 0 10px 10px;
   }
   .low-main{
@@ -780,7 +776,7 @@
   .TM{
     font-family: 新宋体;
     font-weight: bold;
-    font-size: 1.0625rem;
+    font-size: 17px;
   }
   .btn {
     width: 120px;
