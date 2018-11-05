@@ -218,9 +218,13 @@
         this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}})
       },
       searchMsg () {
-        if (this.$store.state.value === 2) {
+        if (this.$store.state.value === 2 && this.$store.state.zsdTreeTags.length === 0) {
+          this.$message('请输入知识点')
+        } else if (this.$store.state.value === 2 && this.$store.state.zsdTreeTags.length !== 0) {
           let ms = this.$store.state.zsdTreeTags.join('；')
           this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: ms, kind: this.$store.state.select, way: 2}})
+        } else if (this.$store.state.value !== 2 && this.$store.state.input_message === '') {
+          this.$message('请输入搜索内容')
         } else {
           this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, kind: this.$store.state.select, way: this.$store.state.value}})
         }

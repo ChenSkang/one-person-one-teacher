@@ -148,46 +148,42 @@ export default{
     // 文字搜索
     Vue.prototype.wordSearch = function (msg) {
       const way = this.$store.state.value ? this.$store.state.value + 1 : 1
-      if (way !== 3 && msg === '') {
-        this.$message.warning('请输入搜索内容')
+      this.$store.state.history.loading = true
+      const kind = this.$store.state.select + '题'
+      let formData = new FormData()
+      if (way === 3) {
+        let ms = this.$store.state.zsdTreeTags.join('；')
+        formData.append('word', ms)
       } else {
-        this.$store.state.history.loading = true
-        const kind = this.$store.state.select + '题'
-        let formData = new FormData()
-        if (way === 3) {
-          let ms = this.$store.state.zsdTreeTags.join('；')
-          formData.append('word', ms)
-        } else {
-          formData.append('word', msg)
-        }
-        formData.append('way', way)
-        formData.append('kind', kind)
-        let url = this.$store.state.urls.url + 'wordServlet'
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.cropImg = ''
-          sessionStorage.removeItem('defaultSrc')
-          this.$store.state.history.loading = false
-          sessionStorage.setItem('subj', JSON.stringify(response.data))
-          console.log(response.data)
-          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-          if (way === 1) {
-            sessionStorage.setItem('title_number', 'true')
-          } else {
-            sessionStorage.setItem('title_number', 'false')
-          }
-          this.$store.state.history.nowHomePage = 1
-        }, (response) => {
-          this.$store.state.history.loading = false
-          this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
-            confirmButtonText: '确定'
-          })
-        })
+        formData.append('word', msg)
       }
+      formData.append('way', way)
+      formData.append('kind', kind)
+      let url = this.$store.state.urls.url + 'wordServlet'
+      this.$axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        withCredentials: true
+      }).then((response) => {
+        this.$store.state.cropImg = ''
+        sessionStorage.removeItem('defaultSrc')
+        this.$store.state.history.loading = false
+        sessionStorage.setItem('subj', JSON.stringify(response.data))
+        console.log(response.data)
+        this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
+        if (way === 1) {
+          sessionStorage.setItem('title_number', 'true')
+        } else {
+          sessionStorage.setItem('title_number', 'false')
+        }
+        this.$store.state.history.nowHomePage = 1
+      }, (response) => {
+        this.$store.state.history.loading = false
+        this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
+          confirmButtonText: '确定'
+        })
+      })
     }
     // 重新推题
     Vue.prototype.againSearch = function (msg) {
@@ -249,6 +245,7 @@ export default{
         sessionStorage.setItem('subj', JSON.stringify(response.data))
         this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
         this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}})
+        this.$store.state.history.nowHomePage = 1
         console.log(response.data)
       }, (response) => {
         this.$store.state.history.loading = false
