@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="mask" :style="{minHeights: minHeights + 'px'}" v-if="popoverFirst"></div>
+    <div id="mask" :style="{minHeights: minHeights + 'px'}" v-if="popoverFirst && $store.state.nowSub.length"></div>
     <zsd-tree></zsd-tree>
     <my-head></my-head>
     <mySpace></mySpace>
