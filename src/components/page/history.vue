@@ -2,41 +2,12 @@
   <div>
     <my-head></my-head>
     <mySpace></mySpace>
+    <answer></answer>
     <div class="main">
       <div class="concern">
         <div class="exam" id="pdfDom">
           <div class="exam_something">
-            <div class="exam_left" v-if="showSets[2]" title="装订线">
-              <img src="../../img/peal_line.png" alt="">
-            </div>
-            <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName"></div>
-            <div v-if="showSets[0]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
-            <div v-if="showSets[1]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
-            <div v-if="showSet[1]" title="点击设置考生信息"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
-            <div class="scores" v-if="showSet[2]" title="打分栏">
-              <table border="1" cellspacing="0" cellpadding="0" align="center">
-                <tr>
-                  <td>题号</td>
-                  <td>一</td>
-                  <td>二</td>
-                  <td>三</td>
-                  <td>总分</td>
-                </tr>
-                <tr>
-                  <td>得分</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </table>
-            </div>
-            <div class="attentions" v-if="showSet[3]" title="注意事项">
-              <span>注意事项：</span>
-              <p v-for="(attention, index) in attentions" :key="attention">
-                {{index + 1 + '.'+ '&nbsp;' + attention}}
-              </p>
-            </div>
+            <div class="exam-title">{{examName}}</div>
           </div>
 
           <div v-if="$store.state.history.XZ.length" class="TM">一.选择题（共{{$store.state.history.XZ.length}}小题）</div>
@@ -44,6 +15,13 @@
             <div class="up">
               <span class="TH">{{index + 1}}</span>
               <span v-html="value.que"></span>
+            </div>
+            <div class="low">
+              <div class="low-main">
+                <div @click="showJX1(index)">解析</div>
+                <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
+                <div @click="addPaper(value.unique)">添加试题篮</div>
+              </div>
             </div>
           </div>
 
@@ -53,6 +31,13 @@
               <span class="TH">{{$store.state.history.XZ.length + index + 1}}</span>
               <span v-html="value.que"></span>
             </div>
+            <div class="low">
+              <div class="low-main">
+                <div @click="showJX2(index)">解析</div>
+                <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
+                <div @click="addPaper(value.unique)">添加试题篮</div>
+              </div>
+            </div>
           </div>
 
           <div v-if="$store.state.history.JD.length" class="TM">{{strjd}}.解答题（共{{$store.state.history.JD.length}}小题）</div>
@@ -60,6 +45,13 @@
             <div class="up">
               <span class="TH">{{$store.state.history.XZ.length + $store.state.history.TK.length + index + 1}}</span>
               <span v-html="value.que"></span>
+            </div>
+            <div class="low">
+              <div class="low-main">
+                <div @click="showJX3(index)">解析</div>
+                <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
+                <div @click="addPaper(value.unique)">添加试题篮</div>
+              </div>
             </div>
           </div>
         </div>
@@ -70,22 +62,8 @@
               <div><el-button class="btn" @click="$router.push('/myexam')" icon="el-icon-back" type="primary">返回</el-button></div>
               <div><el-button class="btn" @click="downExam()" type="primary" icon="el-icon-download">下载</el-button></div>
              </div>
-            <div class="right_down">
-              <div class="set_title">试卷信息</div>
-              <div class="set_exam">
-                <el-row>
-                  <el-col :span="12">
-                    <div v-for="(city, index) in cities" :key="city">
-                      <el-checkbox  v-model="showSet[index]" :key="city">{{city}}</el-checkbox>
-                    </div>
-                  </el-col>
-                  <el-col :span="12">
-                    <div v-for="(mation, index) in mations" :key="mation">
-                      <el-checkbox  v-model="showSets[index]" :key="mation">{{mation}}</el-checkbox>
-                    </div>
-                  </el-col>
-                </el-row>
-              </div>
+            <div class="right-foot">
+              <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
             </div>
           </div>
         </div>
@@ -102,23 +80,18 @@
   import myHead from '../common/header.vue'
   import myFoot from '../common/footer.vue'
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
-  const firstOptions = ['主标题', '考生信息', '总分栏', '注意事项']
-  const secondOptions = ['副标题', '试卷信息', '装订线']
+  import answer from '../common/anwer.vue'
   export default {
     data () {
+      this.chartSettings = {
+        radius: 80,
+        offsetY: 150,
+        label: {
+          show: true,
+          position: 'inside'
+        }
+      }
       return {
-        cities: firstOptions,
-        mations: secondOptions,
-        showSet: [true, false, true, true],
-        showSets: [true, false, true],
-        examSecondName: '试卷副标题',
-        examThirdName: '考试范围：xxx；考试时间：100分钟；命题人：xxx',
-        examFourName: '学校：________姓名：________班级：________学号：________',
-        attentions: [
-          '答题前填写好自己的姓名、班级、学号',
-          '请将答案填写到答题卡上面'
-        ],
-        htmlTitle: 'test'
       }
     },
     components: {
@@ -126,7 +99,8 @@
       ElButton,
       myHead,
       myFoot,
-      gotop
+      gotop,
+      answer
     },
     methods: {
       downExam () {
@@ -143,6 +117,47 @@
           withCredentials: true
         }).then((response) => {
           window.open(response.data)
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      },
+      showJX1 (x) {
+        this.$store.state.myTest[0].que = this.$store.state.history.XZ[x].que
+        this.$store.state.myTest[0].kddp = ''
+        this.$store.state.myTest[0].zsd = ''
+        this.$store.state.myTest[0].answer = this.$store.state.history.XZ[x].answer
+        this.$store.state.myTest[0].jx = this.$store.state.history.XZ[x].jx
+        this.$store.state.IFJX = true
+      },
+      showJX2 (x) {
+        this.$store.state.myTest[0].que = this.$store.state.history.TK[x].que
+        this.$store.state.myTest[0].kddp = ''
+        this.$store.state.myTest[0].zsd = ''
+        this.$store.state.myTest[0].answer = this.$store.state.history.TK[x].answer
+        this.$store.state.myTest[0].jx = this.$store.state.history.TK[x].jx
+        this.$store.state.IFJX = true
+      },
+      showJX3 (x) {
+        this.$store.state.myTest[0].que = this.$store.state.history.JD[x].que
+        this.$store.state.myTest[0].kddp = ''
+        this.$store.state.myTest[0].zsd = ''
+        this.$store.state.myTest[0].answer = this.$store.state.history.JD[x].answer
+        this.$store.state.myTest[0].jx = this.$store.state.history.JD[x].jx
+        this.$store.state.IFJX = true
+      },
+      addPaper (msg) {
+        let sessionId = sessionStorage.getItem('sessionId')
+        let form = new FormData()
+        form.append('unique', msg)
+        form.append('sessionId', sessionId)
+        let url = this.$store.state.urls.url + 'AddQueServlet'
+        this.$axios.post(url, form, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          this.$message.success('试题添加成功')
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
@@ -167,16 +182,16 @@
           for (let i = 0; i < response.data.length; i++) {
             switch (response.data[i].kind) {
               case '选择题':
-                this.$store.state.history.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
+                this.$store.state.history.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                 break
               case '填空题':
-                this.$store.state.history.TK.push({que: response.data[i].que, unique: response.data[i].unique})
+                this.$store.state.history.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                 break
               case '解答题':
-                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                 break
               default:
-                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
             }
           }
         }, (response) => {
@@ -194,6 +209,17 @@
           return '一'
         }
       },
+      chartData: function () {
+        let str = {
+          columns: ['题型', '题目数量'],
+          rows: [
+            { '题型': '选择题', '题目数量': this.$store.state.history.XZ.length },
+            { '题型': '填空题', '题目数量': this.$store.state.history.TK.length },
+            { '题型': '解答题', '题目数量': this.$store.state.history.JD.length }
+          ]
+        }
+        return str
+      },
       examName: function () {
         return sessionStorage.getItem('paperName')
       }
@@ -210,6 +236,7 @@
     padding-top: 20px;
     padding-bottom: 20px;
     letter-spacing: 1px;
+    overflow: hidden;
   }
   .concern{
     width: 84%;
@@ -224,100 +251,30 @@
     width: 915px;
     background-color: #fff;
     position: relative;
-    padding: 40px 40px 40px 100px;
+    padding: 40px 50px 40px 50px;
     min-height: 910px;
   }
   .right{
     width: 90%;
     margin-left: 5%;
+    min-width: 240px;
   }
   .right_up{
     width: 100%;
     text-align: center;
     background-color: #fff;
   }
-  .right_down{
+  .right-foot{
     margin-top: 20px;
     width: 100%;
-    background-color: #fff;
     padding-bottom: 20px;
   }
-  .set_title{
+  .exam-title{
     width: 100%;
-    height: 45px;
-    line-height: 45px;
-    font-size: 1rem;
-    text-align: center;
-    background-color: #EBEEF5;
-    border-bottom: 1px solid #E4E7ED;
-    margin-bottom: 10px;
-  }
-  .set_exam{
-    width: 80%;
-    margin-left: 10%;
-  }
-  .set_exam div{
-    margin-top: 10px;
-  }
-  .exam_left img{
-    position: absolute;
-    left: 7px;
-    top: 0;
-  }
-  .exam_name{
-    width: 100%;
-    text-align: center;
-    border: 1px solid #fff;
-  }
-  .exam_name:hover{
-    background-color: #FEF7D7;
-    border: 1px solid #CCC;
-  }
-  .exam_name:focus{
-    background-color: #FEF7D7;
-    border: 1px solid #fff;
-  }
-  .exam_name1{
-    font: 1.375rem Arial bold;
+    height: 40px;
+    font: 22px Arial bold;
     line-height: 40px;
-  }
-  .exam_name2{
-    font: 1.125rem Arial;
-    line-height: 1.5em;
-  }
-  .exam_name3{
-    font: 0.875rem 微软雅黑;
-    height: 50px;
-    line-height: 50px;
-  }
-  .exam_name4{
-    font: 0.875rem 微软雅黑;
-    line-height: 1.5em;
-  }
-  .scores{
-    margin: 15px 0;
-  }
-  .scores table{
-    border-collapse: collapse;
-    margin: 0 auto;
-  }
-  .scores table td{
-    width: 50px;
-    height: 25px;
     text-align: center;
-    font-size: 0.75rem;
-  }
-  .attentions{
-    width: 100%;
-    color: #999999;
-    font-size: 0.75rem;
-    margin-bottom: 5mm;
-  }
-  .attentions span{
-    font-size: 0.9375rem;
-  }
-  .attentions p{
-    line-height: 20px;
   }
   .ques{
     position: relative;
@@ -338,20 +295,26 @@
   }
   .up{
     line-height: 25px;
-    font-size: 0.875rem;
+    font-size: 14px;
     padding: 20px 20px 10px 20px;
+  }
+  .jx{
+    color: #409EFF;
+    font-weight: bold;
   }
   .low{
     height: 36px;
     position: relative;
     bottom: 0;
-    display: flex;
-    flex-direction: row;
     line-height: 36px;
     padding: 0 20px;
     color: #fff;
-    font-size: 0.75rem;
+    font-size: 12px;
     border-radius: 0 0 10px 10px;
+  }
+  .low-main{
+    display: flex;
+    justify-content:flex-end;
   }
   .low div{
     margin-left: 15px;
@@ -363,7 +326,7 @@
   .TM{
     font-family: 新宋体;
     font-weight: bold;
-    font-size: 1.0625rem;
+    font-size: 17px;
   }
   .btn {
     width: 120px;
