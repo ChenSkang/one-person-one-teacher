@@ -3,14 +3,16 @@
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading">
     <div id="space">
-      <div class="col" @click="$router.push('/')"><span>首页</span>丨</div>
-      <div class="col" v-if="nowuser" @click="signShows()"><span>登录</span>丨</div>
-      <div class="col" v-else><span>{{$store.state.userNow}}</span>丨</div>
-      <div class="col" v-if="nowuser" @click="registerShows()"><span>注册</span></div>
-      <div class="col" v-else @click="signOut()"><span>退出</span>丨</div>
-      <div class="col" v-if="!nowuser" @click="goMyExam()"><span>历史试题</span>丨</div>
-      <div class="col" v-if="!nowuser" @click="searchHistory()"><span>搜索历史</span>丨</div>
-      <div class="col" v-if="!nowuser" @click="goBasket()"><span>试题篮</span></div>
+      <div class="col col-hover" @click="$router.push('/')"><span>首页</span></div><div class="col">丨</div>
+      <div class="col col-hover" v-show="nowuser" @click="signShows()"><span>登录</span></div>
+      <div class="col col-name col-hover" v-show="!nowuser">
+        <span>{{$store.state.userNow}}</span>
+        <div class="col-out" @click="signOut()"><span>退出</span></div>
+      </div><div class="col">丨</div>
+      <div class="col col-hover" v-show="nowuser" @click="registerShows()"><span>注册</span></div>
+      <div class="col col-hover" v-show="!nowuser" @click="goMyExam()"><span>历史试题</span></div><div class="col" v-show="!nowuser">丨</div>
+      <div class="col col-hover" v-show="!nowuser" @click="searchHistory()"><span>搜索历史</span></div><div class="col" v-show="!nowuser">丨</div>
+      <div class="col col-hover" v-show="!nowuser" @click="goBasket()"><span>试题篮</span></div>
     </div>
     <el-dialog :title="ms" :visible.sync="registerShow" width="30%" :modal="false" :append-to-body="true">
       <el-form :model="registerForm" status-icon :rules="registerRule" ref="registerForm" label-width="100px" class="demo-ruleForm">
@@ -359,8 +361,22 @@
     line-height: 40px;
     cursor: pointer;
   }
-  .col:hover > span{
-    background-color: #909399;
+  .col-name{
+    position: relative;
+  }
+  .col-name:hover .col-out{
+    display: block;
+    background-color: #C0C4CC;
+  }
+  .col-out {
+    width: 100%;
+    height: 40px;
+    position:absolute;
+    top:40px;
+    display: none;
+  }
+  .col-hover:hover{
+    color: #303133;
   }
   .demo-ruleForm{
     text-align: center;
