@@ -72,16 +72,16 @@
           for (let i = 0; i < response.data.length; i++) {
             switch (response.data[i].kind) {
               case '选择题':
-                this.$store.state.history.XZ.push({que: response.data[i].que, unique: response.data[i].unique})
+                this.$store.state.history.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                 break
               case '填空题':
-                this.$store.state.history.TK.push({que: response.data[i].que, unique: response.data[i].unique})
+                this.$store.state.history.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                 break
               case '解答题':
-                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
                 break
               default:
-                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique})
+                this.$store.state.history.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer})
             }
           }
           this.$router.push('/history')
