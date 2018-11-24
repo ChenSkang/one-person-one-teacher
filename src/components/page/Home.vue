@@ -203,12 +203,10 @@
         this.$store.state.IFJX = true
       },
       addPaper (x) {
-        let userId = sessionStorage.getItem('userId')
         let sessionId = sessionStorage.getItem('sessionId')
         if (sessionId) {
           let ida = this.$store.state.nowSub[x].unique
           let formData = new FormData()
-          formData.append('userId', userId)
           formData.append('sessionId', sessionId)
           formData.append('unique', ida)
           let url = this.$store.state.urls.url + 'AddQueServlet'
