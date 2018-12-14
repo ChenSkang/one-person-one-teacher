@@ -40,13 +40,4 @@
     min-height: 100%;
     font-size: 16px;
   }
-  html::-webkit-scrollbar{
-    width: 8px;
-    height: 0;
-    background-color: transparent;
-  }
-  html::-webkit-scrollbar-thumb{
-    border-radius: 6px;
-    background-color: #DCDFE6;
-  }
 </style>
