@@ -24,14 +24,12 @@
     z-index: 990;
     position: fixed;
     width: 100%;
-    height: 40px;
-    background-image: url("./../../img/base_title.png");
-    background-size: cover;
+    height: 50px;
   }
   .top {
     width: 100%;
-    height: 40px;
-    line-height: 40px;
+    height: 50px;
+    line-height: 50px;
     cursor: pointer;
   }
   .row{
