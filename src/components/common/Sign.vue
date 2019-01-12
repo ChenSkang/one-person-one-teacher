@@ -12,7 +12,7 @@
         <div><el-button type="warning" size="small" plain style="margin-left: 500px" @click="popoverClickTwo()">我知道了</el-button></div>
       </div>
     </div>
-    <my-head></my-head>
+    <my-head style="background-color: #2d8cf0"></my-head>
     <mySpace></mySpace>
     <zsd-tree></zsd-tree>
     <el-dialog title="试题解析" :visible.sync="IFJX" width="70%" :append-to-body="true">
@@ -348,12 +348,11 @@
   }
   .first-head{
     width: 100%;
-    height: 160px;
+    height: 330px;
     position: relative;
     top: 40px;
     box-sizing: border-box;
-    background-image: url("./../../img/base_head.png");
-    background-size: cover;
+    background-color: #2d8cf0
   }
   .first-middle{
     width: 100%;
