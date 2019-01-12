@@ -9,8 +9,13 @@
           :header-cell-style="{color: '#409eff'}"
           :data="$store.state.paperList">
           <el-table-column
-            prop="data"
+            prop="id"
             label="ID"
+            width="200">
+          </el-table-column>
+          <el-table-column
+            prop="title"
+            label="title"
             width="200">
           </el-table-column>
           <el-table-column
