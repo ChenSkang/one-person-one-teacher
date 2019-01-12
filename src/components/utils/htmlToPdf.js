@@ -218,6 +218,79 @@ export default{
     Vue.prototype.zsdTagsClose = function (tag) {
       this.$store.state.zsdTreeTags.splice(this.$store.state.zsdTreeTags.indexOf(tag), 1)
     }
+    Vue.prototype.getPaperList = function () {
+      if (sessionStorage.getItem('sessionId')) {
+        let url = this.$store.state.urls.url + 'GetPaperListServlet'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response.data)
+          this.$store.state.paperList = response.data
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      } else {
+        this.signShows()
+        this.$message('请先登录')
+      }
+    }
+    Vue.prototype.createPaper = function (value) {
+      let url = this.$store.state.urls.url + 'CreatePaperServlet'
+      let sessionId = sessionStorage.getItem('sessionId')
+      let formData = new FormData()
+      formData.append('sessionId', sessionId)
+      formData.append('title', value)
+      this.$axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        withCredentials: true
+      }).then((response) => {
+        console.log(response.data)
+      }, (response) => {
+        this.$message.error('请求服务端失败')
+      })
+    }
+    Vue.prototype.getPaper = function (x) {
+      let url = this.$store.state.urls.url + 'GetPaperServlet'
+      let sessionId = sessionStorage.getItem('sessionId')
+      let formData = new FormData()
+      formData.append('sessionId', sessionId)
+      formData.append('pid', x)
+      this.$axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        withCredentials: true
+      }).then((response) => {
+        console.log(response.data)
+      }, (response) => {
+        this.$message.error('请求服务端失败')
+      })
+    }
+    Vue.prototype.deletePaper = function (x) {
+      let url = this.$store.state.urls.url + 'DeletePaperServlet'
+      let sessionId = sessionStorage.getItem('sessionId')
+      let formData = new FormData()
+      formData.append('sessionId', sessionId)
+      formData.append('pid', x)
+      this.$axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        withCredentials: true
+      }).then((response) => {
+        console.log(response.data)
+      }, (response) => {
+        this.$message.error('请求服务端失败')
+      })
+    }
     Vue.prototype.imgSearch = function () {
       this.$store.state.history.loading = true
       const page = this.$store.state.cropImg
