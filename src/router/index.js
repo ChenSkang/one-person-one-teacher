@@ -56,6 +56,11 @@ export default new Router({
       path: '/safe',
       name: 'Safe',
       component: resolve => require(['@/components/page/safe'], resolve)
+    },
+    {
+      path: '/testPapers',
+      name: 'TestPapers',
+      component: resolve => require(['@/components/page/TestPapers'], resolve)
     }
   ]
 })

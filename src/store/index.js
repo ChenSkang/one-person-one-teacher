@@ -48,5 +48,6 @@ export default new Vuex.Store({
   modules: {
     urls: urls,
     history: history
-  }
+  },
+  paperList: []
 })
