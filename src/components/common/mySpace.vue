@@ -10,9 +10,7 @@
         <div class="col-out" @click="signOut()"><span>退出</span></div>
       </div><div class="col">丨</div>
       <div class="col col-hover" v-show="nowuser" @click="registerShows()"><span>注册</span></div>
-      <div class="col col-hover" v-show="!nowuser" @click="goMyExam()"><span>历史试题</span></div><div class="col" v-show="!nowuser">丨</div>
       <div class="col col-hover" v-show="!nowuser" @click="searchHistory()"><span>搜索历史</span></div><div class="col" v-show="!nowuser">丨</div>
-      <div class="col col-hover" v-show="!nowuser" @click="goBasket()"><span>试题篮</span></div><div class="col" v-show="!nowuser">丨</div>
       <div class="col col-hover" v-show="!nowuser" @click="$router.push('/testPapers')"><span>我的试卷</span></div>
     </div>
     <el-dialog :title="ms" :visible.sync="registerShow" width="30%" :modal="false" :append-to-body="true">

@@ -12,8 +12,7 @@
         <div><el-button type="warning" size="small" plain style="margin-left: 500px" @click="popoverClickTwo()">我知道了</el-button></div>
       </div>
     </div>
-    <my-head style="background-color: #2d8cf0"></my-head>
-    <mySpace></mySpace>
+    <my-head messgae="" style="background-color: #2d8cf0"></my-head>
     <zsd-tree></zsd-tree>
     <el-dialog title="试题解析" :visible.sync="IFJX" width="70%" :append-to-body="true">
       <div class="ST TI" v-html="myTest[0].que"></div>
@@ -39,43 +38,9 @@
 
     <div>
       <div class="first-head">
-        <div class="transverse"></div>
         <div class="header-concern">
-          <div v-if="$store.state.zsdTreeTags.length && $store.state.value === 2" class="zsd-tags">
-            <el-tag
-              style="margin-top: 5px"
-              color="#fff"
-              :key="tag"
-              v-for="tag in $store.state.zsdTreeTags"
-              closable
-              @close="zsdTagsClose(tag)">
-              {{tag}}
-            </el-tag>
-          </div>
-          <div>
-            <img src="./../../img/hand.png" alt="">
-          </div>
-          <div style="width: 120px">
-            <el-select v-model="$store.state.value" placeholder="题干">
-              <el-option
-                v-for="item in $store.state.options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </div>
           <div style="width: 70%">
-            <el-input v-model="$store.state.input_message" :disabled="$store.state.value === 2" @keyup.native.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder">
-              <template slot="append">
-                <el-radio-group v-model="$store.state.select" size="mini">
-                  <el-radio-button label="全部"></el-radio-button>
-                  <el-radio-button label="选择"></el-radio-button>
-                  <el-radio-button label="填空"></el-radio-button>
-                  <el-radio-button label="解答"></el-radio-button>
-                </el-radio-group>
-              </template>
-            </el-input>
+            <el-input v-model="$store.state.input_message"@keyup.native.enter="searchMsg()" placeholder="题干/知识点/试卷"></el-input>
           </div>
           <div>
             <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-5px)">搜索</el-button>
@@ -408,7 +373,7 @@
     font-style: oblique;
   }
   .down-middle{
-    background-image: url("./../../img/base.png");
+    background-color: #F2F6FC;
     background-size: cover;
   }
   .middle-down{
