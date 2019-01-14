@@ -12,7 +12,7 @@
         <div><el-button type="warning" size="small" plain style="margin-left: 500px" @click="popoverClickTwo()">我知道了</el-button></div>
       </div>
     </div>
-    <my-head messgae="" style="background-color: #2d8cf0"></my-head>
+    <my-head style="background-color: #2d8cf0"></my-head>
     <zsd-tree></zsd-tree>
     <el-dialog title="试题解析" :visible.sync="IFJX" width="70%" :append-to-body="true">
       <div class="ST TI" v-html="myTest[0].que"></div>
@@ -38,79 +38,46 @@
 
     <div>
       <div class="first-head">
+        <div class="search-logo">OPOT</div>
         <div class="header-concern">
-          <div style="width: 70%">
+          <div style="width: 584px; min-width: 584px">
             <el-input v-model="$store.state.input_message"@keyup.native.enter="searchMsg()" placeholder="题干/知识点/试卷"></el-input>
           </div>
-          <div>
-            <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-5px)">搜索</el-button>
-          </div>
           <div style="position: relative">
-            <el-button icon="el-icon-picture-outline" type="warning">图片搜索
+            <el-button icon="el-icon-picture-outline" type="warning">
               <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" icon="el-icon-search"/>
             </el-button>
           </div>
-        </div>
-      </div>
-      <div class="first-middle">
-        <div style="background-color: #fff">
-          <div class="middle-up my-positions">
-            <div class="up-title upt">
-              <p>——<span>信息导航</span>——</p>
-            </div>
-            <div class="up-body">
-              <div class="up-main" @click="signShows()">
-                <img src="./../../img/base_four.png" alt=""/>
-                <p>用户登录</p>
-              </div>
-              <div class="up-main" @click="goMyExam()">
-                <img src="./../../img/base_one.png" alt=""/>
-                <p>历史试题</p>
-              </div>
-              <div class="up-main" @click="searchHistory()">
-                <img src="./../../img/base_three.png" alt=""/>
-                <p>搜索历史</p>
-              </div>
-              <div class="up-main" @click="goBasket()">
-                <img src="./../../img/base_two.png" alt=""/>
-                <p>试题篮</p>
-              </div>
-            </div>
+          <div>
+            <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(0)">搜题</el-button>
+          </div>
+          <div style="position: relative">
+            <el-button icon="el-icon-picture-outline" type="warning">组卷</el-button>
           </div>
         </div>
-        <div class="down-middle">
-          <div class="middle-down my-positions">
-            <div class="up-title downt">
-              <p>——<span>热门试题推荐</span>——</p>
+        <div class="fire">
+          <img src="../../img/fire.png" width="16px" style="transform: translateY(-3px)" alt="" />&nbsp;&nbsp;一次函数
+        </div>
+      </div>
+      <div class="home-main">
+        <div class="main-title">
+          <div class="title-line">每日推荐</div>
+        </div>
+        <div class="main-popular">
+          <div class="main-hot hot-left" v-if="hotQuestions.length">
+            <div><span v-html="hotQuestions[0].que"></span></div>
+            <div v-for="item in 5">
+              <span v-html="hotQuestions[item].que"></span>
             </div>
-            <div class="up-body">
-              <div class="down-main" v-if="hotQuestions.length">
-                <div class="down-que left-que" v-for="item in 3" v-bind:key="hotQuestions[item - 1].unique">
-                  <div>
-                    <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item - 1].que"></span></p>
-                    <div class="fire-foot">
-                      <div class="fire-foot-div" @click="againSearchs(hotQuestions[item - 1].unique)">推荐</div>
-                      <div class="fire-foot-div" @click="showMore(item - 1)">解析</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="down-main" v-else></div>
-              <div class="down-line">
-                <div class="line"></div>
-              </div>
-              <div class="down-main" v-if="hotQuestions.length">
-                <div class="down-que right-que" v-for="item in hotQuestions.length-3" v-bind:key="hotQuestions[item + 2].unique">
-                  <div>
-                    <p><img src="./../../img/fire.png" /><span v-html="hotQuestions[item + 2].que"></span></p>
-                    <div class="fire-foot">
-                      <div class="fire-foot-div" @click="againSearchs(hotQuestions[item + 2].unique)">推荐</div>
-                      <div class="fire-foot-div" @click="showMore(item + 2)">解析</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="down-main" v-else></div>
+          </div>
+          <div class="main-hot hot-right">
+            <div class="hot-search">热门搜索</div>
+            <div class="hot-list">
+              <ul>
+                <li class="list" v-for="(value, index) in searchHot">
+                  <img v-if="index < 3" src="../../img/fire.png" width="16px" style="transform: translateY(-3px)" alt="" />{{index + 1}}. {{value}}
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -144,7 +111,19 @@
         ],
         minHeight: 0,
         popoverFirst: false,
-        popoverTwo: false
+        popoverTwo: false,
+        searchHot: [
+          '一次函数',
+          '二次函数',
+          '三次函数',
+          '四次函数',
+          '五次函数',
+          '六次函数',
+          '七次函数',
+          '八次函数',
+          '九次函数',
+          '十次函数'
+        ]
       }
     },
     methods: {
@@ -315,132 +294,98 @@
     width: 100%;
     height: 330px;
     position: relative;
-    top: 40px;
+    top: 50px;
     box-sizing: border-box;
     background-color: #2d8cf0
   }
-  .first-middle{
+  .header-concern {
+    margin-left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    top: 80px;
+  }
+  .search-logo{
+    height: 70px;
+    text-align: center;
+    font-size: 45px;
+    line-height: 70px;
+    color: #fff;
+    position: relative;
+    top: 80px;
+  }
+  .fire{
+    font-size: 14px;
+    color: #fff;
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    top: 110px;
+    text-align: center;
+  }
+  .home-main{
     width: 100%;
     position: relative;
-    top: 40px;
+    top: 50px;
+    background-color: #fbfbfb;
   }
-  .middle-up {
-    height: 240px;
+  .main-title{
+    font-size: 16px;
+    margin: 0 auto 10px;
+    width: 77%;
+    min-width: 1000px;
+    height: 40px;
+    line-height: 40px;
   }
-  .up-title{
-    text-align: center;
-    font-size: 19px;
-    font-family: 微软雅黑;
+  .title-line{
+    height: 40px;
+    width: 71%;
+    box-sizing: border-box;
+    border-bottom: 1px solid #DCDFE6;
   }
-  .upt{
-    height: 60px;
-    color: #409EFF;
-    line-height: 60px;
-  }
-  .downt{
-    height: 60px;
-    color: #fff;
-    line-height: 60px;
-  }
-  .up-title p span{
-    margin-left: 20px;
-    letter-spacing: 20px;
-  }
-  .up-body{
+  .main-popular{
+    position: relative;
+    margin: 0 auto;
+    width: 77%;
+    min-width: 1000px;
     display: flex;
     flex-direction: row;
   }
-  .up-main{
-    height: 180px;
-    width: 25%;
-    cursor: pointer;
-  }
-  .up-main img{
-    height: 130px;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .up-main p{
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    letter-spacing: 3px;
-    font-weight: 500;
-  }
-  .up-main:hover p{
-    text-decoration: underline;
-    font-style: oblique;
-  }
-  .down-middle{
-    background-color: #F2F6FC;
-    background-size: cover;
-  }
-  .middle-down{
-    height: 480px;
-  }
-  .down-main{
-    width: 50%;
-    height: 420px;
-  }
-  .down-line{
-    width: 30px;
-  }
-  .line{
-    width: 2px;
-    height: 420px;
+  .hot-left{
+    width: 71%;
     background-color: #fff;
-    margin-left: 50%;
-    transform: translateX(-50%);
-  }
-  .down-que{
-    position: relative;
-    width: 93%;
-    height: 90px;
-    background-color: rgba(124, 146, 203, .75);
-    overflow: hidden;
-  }
-  .down-que img{
-    margin-right: 5px;
-    margin-bottom: 5px;
-  }
-  .down-que p{
+    margin-right: 2%;
+    box-sizing: border-box;
+    border: 1px solid #eee;
     font-size: 14px;
-    color: #fff;
-    display: -webkit-box;
-    overflow: hidden;
-    margin: 15px 20px 10px 20px;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    word-break: break-all;
   }
-  .left-que{
-    float: left;
-    margin-bottom: 50px;
+  .hot-right{
+    width: 27%;
+    height: 320px;
+    background-color: #fff;
+    box-sizing: border-box;
+    border: 1px solid #eee;
   }
-  .right-que{
-    float: right;
-    margin-top: 50px;
+  .hot-search{
+    height: 35px;
+    line-height: 35px;
+    color: #333;
+    font-size: 18px;
+    width: 95%;
+    margin: 0 auto 5px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #DCDFE6;
   }
-  .down-que:hover .fire-foot{
-    opacity: 1;
+  .hot-list{
+
   }
-  .fire-foot{
-    width: 100%;
-    height: 20px;
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    flex-direction: row-reverse;
-    opacity: 0;
-    transition: .5s;
-  }
-  .fire-foot-div{
-    margin-right: 20px;
-    line-height: 20px;
-    font-size: 13px;
-    color: #fff;
-    cursor: pointer;
+  .list{
+    width: 95%;
+    margin: 0 auto;
+    color: #333;
+    height: 27px;
+    line-height: 27px;
+    font-size: 14px;
   }
 </style>

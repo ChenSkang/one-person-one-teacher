@@ -60,9 +60,10 @@
     padding: 0;
     font-weight: 500;
   }
-  navigation{
+  .navigation{
     font-size: 14px;
     color: #fff;
+    font-family: 微软雅黑;
   }
   .user{
     float: right;
