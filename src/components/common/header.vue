@@ -8,14 +8,14 @@
     </div>
     <div class="user">
       <div class="name" v-if="$store.state.userNow">{{$store.state.userNow}}</div>
-      <div class="name" v-else>注册帐号</div>
+      <div class="name" v-else><div>注册帐号</div><div>|</div><div @click="signShows()">登录</div></div>
       <div class="port">
         <img :src="imgSrc" alt="">
       </div>
-      <div class="user-info">
+      <div v-if="$store.state.userNow" class="user-info">
         <div class="info">个人中心</div>
-        <div class="info">用户反馈</div>
-        <div class="info">退出登录</div>
+        <a href="http://support.qq.com/product/38530" target="_blank" style="color: #333"><div class="info">用户反馈</div></a>
+        <div class="info" @click="signOut()">退出登录</div>
       </div>
     </div>
   </div>
@@ -74,7 +74,13 @@
   .name{
     line-height: 50px;
     color: #fff;
-    margin-right: 8px;
+    margin-right: 5px;
+    display: flex;
+    flex-direction: row;
+  }
+  .name div{
+    margin-right: 5px;
+    cursor: pointer;
   }
   .port{
     margin-top: 11px;
@@ -87,14 +93,20 @@
   .port img{
     width: 28px;
     height: 28px;
+    cursor: pointer;
+  }
+  .user:hover .user-info{
+    display: block;
   }
   .user-info{
     color: #606266;
     position: absolute;
     top: 50px;
+    right: 40px;
     background-color: #fff;
     padding:2px 0;
     border-radius: 2px;
+    display: none;
   }
   .info{
     cursor: pointer;

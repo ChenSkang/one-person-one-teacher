@@ -291,6 +291,27 @@ export default{
         this.$message.error('请求服务端失败')
       })
     }
+    Vue.prototype.signOut = function () {
+      let url = this.$store.state.urls.url + 'LogoutServlet'
+      let sessionId = sessionStorage.getItem('sessionId')
+      let formData = new FormData()
+      formData.append('sessionId', sessionId)
+      this.$axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        withCredentials: true
+      }).then((response) => {
+        sessionStorage.removeItem('sessionId')
+        sessionStorage.removeItem('nowUser')
+        localStorage.removeItem('thisUser')
+        localStorage.removeItem('thisPass')
+        this.$store.state.userNow = ''
+        this.$router.push('/')
+      }, (response) => {
+        this.$message.error('请求服务端失败')
+      })
+    }
     Vue.prototype.imgSearch = function () {
       this.$store.state.history.loading = true
       const page = this.$store.state.cropImg

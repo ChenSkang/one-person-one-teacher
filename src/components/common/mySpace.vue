@@ -2,7 +2,7 @@
   <div  v-loading.fullscreen.lock="$store.state.history.loading"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading">
-    <div id="space">
+    <div id="space" style="display: none">
       <div class="col col-hover" @click="$router.push('/')"><span>首页</span></div><div class="col">丨</div>
       <div class="col col-hover" v-show="nowuser" @click="signShows()"><span>登录</span></div>
       <div class="col col-name col-hover" v-show="!nowuser">
@@ -139,9 +139,7 @@
       submitSignForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // 保存的账号
             let name = this.signForm.usr
-            // 保存的密码
             let pass = this.signForm.pass
             let formData = new FormData()
             formData.append('LoginInfo', name)
@@ -159,7 +157,6 @@
                 this.$store.state.userNow = response.data.u.username
                 if (this.checked === true) {
                   this.clearCookie()
-                  // 传入账号名，密码，和保存天数3个参数
                   this.setCookie(name, pass, 7)
                 } else {
                   this.clearCookie()
@@ -191,32 +188,27 @@
       resetForm (formName) {
         this.$refs[formName].resetFields()
       },
-      // 设置cookie
       setCookie (cname, cpwd, exdays) {
-        let exdate = new Date() // 获取时间
-        exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays) // 保存的天数
-        // 字符串拼接cookie
+        let exdate = new Date()
+        exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays)
         window.document.cookie = 'userName' + '=' + cname + ';path=/;expires=' + exdate.toGMTString()
         window.document.cookie = 'userPwd' + '=' + cpwd + ';path=/;expires=' + exdate.toGMTString()
       },
-      // 读取cookie
       getCookie: function () {
         if (document.cookie.length > 0) {
-          let arr = document.cookie.split('; ') // 这里显示的格式需要切割一下自己可输出看下
+          let arr = document.cookie.split('; ')
           for (let i = 0; i < arr.length; i++) {
-            let arr2 = arr[i].split('=') // 再次切割
-            // 判断查找相对应的值
+            let arr2 = arr[i].split('=')
             if (arr2[0] === 'userName') {
-              this.signForm.usr = arr2[1] // 保存到保存数据的地方
+              this.signForm.usr = arr2[1]
             } else if (arr2[0] === 'userPwd') {
               this.signForm.pass = arr2[1]
             }
           }
         }
       },
-      // 清除cookie
       clearCookie: function () {
-        this.setCookie('', '', -1) // 修改2值都为空，天数为负1天就好了
+        this.setCookie('', '', -1)
       },
       submitRegisterForm (formName) {
         this.$refs[formName].validate((valid) => {
@@ -266,27 +258,6 @@
       goRegister () {
         this.registerShow = true
         this.$store.state.signShow = false
-      },
-      signOut () {
-        let url = this.$store.state.urls.url + 'LogoutServlet'
-        let sessionId = sessionStorage.getItem('sessionId')
-        let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          sessionStorage.removeItem('sessionId')
-          sessionStorage.removeItem('nowUser')
-          localStorage.removeItem('thisUser')
-          localStorage.removeItem('thisPass')
-          this.$store.state.userNow = ''
-          this.$router.push('/')
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
       },
       forgetPass () {
         this.$store.state.signShow = false

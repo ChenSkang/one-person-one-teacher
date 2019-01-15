@@ -38,9 +38,6 @@
             {{tag}}
           </el-tag>
         </div>
-        <div>
-          <img src="./../../img/hand.png" alt="">
-        </div>
         <div style="width: 120px">
           <el-select v-model="$store.state.value" placeholder="题干">
             <el-option
@@ -385,8 +382,6 @@
     position: relative;
     top: 40px;
     box-sizing: border-box;
-    background-image: url("./../../img/base_head.png");
-    background-size: cover;
     z-index: 9;
   }
   .pre-img{
