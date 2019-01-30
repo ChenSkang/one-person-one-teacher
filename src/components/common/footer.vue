@@ -33,11 +33,11 @@
     position: relative;
     top: 50px;
     bottom: 0;
-    background-color: #409EFF;
+    background-color: #3f464e;
   }
   .main{
     font-size: 12px;
-    color: #fff;
+    color: #909399;
     text-align: center;
     position: absolute;
     left: 50%;
@@ -50,6 +50,6 @@
   }
   .foot-main:hover span{
     text-decoration: underline;
-    color: #000;
+    color: #dcdfe6;
   }
 </style>
