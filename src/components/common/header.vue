@@ -4,7 +4,7 @@
       <div class="row"><div class="logo" @click="$router.push('/')">OPOT</div></div>
       <div class="row"><div class="navigation" @click="$router.push('/')">搜索</div></div>
       <div class="row"><div class="navigation" @click="$router.push('/')">我的试卷</div></div>
-      <div class="row"><div class="navigation" @click="$router.push('/')">搜索历史</div></div>
+      <div class="row"><div class="navigation" @click="searchHistory()">搜索历史</div></div>
     </div>
     <div class="user">
       <div class="name" v-if="$store.state.userNow">{{$store.state.userNow}}</div>
@@ -39,6 +39,7 @@
     position: fixed;
     width: 100%;
     height: 50px;
+    background-color: #3f464e
   }
   .top {
     float: left;
@@ -50,7 +51,7 @@
   .row{
     position: relative;
     left: 20px;
-    color: #fff;
+    color: #409eff;
     margin-right: 20px;
     cursor: pointer;
   }
@@ -62,8 +63,11 @@
   }
   .navigation{
     font-size: 14px;
-    color: #fff;
+    color: #dcdfe6;
     font-family: 微软雅黑;
+  }
+  .navigation:hover{
+    color: #fff;
   }
   .user{
     float: right;
@@ -73,10 +77,14 @@
   }
   .name{
     line-height: 50px;
-    color: #fff;
+    color: #dcdfe6;
     margin-right: 5px;
     display: flex;
     flex-direction: row;
+    cursor: pointer;
+  }
+  .name:hover{
+    color: #fff;
   }
   .name div{
     margin-right: 5px;
@@ -114,5 +122,6 @@
   }
   .info:hover{
     background-color: #409eff;
+    color: #fff;
   }
 </style>
