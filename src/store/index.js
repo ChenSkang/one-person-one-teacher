@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 import urls from './server'
 import history from './history'
+import temp from './temp'
 
 export default new Vuex.Store({
   state: {
@@ -47,7 +48,8 @@ export default new Vuex.Store({
   },
   modules: {
     urls: urls,
-    history: history
+    history: history,
+    temp: temp
   },
   paperList: []
 })
