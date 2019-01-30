@@ -1,9 +1,9 @@
 <template>
   <div>
     <div id="mask" :style="{minHeights: minHeights + 'px'}" v-if="popoverFirst && $store.state.nowSub.length"></div>
-    <zsd-tree></zsd-tree>
     <my-head></my-head>
     <mySpace></mySpace>
+    <top-search v-if="topFixed"></top-search>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" center :append-to-body="true">
       <vue-cropper ref='cropper'
                    :src="imageSrc"
@@ -23,114 +23,116 @@
     <el-dialog :visible.sync="imgVisible" width="70%" :append-to-body="true">
       <img style="max-height: 60vh; margin-left: 50%; transform: translateX(-50%)" :src="$store.state.cropImg">
     </el-dialog>
-    <div class="query" :class="{topfix2: topFixed}">{{nowQuery}}</div>
-    <div class="first-head">
-      <div class="transverse"></div>
-      <div class="header-concern" :class="{topfix: topFixed}">
-        <div v-if="$store.state.zsdTreeTags.length && $store.state.value === 2" class="zsd-tags">
-          <el-tag
-            style="margin-top: 5px"
-            color="#fff"
-            :key="tag"
-            v-for="tag in $store.state.zsdTreeTags"
-            closable
-            @close="zsdTagsClose(tag)">
-            {{tag}}
-          </el-tag>
+    <div class="query">{{nowQuery}}</div>
+    <div class="home-main" :style="{minHeight: minHeight + 'px'}">
+      <div class="main-middle">
+        <div class="main-left">
+          <div class="header-concern">
+            <div style="width: 100%; position: relative">
+              <el-input v-model="$store.state.input_message" @keyup.native.enter="searchMsg()" placeholder="题干/知识点/试卷"></el-input>
+              <div style="position: absolute; right: 15px; top: 6px; cursor: pointer">
+                <img src="../../img/phone.png" width="28px" />
+                <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage"/>
+              </div>
+            </div>
+            <div class="btn-primary search-btn" @click="searchMsg()">
+              <i class="el-icon-search">搜题</i>
+            </div>
+            <div class="btn-primary search-page">
+              <i class="el-icon-document">组卷</i>
+            </div>
+          </div>
+          <div class="screen">
+            <div class="screen-title" @click="screenShow = !screenShow">筛选</div>
+            <transition name="el-zoom-in-top">
+              <div class="screen-window" v-if="screenShow">
+                <div class="screen-list">
+                  <div class="screen-ul">题型</div>
+                  <div class="screen-li" :class="{choice: screenChoiceOne[0]}" @click="choiceOne(0)">全部</div>
+                  <div class="screen-li" :class="{choice: screenChoiceOne[1]}" @click="choiceOne(1)">选择题</div>
+                  <div class="screen-li" :class="{choice: screenChoiceOne[2]}" @click="choiceOne(2)">填空题</div>
+                  <div class="screen-li" :class="{choice: screenChoiceOne[3]}" @click="choiceOne(3)">解答题</div>
+                </div>
+                <div class="screen-list">
+                  <div class="screen-ul">难度</div>
+                  <div class="screen-li" :class="{choice: screenChoiceTwo[0]}" @click="choiceTwo(0)">全部</div>
+                  <div class="screen-li" :class="{choice: screenChoiceTwo[1]}" @click="choiceTwo(1)">易</div>
+                  <div class="screen-li" :class="{choice: screenChoiceTwo[2]}" @click="choiceTwo(2)">较易</div>
+                  <div class="screen-li" :class="{choice: screenChoiceTwo[3]}" @click="choiceTwo(3)">中档</div>
+                  <div class="screen-li" :class="{choice: screenChoiceTwo[4]}" @click="choiceTwo(4)">较难</div>
+                  <div class="screen-li" :class="{choice: screenChoiceTwo[5]}" @click="choiceTwo(5)">难</div>
+                </div>
+              </div>
+            </transition>
+          </div>
+          <div class="block" v-if="$store.state.nowSub.length">
+            <div>
+              <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
+              <ul>
+                <li class="ques" v-for="item in nowQues" :key="$store.state.nowSub[item + nowPage - 1].unique">
+                  <div class="up">
+                    <span class="TH">{{titleNumber(item + nowPage)}}</span>
+                    <span class="QUE" v-html="$store.state.nowSub[item + nowPage - 1].que"></span>
+                  </div>
+                  <div class="popoverOne" v-if="popoverFirst && item === 1">
+                    <div class="popoverOne-arrow"></div>
+                    <p class="popover-p">点击推荐本题的同类型题目</p>
+                    <div><el-button type="warning" size="mini" plain style="margin-left: 200px" @click="popoverClickOne()">我知道了</el-button></div>
+                  </div>
+                  <div class="low">
+                    <div><el-button type="primary" size="mini" @click="showJX(item + nowPage - 1)">查看解析</el-button></div>
+                    <div><el-button type="primary" @click="addPaper(item + nowPage - 1)" size="mini">添加试题</el-button></div>
+                    <div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:$store.state.nowSub[item + nowPage - 1].unique}})">相似推荐</el-button></div>
+                  </div>
+                </li>
+              </ul>
+              <el-pagination
+                class="que-page"
+                background
+                layout="prev, pager, next"
+                :page-size="10"
+                :current-page.sync="$store.state.history.nowHomePage"
+                @current-change="nextPage"
+                :total="$store.state.nowSub.length">
+              </el-pagination>
+            </div>
+          </div>
         </div>
-        <div style="width: 120px">
-          <el-select v-model="$store.state.value" placeholder="题干">
-            <el-option
-              v-for="item in $store.state.options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </div>
-        <div style="width: 70%">
-          <el-input v-model="$store.state.input_message" :disabled="$store.state.value === 2" @keyup.native.enter="searchMsg()" :placeholder="$store.state.options[$store.state.value? $store.state.value : 0].holder">
-            <template slot="append">
-              <el-radio-group v-model="$store.state.select" size="mini">
-                <el-radio-button label="全部"></el-radio-button>
-                <el-radio-button label="选择"></el-radio-button>
-                <el-radio-button label="填空"></el-radio-button>
-                <el-radio-button label="解答"></el-radio-button>
-              </el-radio-group>
-            </template>
-          </el-input>
-        </div>
-        <div>
-          <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(-5px)">搜 索</el-button>
-        </div>
-        <div style="position: relative">
-          <el-button icon="el-icon-picture-outline" type="warning">图片搜索
-            <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" icon="el-icon-search"/>
-          </el-button>
+        <div class="main-right">
+          <div class="right-fix">
+            <div class="hot-search">热门搜索</div>
+            <div class="hot-list">
+              <ul>
+                <li class="list" v-for="(value, index) in searchHot">
+                  <img v-if="index < 3" src="../../img/fire.png" width="16px" style="transform: translateY(-3px);margin-right: 3px" alt="" />{{index + 1}}. {{value}}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div id="main" v-if="$store.state.nowSub.length" :style="{minHeight: minHeight + 'px'}">
-      <div class="block">
-        <div>
-          <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
-          <ul>
-            <li class="ques" v-for="item in nowQues" :key="$store.state.nowSub[item + nowPage - 1].unique">
-              <div class="up">
-                <span class="TH">{{titleNumber(item + nowPage)}}</span>
-                <span class="QUE" v-html="$store.state.nowSub[item + nowPage - 1].que"></span>
-              </div>
-              <div class="popoverOne" v-if="popoverFirst && item === 1">
-                <div class="popoverOne-arrow"></div>
-                <p class="popover-p">点击推荐本题的同类型题目</p>
-                <div><el-button type="warning" size="mini" plain style="margin-left: 200px" @click="popoverClickOne()">我知道了</el-button></div>
-              </div>
-              <div class="low">
-                <div><el-button type="primary" size="mini" @click="showJX(item + nowPage - 1)" icon="el-icon-document">查看解析</el-button></div>
-                <div><el-button type="primary" @click="addPaper(item + nowPage - 1)" size="mini" icon="el-icon-plus">添加试题</el-button></div>
-                <div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:$store.state.nowSub[item + nowPage - 1].unique}})" icon="el-icon-search">相似推荐</el-button></div>
-              </div>
-            </li>
-          </ul>
-          <el-pagination
-            class="que-page"
-            background
-            layout="prev, pager, next"
-            :page-size="10"
-            :current-page.sync="$store.state.history.nowHomePage"
-            @current-change="nextPage"
-            :total="$store.state.nowSub.length">
-          </el-pagination>
-        </div>
-      </div>
-      <answer></answer>
-    </div>
-    <div v-else :style="{minHeight: minHeight + 'px'}">
+    <answer></answer>
+    <div v-if="!$store.state.nowSub.length" :style="{minHeight: minHeight + 'px'}">
       <p style="position: absolute; top: 250px; left: 50%; transform: translateX(-50%)">暂没有与搜索内容相关的题目</p>
     </div>
-    <my-foot></my-foot>
-    <gotop></gotop>
   </div>
 </template>
 
 <script>
-  import zsdTree from '../common/zsdTree.vue'
-  import gotop from '../common/gotop.vue'
   import mySpace from '../common/mySpace.vue'
   import VueCropper from 'vue-cropperjs'
   import myHead from '../common/header.vue'
-  import myFoot from '../common/footer.vue'
   import answer from '../common/anwer.vue'
+  import topSearch from '../common/SearchTop.vue'
   import lrz from 'lrz'
   export default {
     components: {
       VueCropper,
       myHead,
       answer,
-      myFoot,
       mySpace,
-      gotop,
-      zsdTree
+      topSearch
     },
     data () {
       return {
@@ -140,7 +142,22 @@
         minHeight: 0,
         minHeights: 0,
         topFixed: false,
-        popoverFirst: false
+        popoverFirst: false,
+        screenShow: true,
+        screenChoiceOne: [true, false, false, false],
+        screenChoiceTwo: [true, false, false, false, false, false],
+        searchHot: [
+          '一次函数',
+          '二次函数',
+          '三次函数',
+          '四次函数',
+          '五次函数',
+          '六次函数',
+          '七次函数',
+          '八次函数',
+          '九次函数',
+          '十次函数'
+        ]
       }
     },
     methods: {
@@ -190,6 +207,18 @@
         } else {
           this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, kind: this.$store.state.select, way: this.$store.state.value, num: num}})
         }
+      },
+      choiceOne (num) {
+        for (let i = 0; i < this.screenChoiceOne.length; i++) {
+          this.screenChoiceOne[i] = false
+        }
+        this.$set(this.screenChoiceOne, num, true)
+      },
+      choiceTwo (num) {
+        for (let i = 0; i < this.screenChoiceTwo.length; i++) {
+          this.screenChoiceTwo[i] = false
+        }
+        this.$set(this.screenChoiceTwo, num, true)
       },
       showJX (x) {
         this.$store.state.myTest[0].que = this.$store.state.nowSub[x].que
@@ -370,19 +399,96 @@
     letter-spacing: 1px;
     text-indent: 20px;
   }
-  #main{
+  .home-main{
     width: 100%;
     position: relative;
-    top: 40px;
-    overflow: hidden;
-  }
-  .first-head{
-    width: 100%;
-    height: 160px;
-    position: relative;
-    top: 40px;
-    box-sizing: border-box;
+    top: 50px;
     z-index: 9;
+    background-color: #fbfbfb;
+  }
+  .main-middle{
+    width: 86%;
+    min-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+  }
+  .main-left{
+    width: 75%;
+    margin: 20px 2% 20px 0;
+  }
+  .main-right{
+    margin-top: 20px;
+  }
+  .right-fix{
+    width: 23%;
+    height: 350px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid #DCDFE6;
+    position: fixed;
+  }
+  .screen{
+  }
+  .screen-title{
+    margin: 10px 0;
+    cursor: pointer;
+  }
+  .screen-title:hover{
+    text-decoration: underline;
+  }
+  .screen-window{
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid #DCDFE6;
+    padding: 10px;
+    background-color: #fff;
+  }
+  .screen-list{
+    margin: 10px 0 10px 20px;
+    display: flex;
+    flex-direction: row;
+    color: #333;
+  }
+  .screen-ul{
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "PingFang SC";
+    letter-spacing: 1px;
+    margin-right: 20px;
+  }
+  .screen-li{
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-right: 20px;
+    border-radius: 3px;
+    padding: 2px 3px;
+    cursor: pointer;
+  }
+  .choice{
+    background-color: #409EFF;
+    color: #fff;
+  }
+  .hot-search{
+    height: 35px;
+    line-height: 35px;
+    color: #333;
+    font-size: 17px;
+    font-family: 黑体;
+    width: 90%;
+    margin: 0 auto 5px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #DCDFE6;
+  }
+  .list{
+    letter-spacing: 1px;
+    width: 88%;
+    margin: 0 auto;
+    color: #333;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
   }
   .pre-img{
     max-width: 96%;
@@ -393,17 +499,20 @@
     margin-left: 50%;
     transform: translateX(-50%);
   }
+  .header-concern {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+  }
   .block{
-    width: 68%;
-    margin: 20px 16% 20px 16%;
   }
   .ques{
     position: relative;
-    width: 98%;
     clear: both;
-    margin: 10px 1% 10px 1%;
+    margin: 10px 0;
     box-sizing: border-box;
-    border-radius: 10px;
+    border-radius: 5px;
+    background-color: #fff;
     border: 1px solid #DCDFE6;
     word-wrap: break-word;
     letter-spacing: 1px;
@@ -415,12 +524,12 @@
   }
   .low{
     background-color: #f4f4f4;
-    height: 36px;
+    height: 40px;
     position: relative;
     bottom: 0;
     display: flex;
     justify-content: flex-end;
-    line-height: 36px;
+    line-height: 40px;
     box-sizing: border-box;
     border-top: 1px solid #dadada;
     padding: 0 20px;
@@ -434,6 +543,8 @@
   }
   .que-page{
     text-align: center;
+    margin: 50px 0;
+    font-size: 16px;
   }
   .topfix {
     position: fixed !important;
@@ -447,7 +558,8 @@
     background-color: #F2F6FC;
     text-align: center;
     position: fixed;
-    top: 40px;
-    height: 40px;
+    top: 50px;
+    height: 0;
+    opacity: 0;
   }
 </style>
