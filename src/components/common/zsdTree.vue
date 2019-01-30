@@ -1,8 +1,6 @@
 <template>
   <div>
-    <span v-if="zsdTemp" style="opacity: 0"></span>
-    <div id="zsd" :class="{ movezsd: zsdTransition }">
-      <div class="arrow" @click="zsdTranslate = !zsdTranslate"><p>知<br/>识<br/>点</p></div>
+    <div id="zsd">
       <div class="tree">
         <el-input
           placeholder="搜索知识点"
@@ -15,8 +13,8 @@
           :filter-node-method="filterNode"
           @node-click="handleNodeClick"
           ref="zsdTree">
-        </el-tree> 
-      </div>      
+        </el-tree>
+      </div>
     </div>
   </div>
 </template>
@@ -25,8 +23,6 @@
   export default {
     data () {
       return {
-        nowValue: this.$store.state.value,
-        zsdTranslate: true,
         zsdText: '',
         zsdTree: [{
           label: '数与式',
@@ -1233,34 +1229,13 @@
         return data.label.indexOf(value) !== -1
       },
       handleNodeClick (data) {
-        if (!data.children && this.$store.state.zsdTreeTags.indexOf(data.label) === -1) {
-          if (this.$store.state.zsdTreeTags.length < 5) {
-            document.body.scrollTop = 0
-            document.documentElement.scrollTop = 0
-            this.$store.state.value = 2
-            this.$store.state.zsdTreeTags.push(data.label)
-          } else {
-            this.$message.warning('最多选择5个知识点')
-          }
-        }
       }
     },
     computed: {
-      zsdTemp () {
-        return this.$store.state.value
-      },
-      zsdTransition () {
-        return this.zsdTranslate
-      }
     },
     watch: {
       zsdText (val) {
         this.$refs.zsdTree.filter(val)
-      },
-      zsdTemp (val) {
-        if (val === 2) {
-          this.zsdTranslate = false
-        }
       }
     }
   }
@@ -1268,38 +1243,14 @@
 
 <style scoped>
   #zsd{
-    width: 16%;
-    min-width: 200px;
+    width: 300px;
     height: 500px;
     max-height: 500px;
-    position: fixed;
-    left: 0;
-    top: 100px;
-    border: 1px solid #E6A23C;
+    border: 1px solid #dcdfe6;
+    border-radius: 5px;
     z-index: 999;
     background-color: #fff;
     overflow-x: visible;
-    transition: .5s;
-  }
-  .movezsd{
-    transform: translateX(-100%);
-  }
-  .arrow{
-    color: #fff;
-    text-align: center;
-    width: 40px;
-    height: 100px;
-    position: absolute;
-    right: -40px;
-    top: 200px;
-    display: table;
-    background-color: #E6A23C;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-  }
-  .arrow p{
-    display: table-cell;
-    vertical-align: middle;
   }
   .tree{
     height: 500px;
