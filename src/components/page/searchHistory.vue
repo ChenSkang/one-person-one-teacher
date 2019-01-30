@@ -17,10 +17,11 @@
     <div>
       <div class="main" :style="{minHeight: minHeight + 'px'}">
          <el-table
-          class="table my-position"
-          :header-cell-style="{color: '#409eff'}"
-          :data="$store.state.history.searched"
-          @row-dblclick="showExams">
+           border
+           class="table my-position"
+           :header-cell-style="{color: '#333333', backgroundColor: '#fbfbfb'}"
+           :data="searchArray"
+           @row-dblclick="showExams">
           <el-table-column
             prop="time"
             label="搜索时间"
@@ -35,12 +36,24 @@
             label="操作"
             width="180">
             <template slot-scope="scope">
-              <el-button size="small" type="primary" @click="showExams(scope.row)">查看</el-button>
-              <el-button size="small" type="danger" @click="deleteHistory(scope.$index)">删除</el-button>
+              <div class="btn-small cell-btn1" @click="showExams(scope.row)">查看</div>
+              <div class="btn-small cell-btn2" @click="deleteHistory(scope.$index)">删除</div>
             </template>
           </el-table-column>
         </el-table>
-        <div class="table-delete my-position"><el-button size="small" type="primary" @click="clearSearched()">清空历史</el-button></div>
+        <div class="delete-all" @click="clearSearched()">
+          <div class="delete-title"><i class="el-icon-delete">全部清空</i></div>
+        </div>
+        <div class="pages">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-size="6"
+            :current-page.sync="pageNow"
+            @current-change="nextPage"
+            :total="$store.state.history.searched.length">
+          </el-pagination>
+        </div>
       </div>
     </div>
     <myFoot></myFoot>
@@ -60,7 +73,8 @@
         searchQue: '',
         searchWay: '',
         searchKind: '',
-        minHeight: 0
+        minHeight: 0,
+        pageNow: 1
       }
     },
     components: {
@@ -107,32 +121,6 @@
           this.$store.state.zsdTreeTags = que.split('；')
         }
         this.$router.push({path: '/index', query: {servlet: 'wordSearch', kind: k, msg: que, way: w}})
-        /* let url = this.$store.state.urls.url + 'SearchAgainServlet'
-        this.imgVisible = false
-        this.imgVisibles = false
-        this.$store.state.history.loading = true
-        let formData = new FormData()
-        formData.append('que', que)
-        formData.append('way', way)
-        formData.append('kind', kind)
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.nowSub = []
-          sessionStorage.setItem('defaultSrc', this.searchImage)
-          this.$store.state.cropImg = this.searchImage
-          sessionStorage.setItem('subj', JSON.stringify(response.data))
-          this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-          this.$store.state.history.loading = false
-          this.$router.push('/index')
-          this.$message.success('推荐成功')
-        }, (response) => {
-          this.$store.state.history.loading = false
-          this.$message.error('请求服务端失败')
-        }) */
       },
       clearSearched () {
         let url = this.$store.state.urls.url + 'CleanHistoryServlet'
@@ -166,8 +154,15 @@
         })
       }
     },
+    computed: {
+      searchArray: function () {
+        let arr = []
+        arr = this.$store.state.history.searched.slice(this.pageNow * 6 - 6, this.pageNow * 6)
+        return arr
+      }
+    },
     created () {
-      this.minHeight = document.documentElement.clientHeight - 151
+      this.minHeight = document.documentElement.clientHeight - 161
       if (this.$store.state.userNow) {
         if (this.$store.state.history.find) {
           let url = this.$store.state.urls.url + 'GetHistoryServlet'
@@ -196,15 +191,50 @@
     position: relative;
     top: 40px;
     margin-bottom: 60px;
+    background-color: #fbfbfb;
   }
   .table{
-    border: #409eff 3px solid;
+    border: #dcdfe6 1px solid;
     box-sizing: border-box;
     border-radius: 10px;
   }
-  .table-delete{
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
+  .delete-all{
+    position: relative;
+    top: 50px;
+    letter-spacing: 1px;
+    width: 66%;
+    margin: 0 auto;
+    height: 40px;
+  }
+  .delete-title{
+    position: absolute;
+    right: 0;
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+    color: #303133;
+    padding: 0 5px;
+  }
+  .delete-title:hover{
+    color: #f56c6c;
+    box-sizing: border-box;
+    border-bottom: 1px solid #f56c6c;
+  }
+  .cell-btn1{
+    display: inline;
+    border: 1px #409EFF solid;
+    padding: 0 13px;
+    color: #409EFF;
+  }
+  .cell-btn2{
+    display: inline;
+    border: 1px #f56c6c solid;
+    padding: 0 13px;
+    color: #f56c6c;
+  }
+  .pages{
+    width: 800px;
+    text-align: center;
+    margin: 50px auto;
   }
 </style>
