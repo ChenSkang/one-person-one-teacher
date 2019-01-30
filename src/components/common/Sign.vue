@@ -12,9 +12,8 @@
         <div><el-button type="warning" size="small" plain style="margin-left: 500px" @click="popoverClickTwo()">我知道了</el-button></div>
       </div>
     </div>
-    <my-head style="background-color: #2d8cf0"></my-head>
+    <my-head></my-head>
     <my-space></my-space>
-    <zsd-tree></zsd-tree>
     <el-dialog title="试题解析" :visible.sync="IFJX" width="70%" :append-to-body="true">
       <div class="ST TI" v-html="myTest[0].que"></div>
       <div class="JX TI"><span class="jx">解析：</span><span v-html="myTest[0].jx"></span></div>
@@ -42,17 +41,17 @@
         <div class="search-logo">OPOT</div>
         <div class="header-concern">
           <div style="width: 584px; min-width: 584px; position: relative">
-            <el-input v-model="$store.state.input_message"@keyup.native.enter="searchMsg()" placeholder="题干/知识点/试卷"></el-input>
+            <el-input v-model="$store.state.input_message" @keyup.native.enter="searchMsg()" placeholder="题干/知识点/试卷"></el-input>
             <div style="position: absolute; right: 15px; top: 6px; cursor: pointer">
               <img src="../../img/phone.png" width="28px" />
               <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage"/>
             </div>
           </div>
-          <div>
-            <el-button @click="searchMsg()" type="primary" icon="el-icon-search" style="transform: translateX(0)">搜题</el-button>
+          <div class="btn-primary search-btn" @click="searchMsg()">
+            <i class="el-icon-search">搜题</i>
           </div>
-          <div style="position: relative">
-            <el-button icon="el-icon-document" type="warning">组卷</el-button>
+          <div class="btn-primary search-page">
+            <i class="el-icon-document">组卷</i>
           </div>
         </div>
         <div class="fire">
@@ -63,15 +62,21 @@
         <div class="main-title">
           <div class="title-line">每日推荐</div>
         </div>
+        <div class="note">
+          <img @click="zsdShow = !zsdShow" src="../../img/note.png" alt="" />
+          <div class="note-zsd" v-if="zsdShow">
+            <zsd-tree></zsd-tree>
+          </div>
+        </div>
         <div class="main-popular">
           <div class="main-hot hot-left" v-if="hotQuestions.length">
             <div class="que-up">
-              <span v-html="hotQuestions[0].que"></span>
+              <img src="../../img/book.png" alt="" />
             </div>
             <div class="que-down">
-              <div v-for="item in 5">
+              <div v-for="item in 6">
                 <div class="que-show">
-                  <span v-html="hotQuestions[item].que"></span>
+                  <span v-html="hotQuestions[item-1].que"></span>
                 </div>
               </div>
             </div>
@@ -81,7 +86,7 @@
             <div class="hot-list">
               <ul>
                 <li class="list" v-for="(value, index) in searchHot">
-                  <img v-if="index < 3" src="../../img/fire.png" width="16px" style="transform: translateY(-3px)" alt="" />{{index + 1}}. {{value}}
+                  <img v-if="index < 3" src="../../img/fire.png" width="16px" style="transform: translateY(-3px);margin-right: 3px" alt="" />{{index + 1}}. {{value}}
                 </li>
               </ul>
             </div>
@@ -101,7 +106,7 @@
 <script>
   import VueCropper from 'vue-cropperjs'
   import mySpace from './mySpace.vue'
-  import myHead from './header.vue'
+  import myHead from './HomeHead.vue'
   import zsdTree from './zsdTree.vue'
   import myFoot from './footer.vue'
   import ElRow from 'element-ui/packages/row/src/row'
@@ -111,6 +116,7 @@
   export default {
     data () {
       return {
+        zsdShow: false,
         visible: false,
         imageSrc: '',
         hotQuestions: [],
@@ -343,6 +349,7 @@
   }
   .main-title{
     font-size: 16px;
+    color: #333;
     margin: 0 auto 15px;
     width: 77%;
     min-width: 1000px;
@@ -351,9 +358,20 @@
   }
   .title-line{
     height: 40px;
-    width: 71%;
+    width: 73%;
     box-sizing: border-box;
     border-bottom: 1px solid #DCDFE6;
+  }
+  .note{
+    position: absolute;
+    top: -23px;
+    right: 45px;
+  }
+  .note-zsd{
+    position: absolute;
+    right: 75px;
+    z-index: 9;
+    top: 40px;
   }
   .main-popular{
     position: relative;
@@ -364,54 +382,61 @@
     flex-direction: row;
   }
   .hot-left{
-    width: 71%;
+    width: 73%;
     background-color: #fff;
     margin-right: 2%;
     font-size: 14px;
   }
   .que-up{
-    box-sizing: border-box;
-    border: 1px solid #eee;
     margin-bottom: 20px;
+  }
+  .que-up img{
+    width: 100%;
   }
   .que-down{
     box-sizing: border-box;
     border: 1px solid #eee;
   }
   .que-show{
+    width: 95%;
+    margin: 0 auto;
+    padding: 10px 0;
+    color: #333;
+    font-size: 14px;
+    letter-spacing: 1px;
     height: 100px;
-    text-indent: 10px;
+    line-height: 30px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
     box-sizing: border-box;
-    border-bottom: 1px solid #606266;
+    border-bottom: 25px solid #fff;
+    border-top: 1px solid #dcdfe6;
   }
   .hot-right{
-    width: 27%;
-    height: 320px;
+    width: 25%;
+    height: 350px;
     background-color: #fff;
+    border-radius: 5px;
     box-sizing: border-box;
-    border: 1px solid #eee;
+    border: 1px solid #DCDFE6;
   }
   .hot-search{
     height: 35px;
     line-height: 35px;
     color: #333;
-    font-size: 18px;
-    width: 95%;
+    font-size: 17px;
+    font-family: 黑体;
+    width: 90%;
     margin: 0 auto 5px;
     box-sizing: border-box;
     border-bottom: 1px solid #DCDFE6;
   }
   .list{
-    width: 95%;
+    letter-spacing: 1px;
+    width: 88%;
     margin: 0 auto;
     color: #333;
-    height: 27px;
-    line-height: 27px;
+    height: 30px;
+    line-height: 30px;
     font-size: 14px;
   }
   .main-foot{
