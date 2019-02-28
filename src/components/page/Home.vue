@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="mask" :style="{minHeights: minHeights + 'px'}" v-if="popoverFirst && $store.state.nowSub.length"></div>
+    <!--<div id="mask" :style="{minHeights: minHeights + 'px'}" v-if="popoverFirst && $store.state.nowSub.length"></div>-->
     <my-head></my-head>
     <mySpace></mySpace>
     <top-search v-if="topFixed"></top-search>
@@ -43,7 +43,11 @@
             </div>
           </div>
           <div class="screen">
-            <div class="screen-title" @click="screenShow = !screenShow">筛选</div>
+            <div class="screen-title">
+              <div class="screen-name" @click="screenShow = !screenShow">筛选</div>
+              <div class="screen-menu"><img src="../../img/menu.png" alt="" /></div>
+              <div class="screen-edition">人教版：七年级上</div>
+            </div>
             <transition name="el-zoom-in-top">
               <div class="screen-window" v-if="screenShow">
                 <div class="screen-list">
@@ -65,24 +69,29 @@
               </div>
             </transition>
           </div>
-          <div class="block" v-if="$store.state.nowSub.length">
+          <div class="block" v-if="$store.state.nowSub.length"
+               v-loading="$store.state.history.loadingTwo"
+               element-loading-text="加载中"
+               element-loading-spinner="el-icon-loading"
+               element-loading-background="rgba(0, 0, 0, 0.1)"
+               >
             <div>
               <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
               <ul>
-                <li class="ques" v-for="item in nowQues" :key="$store.state.nowSub[item + nowPage - 1].unique">
+                <li class="ques" v-for="(value, index) in $store.state.nowSub" :key="value.unique">
                   <div class="up">
-                    <span class="TH">{{titleNumber(item + nowPage)}}</span>
-                    <span class="QUE" v-html="$store.state.nowSub[item + nowPage - 1].que"></span>
+                    <span class="TH">{{index + 1}}</span>
+                    <span class="QUE" v-html="value.question"></span>
                   </div>
-                  <div class="popoverOne" v-if="popoverFirst && item === 1">
+                  <!--<div class="popoverOne" v-if="popoverFirst && item === 1">
                     <div class="popoverOne-arrow"></div>
                     <p class="popover-p">点击推荐本题的同类型题目</p>
                     <div><el-button type="warning" size="mini" plain style="margin-left: 200px" @click="popoverClickOne()">我知道了</el-button></div>
-                  </div>
+                  </div>-->
                   <div class="low">
-                    <div><el-button type="primary" size="mini" @click="showJX(item + nowPage - 1)">查看解析</el-button></div>
-                    <div><el-button type="primary" @click="addPaper(item + nowPage - 1)" size="mini">添加试题</el-button></div>
-                    <div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:$store.state.nowSub[item + nowPage - 1].unique}})">相似推荐</el-button></div>
+                    <div><el-button type="primary" size="mini" @click="showJX(index)">查看解析</el-button></div>
+                    <div><el-button type="primary" @click="addPaper(index)" size="mini">添加试题</el-button></div>
+                    <div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</el-button></div>
                   </div>
                 </li>
               </ul>
@@ -93,7 +102,7 @@
                 :page-size="10"
                 :current-page.sync="$store.state.history.nowHomePage"
                 @current-change="nextPage"
-                :total="$store.state.nowSub.length">
+                :total="500">
               </el-pagination>
             </div>
           </div>
@@ -142,21 +151,21 @@
         minHeight: 0,
         minHeights: 0,
         topFixed: false,
-        popoverFirst: false,
+        // popoverFirst: false,
         screenShow: true,
         screenChoiceOne: [true, false, false, false],
         screenChoiceTwo: [true, false, false, false, false, false],
         searchHot: [
-          '一次函数',
-          '二次函数',
-          '三次函数',
-          '四次函数',
-          '五次函数',
-          '六次函数',
-          '七次函数',
-          '八次函数',
-          '九次函数',
-          '十次函数'
+          '三角形辅助线做法',
+          '二次函数综合题',
+          '一元一次方程的应用',
+          '2018长沙市中考试卷',
+          '二次函数的动点问题',
+          '初中数学新定义问题',
+          '中考压轴题',
+          '一元一次方程的基础测试',
+          '一元一次方程的典型例题',
+          '全等三角形培优经典题目'
         ]
       }
     },
@@ -197,16 +206,7 @@
       },
       searchMsg () {
         let num = Math.random() * 10000
-        if (this.$store.state.value === 2 && this.$store.state.zsdTreeTags.length !== 0) {
-          let ms = this.$store.state.zsdTreeTags.join('；')
-          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: ms, kind: this.$store.state.select, way: 2, num: num}})
-        } else if (this.$store.state.value === 2 && this.$store.state.zsdTreeTags.length === 0) {
-          this.$message('请输入知识点')
-        } else if (this.$store.state.value !== 2 && this.$store.state.input_message === '') {
-          this.$message('请输入搜索内容')
-        } else {
-          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, kind: this.$store.state.select, way: this.$store.state.value, num: num}})
-        }
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, num: num}})
       },
       choiceOne (num) {
         for (let i = 0; i < this.screenChoiceOne.length; i++) {
@@ -221,11 +221,11 @@
         this.$set(this.screenChoiceTwo, num, true)
       },
       showJX (x) {
-        this.$store.state.myTest[0].que = this.$store.state.nowSub[x].que
+        this.$store.state.myTest[0].question = this.$store.state.nowSub[x].question
         this.$store.state.myTest[0].kddp = this.$store.state.nowSub[x].kddp
         this.$store.state.myTest[0].zsd = this.$store.state.nowSub[x].zsd
         this.$store.state.myTest[0].answer = this.$store.state.nowSub[x].answer
-        this.$store.state.myTest[0].jx = this.$store.state.nowSub[x].jx
+        this.$store.state.myTest[0].analysis = this.$store.state.nowSub[x].analysis
         this.$store.state.IFJX = true
       },
       addPaper (x) {
@@ -250,7 +250,7 @@
           this.signShows()
         }
       },
-      titleNumber: function (index) {
+      /* titleNumber: function (index) {
         if (sessionStorage.getItem('title_number') === 'false') {
           return index + '.'
         } else {
@@ -260,8 +260,9 @@
             return index + '.'
           }
         }
-      },
+      }, */
       nextPage (val) {
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: val}})
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
       },
@@ -272,29 +273,19 @@
         } else {
           this.topFixed = false
         }
-      },
+      }/* ,
       popoverClickOne () {
         this.popoverFirst = false
         localStorage.setItem('ifFirsts', 'false')
         const mo = function (e) { e.preventDefault() }
         document.body.style.overflow = ''
         document.addEventListener('touchmove', mo, false)
-      }
+      } */
     },
     mounted () {
       window.addEventListener('scroll', this.handleScroll)
     },
     computed: {
-      nowPage: function () {
-        return (this.$store.state.history.nowHomePage - 1) * 10
-      },
-      nowQues: function () {
-        if (this.$store.state.history.nowHomePage <= this.$store.state.nowSub.length / 10) {
-          return 10
-        } else {
-          return this.$store.state.nowSub.length % 10
-        }
-      },
       nowQuery: function () {
         return this.$route.query
       }
@@ -307,14 +298,9 @@
               this.againSearch(val.msg)
               break
             case 'wordSearch':
-              this.$store.state.select = val.kind
-              this.$store.state.value = parseInt(val.way)
-              if (this.$store.state.value === 2) {
-                this.$store.state.zsdTreeTags = val.msg.split('；')
-              } else {
-                this.$store.state.input_message = val.msg
-              }
-              this.wordSearch(val.msg)
+              this.$store.state.input_message = val.msg
+              let page = parseInt(val.page)
+              this.searchQuestion(val.msg, page)
               break
             case 'imgSearch':
               this.$store.state.cropImg = val.msg
@@ -324,46 +310,40 @@
         }
       }
     },
-    beforeCreate () {
+    /* beforeCreate () {
       if (!localStorage.getItem('ifFirsts')) {
         localStorage.setItem('ifFirsts', 'true')
       }
-    },
+    }, */
     created () {
       this.minHeight = document.documentElement.clientHeight - 251
       this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
-      if (sessionStorage.getItem('subj')) { this.$store.state.nowSub = JSON.parse(sessionStorage.getItem('subj')) }
       switch (this.$route.query.servlet) {
         case 'againSearch':
           this.againSearch(this.$route.query.msg)
           break
         case 'wordSearch':
-          this.$store.state.select = this.$route.query.kind
-          this.$store.state.value = parseInt(this.$route.query.way)
-          if (this.$store.state.value === 2) {
-            this.$store.state.zsdTreeTags = this.$route.query.msg.split('；')
-          } else {
-            this.$store.state.input_message = this.$route.query.msg
-          }
-          this.wordSearch(this.$route.query.msg)
+          this.$store.state.input_message = this.$route.query.msg
+          let page = parseInt(this.$route.query.page)
+          this.searchQuestion(this.$route.query.msg, page)
           break
         case 'imgSearch':
           this.$store.state.cropImg = this.$route.query.msg
           this.imgSearch()
           break
       }
-      if (localStorage.getItem('ifFirsts') === 'true') {
+      /* if (localStorage.getItem('ifFirsts') === 'true') {
         this.popoverFirst = true
         const mo = function (e) { e.preventDefault() }
         document.body.style.overflow = 'hidden'
         document.addEventListener('touchmove', mo, false)
-      }
+      } */
     }
   }
 </script>
 
 <style scoped>
-  #mask{
+ /* #mask{
     width: 100%;
     height: 100%;
     min-width: 1200px;
@@ -398,7 +378,7 @@
     color: #fff;
     letter-spacing: 1px;
     text-indent: 20px;
-  }
+  }*/
   .home-main{
     width: 100%;
     position: relative;
@@ -432,11 +412,29 @@
   .screen{
   }
   .screen-title{
-    margin: 10px 0;
-    cursor: pointer;
+    display: flex;
+    flex-direction: row;
   }
-  .screen-title:hover{
+  .screen-name{
+    margin: 10px 3px 10px 0;
+    cursor: pointer;
+    color: #333;
+  }
+  .screen-name:hover{
     text-decoration: underline;
+  }
+  .screen-edition{
+    margin: 10px 3px 10px 0;
+    cursor: pointer;
+    color: #409EFF;
+    font-weight: bold;
+  }
+  .screen-menu{
+    margin-top: 8px;
+  }
+  .screen-menu img{
+    width: 32px;
+    height: 25px;
   }
   .screen-window{
     border-radius: 5px;
