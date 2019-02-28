@@ -10,7 +10,7 @@
         <div class="col-out" @click="signOut()"><span>退出</span></div>
       </div><div class="col">丨</div>
       <div class="col col-hover" v-show="nowuser" @click="registerShows()"><span>注册</span></div>
-      <div class="col col-hover" v-show="!nowuser" @click="searchHistory()"><span>搜索历史</span></div><div class="col" v-show="!nowuser">丨</div>
+      <div class="col col-hover" v-show="!nowuser"><span>搜索历史</span></div><div class="col" v-show="!nowuser">丨</div>
       <div class="col col-hover" v-show="!nowuser" @click="$router.push('/testPapers')"><span>我的试卷</span></div>
     </div>
     <el-dialog :title="ms" :visible.sync="registerShow" width="30%" :modal="false" :append-to-body="true">
@@ -142,19 +142,20 @@
             let name = this.signForm.usr
             let pass = this.signForm.pass
             let formData = new FormData()
-            formData.append('LoginInfo', name)
-            formData.append('pass', pass)
-            let url = this.$store.state.urls.url + 'LoginServlet'
+            formData.append('username', name)
+            formData.append('password', pass)
+            let url = this.$store.state.urls.url + 'user/login'
             this.$axios.post(url, formData, {
               headers: {
                 'Content-Type': 'application/json;charset=utf-8'
               },
               withCredentials: true
             }).then((response) => {
-              if (response.data.sessionId) {
-                sessionStorage.setItem('sessionId', response.data.sessionId)
-                sessionStorage.setItem('nowUser', response.data.u.username)
-                this.$store.state.userNow = response.data.u.username
+              console.log(response)
+              if (response.data.data.sessionId) {
+                sessionStorage.setItem('sessionId', response.data.data.sessionId)
+                sessionStorage.setItem('nowUser', response.data.data.username)
+                this.$store.state.userNow = response.data.data.username
                 if (this.checked === true) {
                   this.clearCookie()
                   this.setCookie(name, pass, 7)
