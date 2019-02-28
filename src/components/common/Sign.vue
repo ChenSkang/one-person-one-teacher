@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="mask" :style="{minHeight: minHeight + 'px'}" v-if="popoverFirst || popoverTwo">
+    <!--<div id="mask" :style="{minHeight: minHeight + 'px'}" v-if="popoverFirst || popoverTwo">
       <div class="popoverOne" v-if="popoverFirst">
         <div class="popoverOne-arrow"></div>
         <p class="popover-p">点击可输入图片，搜索题目并且推荐同类型题目</p>
@@ -11,12 +11,12 @@
         <p class="popover-p">输入需要搜索的内容，在左侧选择搜索类型，在右侧选择题型</p>
         <div><el-button type="warning" size="small" plain style="margin-left: 500px" @click="popoverClickTwo()">我知道了</el-button></div>
       </div>
-    </div>
+    </div>-->
     <my-head></my-head>
     <my-space></my-space>
     <el-dialog title="试题解析" :visible.sync="IFJX" width="70%" :append-to-body="true">
-      <div class="ST TI" v-html="myTest[0].que"></div>
-      <div class="JX TI"><span class="jx">解析：</span><span v-html="myTest[0].jx"></span></div>
+      <div class="ST TI" v-html="myTest[0].question"></div>
+      <div class="JX TI"><span class="jx">解析：</span><span v-html="myTest[0].analysis"></span></div>
       <div class="JX TI"><span class="jx">解答：</span><span v-html="myTest[0].answer"></span></div>
     </el-dialog>
     <el-dialog :visible.sync="visible" width="60%" center :append-to-body="true">
@@ -54,8 +54,8 @@
             <i class="el-icon-document">组卷</i>
           </div>
         </div>
-        <div class="fire">
-          <img src="../../img/fire.png" width="16px" style="transform: translateY(-3px)" alt="" />&nbsp;&nbsp;一次函数
+        <div class="fire" @click="searchHotMsg(fireMsg)">
+          <img src="../../img/fire.png" width="16px" style="transform: translateY(-3px)" alt="" />&nbsp;&nbsp;<span>{{fireMsg}}</span>
         </div>
       </div>
       <div class="home-main">
@@ -75,8 +75,8 @@
             </div>
             <div class="que-down">
               <div v-for="item in 6">
-                <div class="que-show">
-                  <span v-html="hotQuestions[item-1].que"></span>
+                <div class="que-show" @click="showMore(item - 1)">
+                  <span>{{item}}.</span><span v-html="hotQuestions[item-1].question"></span>
                 </div>
               </div>
             </div>
@@ -85,7 +85,7 @@
             <div class="hot-search">热门搜索</div>
             <div class="hot-list">
               <ul>
-                <li class="list" v-for="(value, index) in searchHot">
+                <li class="list" v-for="(value, index) in searchHot" @click="searchHotMsg(value)">
                   <img v-if="index < 3" src="../../img/fire.png" width="16px" style="transform: translateY(-3px);margin-right: 3px" alt="" />{{index + 1}}. {{value}}
                 </li>
               </ul>
@@ -124,23 +124,25 @@
         myTest: [
           { que: '' },
           { answer: '' },
-          { jx: '' }
+          { analysis: '' }
         ],
         minHeight: 0,
         popoverFirst: false,
         popoverTwo: false,
         searchHot: [
-          '一次函数',
-          '二次函数',
-          '三次函数',
-          '四次函数',
-          '五次函数',
-          '六次函数',
-          '七次函数',
-          '八次函数',
-          '九次函数',
-          '十次函数'
-        ]
+          '三角形辅助线做法',
+          '二次函数综合题',
+          '一元一次方程的应用',
+          '2018长沙市中考试卷',
+          '二次函数的动点问题',
+          '初中数学新定义问题',
+          '中考压轴题',
+          '一元一次方程的基础测试',
+          '一元一次方程的典型例题',
+          '全等三角形培优经典题目'
+        ],
+        fireMsg: '三角形辅助线做法',
+        nowFire: 0
       }
     },
     methods: {
@@ -179,25 +181,29 @@
         this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}})
       },
       searchMsg () {
-        if (this.$store.state.value === 2 && this.$store.state.zsdTreeTags.length === 0) {
-          this.$message('请输入知识点')
-        } else if (this.$store.state.value === 2 && this.$store.state.zsdTreeTags.length !== 0) {
-          let ms = this.$store.state.zsdTreeTags.join('；')
-          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: ms, kind: this.$store.state.select, way: 2}})
-        } else if (this.$store.state.value !== 2 && this.$store.state.input_message === '') {
-          this.$message('请输入搜索内容')
-        } else {
-          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, kind: this.$store.state.select, way: this.$store.state.value}})
-        }
+        let num = Math.random() * 10000
+        let routeData = this.$router.resolve({
+          path: '/index',
+          query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, num: num}
+        })
+        window.open(routeData.href, '_blank')
+      },
+      searchHotMsg (hot) {
+        let num = Math.random() * 10000
+        let routeData = this.$router.resolve({
+          path: '/index',
+          query: {servlet: 'wordSearch', msg: hot, page: 1, num: num}
+        })
+        window.open(routeData.href, '_blank')
       },
       showMore (num) {
-        this.myTest[0].que = this.hotQuestions[num].que
+        this.myTest[0].question = this.hotQuestions[num].question
         this.myTest[0].answer = this.hotQuestions[num].answer
-        this.myTest[0].jx = this.hotQuestions[num].jx
+        this.myTest[0].analysis = this.hotQuestions[num].analysis
         this.IFJX = true
       },
       getHot () {
-        let url = this.$store.state.urls.url + 'GetHotServlet'
+        let url = this.$store.state.urls.url + 'common/getHot'
         this.$axios.get(url, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -205,14 +211,20 @@
           withCredentials: true
         }).then((response) => {
           console.log(response)
-          this.hotQuestions = response.data
+          this.hotQuestions = response.data.data
         }, (res) => {
         })
       },
       againSearchs (x) {
         this.$router.push({path: '/index', query: {servlet: 'againSearch', msg: x}})
       },
-      popoverClickOne () {
+      fireWord () {
+        window.setInterval(() => {
+          this.nowFire = (this.nowFire + 1) % 10
+          this.fireMsg = this.searchHot[this.nowFire]
+        }, 3000)
+      }
+     /* popoverClickOne () {
         this.popoverFirst = false
         this.popoverTwo = true
       },
@@ -222,7 +234,7 @@
         const mo = function (e) { e.preventDefault() }
         document.body.style.overflow = ''
         document.addEventListener('touchmove', mo, false)
-      }
+      } */
     },
     beforeCreate () {
       if (!localStorage.getItem('ifFirst')) {
@@ -231,13 +243,14 @@
     },
     created () {
       this.getHot()
+      this.fireWord()
       this.minHeight = document.documentElement.clientHeight
-      if (localStorage.getItem('ifFirst') === 'true') {
+      /* if (localStorage.getItem('ifFirst') === 'true') {
         this.popoverFirst = true
         const mo = function (e) { e.preventDefault() }
         document.body.style.overflow = 'hidden'
         document.addEventListener('touchmove', mo, false)
-      }
+      } */
     },
     components: {
       ElCol,
@@ -340,6 +353,7 @@
     position: relative;
     top: 120px;
     text-align: center;
+    cursor: pointer;
   }
   .home-main{
     width: 100%;
@@ -410,6 +424,7 @@
     box-sizing: border-box;
     border-bottom: 25px solid #fff;
     border-top: 1px solid #dcdfe6;
+    cursor: pointer;
   }
   .hot-right{
     width: 25%;
@@ -431,13 +446,18 @@
     border-bottom: 1px solid #DCDFE6;
   }
   .list{
-    letter-spacing: 1px;
-    width: 88%;
-    margin: 0 auto;
-    color: #333;
-    height: 30px;
-    line-height: 30px;
-    font-size: 14px;
+     letter-spacing: 1px;
+     width: 88%;
+     margin: 0 auto;
+     color: #333;
+     height: 30px;
+     line-height: 30px;
+     font-size: 14px;
+     cursor: pointer;
+   }
+  .list:hover{
+    text-decoration: underline;
+    color: #409EFF;
   }
   .main-foot{
     width: 100%;
