@@ -38,7 +38,7 @@
             <div class="btn-primary search-btn" @click="searchMsg()">
               <i class="el-icon-search">搜题</i>
             </div>
-            <div class="btn-primary search-page">
+            <div class="btn-primary search-page" @click="searchMsg()">
               <i class="el-icon-document">组卷</i>
             </div>
           </div>
