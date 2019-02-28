@@ -292,7 +292,7 @@ export default{
       })
     }
     Vue.prototype.signOut = function () {
-      let url = this.$store.state.urls.url + 'LogoutServlet'
+      let url = this.$store.state.urls.url + '/user/logout'
       let sessionId = sessionStorage.getItem('sessionId')
       let formData = new FormData()
       formData.append('sessionId', sessionId)
@@ -345,6 +345,31 @@ export default{
         this.$store.state.history.loading = false
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
         this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
+          confirmButtonText: '确定'
+        })
+      })
+    }
+    Vue.prototype.searchQuestion = function (msg, page) {
+      this.$store.state.history.loadingTwo = true
+      let formData = new FormData()
+      formData.append('question', msg)
+      formData.append('page', page)
+      let url = this.$store.state.urls.url + 'search/wordSearch'
+      this.$axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        withCredentials: true
+      }).then((response) => {
+        console.log(response)
+        this.$store.state.nowSub = response.data.data
+        this.$store.state.history.loadingTwo = false
+         /* console.log(response.data)
+        this.$store.state.nowSub = JSON.parse(sessionStorage.subj) */
+        this.$store.state.history.nowHomePage = page
+      }, (response) => {
+        this.$store.state.history.loadingTwo = false
+        this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
           confirmButtonText: '确定'
         })
       })
