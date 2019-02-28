@@ -13,6 +13,7 @@ export default {
     find: true,
     searched: [],
     loading: false,
+    loadingTwo: false,
     nowHomePage: 1
   }
 }

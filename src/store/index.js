@@ -18,7 +18,7 @@ export default new Vuex.Store({
     TK: [], // 试题篮填空题
     XZ: [], // 试题篮选择题
     JD: [], // 试题篮解答题
-    options: [{
+    /* options: [{
       value: 0,
       label: '题干',
       holder: '请输入题干'
@@ -33,8 +33,8 @@ export default new Vuex.Store({
     }],
     value: 0,
     select: '全部',
+    zsdTreeTags: [], */
     input_message: '',
-    zsdTreeTags: [],
     myTest: [
       { que: '' },
       { kddp: '' },
