@@ -36,11 +36,11 @@ export default new Vuex.Store({
     zsdTreeTags: [], */
     input_message: '',
     myTest: [
-      { que: '' },
+      { question: '' },
       { kddp: '' },
-      { zsd: '' },
+      { knowledge: '' },
       { answer: '' },
-      { jx: '' }
+      { analysis: '' }
     ],
     IFJX: false
   },

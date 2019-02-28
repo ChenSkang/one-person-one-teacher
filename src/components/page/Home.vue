@@ -223,7 +223,7 @@
       showJX (x) {
         this.$store.state.myTest[0].question = this.$store.state.nowSub[x].question
         this.$store.state.myTest[0].kddp = this.$store.state.nowSub[x].kddp
-        this.$store.state.myTest[0].zsd = this.$store.state.nowSub[x].zsd
+        this.$store.state.myTest[0].knowledge = this.$store.state.nowSub[x].knowledge
         this.$store.state.myTest[0].answer = this.$store.state.nowSub[x].answer
         this.$store.state.myTest[0].analysis = this.$store.state.nowSub[x].analysis
         this.$store.state.IFJX = true
