@@ -13,6 +13,7 @@ export default new Vuex.Store({
   state: {
     signShow: false,
     nowSub: [],
+    nowSubs: '',
     userNow: '',
     cropImg: '', // 裁切的图片
     TK: [], // 试题篮填空题

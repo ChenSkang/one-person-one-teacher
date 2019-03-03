@@ -80,7 +80,7 @@
               <ul>
                 <li class="ques" v-for="(value, index) in $store.state.nowSub" :key="value.unique">
                   <div class="up">
-                    <span class="TH">{{index + 1}}</span>
+                    <span class="TH">{{$store.state.nowSubs}}{{index + 1}}</span>
                     <span class="QUE" v-html="value.question"></span>
                   </div>
                   <!--<div class="popoverOne" v-if="popoverFirst && item === 1">

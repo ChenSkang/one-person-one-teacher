@@ -363,6 +363,7 @@ export default{
       }).then((response) => {
         console.log(response)
         this.$store.state.nowSub = response.data.data
+        this.$store.state.nowSubs = response.data.msg
         this.$store.state.history.loadingTwo = false
          /* console.log(response.data)
         this.$store.state.nowSub = JSON.parse(sessionStorage.subj) */
