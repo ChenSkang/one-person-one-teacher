@@ -8,7 +8,7 @@
     </div>
     <div class="user">
       <div class="name" v-if="$store.state.userNow">{{$store.state.userNow}}</div>
-      <div class="name" v-else><div>注册帐号</div><div>|</div><div @click="signShows()">登录</div></div>
+      <div class="name" v-else><div @click="signShows()">登录</div></div>
       <div class="port">
         <img :src="imgSrc" alt="">
       </div>
