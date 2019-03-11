@@ -13,23 +13,30 @@
       <div class="col col-hover" v-show="!nowuser"><span>搜索历史</span></div><div class="col" v-show="!nowuser">丨</div>
       <div class="col col-hover" v-show="!nowuser" @click="$router.push('/testPapers')"><span>我的试卷</span></div>
     </div>
-    <el-dialog :title="ms" :visible.sync="registerShow" width="30%" :modal="false" :append-to-body="true">
-      <el-form :model="registerForm" status-icon :rules="registerRule" ref="registerForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="用户名" prop="name">
-          <el-input v-model="registerForm.name"></el-input>
+    <el-dialog :title="ms" :visible.sync="registerShow" width="50%" :append-to-body="true">
+      <el-form :model="registerForm" status-icon :rules="registerRule" ref="registerForm" class="demo-ruleForm">
+        <el-form-item prop="name">
+          <el-input v-model="registerForm.name" placeholder="用户名"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="pass">
-          <el-input type="password" v-model="registerForm.pass" auto-complete="off"></el-input>
+        <el-form-item prop="pass">
+          <el-input type="password" placeholder="密码" v-model="registerForm.pass" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码" prop="ifPass">
-          <el-input type="password" v-model="registerForm.ifPass" auto-complete="off"></el-input>
+        <el-form-item prop="ifPass">
+          <el-input type="password" placeholder="确认密码" v-model="registerForm.ifPass" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item prop="tel" label="电话号码">
-          <el-input type="text" v-model.number="registerForm.tel" ></el-input>
+        <el-form-item prop="tel">
+          <el-input type="text" placeholder="手机号" v-model.number="registerForm.tel" ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitRegisterForm('registerForm')">注册</el-button>
-          <el-button @click="resetForm('registerForm')">重置</el-button>
+          <el-col :span="11">
+            <el-input placeholder="手机验证码"></el-input>
+          </el-col>
+          <el-col :offset="1" :span="12">
+            <div class="btn-primary get-btn">点击获取手机验证码</div>
+          </el-col>
+        </el-form-item>
+        <el-form-item>
+          <div class="btn-primary register-btn" @click="submitRegisterForm('registerForm')">注册</div>
         </el-form-item>
         <hr>
         <p>已经有账号，马上去<span class="to" @click="gosign()">登录</span></p>
@@ -61,7 +68,9 @@
 </template>
 
 <script>
+  import ElInput from '../../../node_modules/element-ui/packages/input/src/input'
   export default {
+    components: {ElInput},
     data () {
       let validatePass = (rule, value, callback) => {
         if (value === '') {
@@ -218,7 +227,7 @@
             formData.append('name', this.registerForm.user)
             formData.append('username', this.registerForm.name)
             formData.append('pass', this.registerForm.pass)
-            formData.append('tel', this.registerForm.tel)
+            formData.append('phone', this.registerForm.tel)
             let url = this.$store.state.urls.url + 'RegisterServlet'
             this.$axios.post(url, formData, {
               headers: {
@@ -361,5 +370,13 @@
   }
   .rt{
     float: right;
+  }
+  .get-btn{
+    background-color: #409eff;
+    color: #fff;
+  }
+  .register-btn{
+    background-color: #2d8cf0;
+    color: #fff;
   }
 </style>
