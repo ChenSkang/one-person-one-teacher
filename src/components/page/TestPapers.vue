@@ -4,31 +4,13 @@
     <mySpace></mySpace>
     <div>
       <div class="main" :style="{minHeight: minHeight + 'px'}">
-         <el-table
-          class="table my-position"
-          :header-cell-style="{color: '#409eff'}"
-          :data="$store.state.paperList">
-          <el-table-column
-            prop="id"
-            label="ID"
-            width="200">
-          </el-table-column>
-          <el-table-column
-            prop="title"
-            label="title"
-            width="200">
-          </el-table-column>
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="180">
-            <template slot-scope="scope">
-              <el-button size="small" type="primary" @click="getPapert(scope.row)">查看</el-button>
-              <el-button size="small" type="danger" @click="deletePapert(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="table-delete my-position"><el-button size="small" type="primary" @click="newPaper()">创建新的试卷</el-button></div>
+        <div class="papers" v-if="$store.state.paperList.length">
+          <div class="papers-row" v-for="i in $store.state.paperList.length">
+
+              {{$store.state.paperList[i - 1].title}}
+          </div>
+        </div>
+        <div class="table-delete"><el-button size="small" type="primary" @click="newPaper()">创建新的试卷</el-button></div>
       </div>
     </div>
     <myFoot></myFoot>
@@ -75,7 +57,7 @@
       }
     },
     created () {
-      this.minHeight = document.documentElement.clientHeight - 151
+      this.minHeight = document.documentElement.clientHeight - 161
       this.getPaperList()
     }
   }
@@ -85,13 +67,8 @@
   .main{
     width: 100%;
     position: relative;
-    top: 40px;
+    top: 50px;
     margin-bottom: 60px;
-  }
-  .table{
-    border: #409eff 3px solid;
-    box-sizing: border-box;
-    border-radius: 10px;
   }
   .table-delete{
     display: flex;
