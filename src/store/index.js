@@ -43,7 +43,8 @@ export default new Vuex.Store({
       { answer: '' },
       { analysis: '' }
     ],
-    IFJX: false
+    IFJX: false,
+    paperList: []
   },
   mutations: {
   },
@@ -51,6 +52,5 @@ export default new Vuex.Store({
     urls: urls,
     history: history,
     temp: temp
-  },
-  paperList: []
+  }
 })
