@@ -220,7 +220,7 @@ export default{
     }
     Vue.prototype.getPaperList = function () {
       if (sessionStorage.getItem('sessionId')) {
-        let url = this.$store.state.urls.url + 'GetPaperListServlet'
+        let url = this.$store.state.urls.url + '/paper/getList'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
@@ -231,7 +231,7 @@ export default{
           withCredentials: true
         }).then((response) => {
           console.log(response.data)
-          this.$store.state.paperList = response.data
+          this.$store.state.paperList = response.data.data
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
@@ -241,7 +241,7 @@ export default{
       }
     }
     Vue.prototype.createPaper = function (value) {
-      let url = this.$store.state.urls.url + 'CreatePaperServlet'
+      let url = this.$store.state.urls.url + '/paper/create'
       let sessionId = sessionStorage.getItem('sessionId')
       let formData = new FormData()
       formData.append('sessionId', sessionId)
