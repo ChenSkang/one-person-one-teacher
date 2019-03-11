@@ -90,7 +90,7 @@
                   </div>-->
                   <div class="low">
                     <div><el-button type="primary" size="mini" @click="showJX(index)">查看解析</el-button></div>
-                    <div><el-button type="primary" @click="addPaper(index)" size="mini">添加试题</el-button></div>
+                    <div><el-button type="primary" @click="getPaperLi()" size="mini">添加试题</el-button></div>
                     <div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</el-button></div>
                   </div>
                 </li>
@@ -227,6 +227,9 @@
         this.$store.state.myTest[0].answer = this.$store.state.nowSub[x].answer
         this.$store.state.myTest[0].analysis = this.$store.state.nowSub[x].analysis
         this.$store.state.IFJX = true
+      },
+      getPaperLi () {
+        this.getPaperList()
       },
       addPaper (x) {
         let sessionId = sessionStorage.getItem('sessionId')
