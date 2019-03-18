@@ -5,9 +5,10 @@
     <div>
       <div class="main" :style="{minHeight: minHeight + 'px'}">
         <div class="papers" v-if="$store.state.paperList.length">
-          <div class="papers-row" v-for="i in $store.state.paperList.length">
-
-              {{$store.state.paperList[i - 1].title}}
+          <div class="papers-col" v-for="i in $store.state.paperList.length">
+            {{$store.state.paperList[i - 1].title}}
+            <div @click="getPapert($store.state.paperList[i - 1].id)">查看</div>
+            <div @click="deletePapert($store.state.paperList[i - 1].id)">删除</div>
           </div>
         </div>
         <div class="table-delete"><el-button size="small" type="primary" @click="newPaper()">创建新的试卷</el-button></div>
@@ -49,11 +50,11 @@
           })
         })
       },
-      getPapert (row) {
-        this.getPaper(row.id)
+      getPapert (val) {
+        this.getPaper(val)
       },
-      deletePapert (row) {
-        this.deletePaper(row.id)
+      deletePapert (val) {
+        this.deletePaper(val)
       }
     },
     created () {
@@ -70,9 +71,14 @@
     top: 50px;
     margin-bottom: 60px;
   }
+  .papers{
+    width: 90%;
+    margin-left: 5%;
+  }
+  .papers-col{
+    float: left;
+    width: 18%;
+  }
   .table-delete{
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
   }
 </style>
