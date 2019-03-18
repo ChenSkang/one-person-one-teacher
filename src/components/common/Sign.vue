@@ -178,7 +178,8 @@
       },
       sureCrop () {
         this.visible = false
-        this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}})
+        this.imgSearch()
+        /* this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}}) */
       },
       searchMsg () {
         let num = Math.random() * 10000

@@ -280,19 +280,19 @@
         let name = localStorage.getItem('thisUser')
         let pass = localStorage.getItem('thisPass')
         let formData = new FormData()
-        formData.append('LoginInfo', name)
-        formData.append('pass', pass)
-        let url = this.$store.state.urls.url + 'LoginServlet'
+        formData.append('username', name)
+        formData.append('password', pass)
+        let url = this.$store.state.urls.url + 'user/login'
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
           },
           withCredentials: true
         }).then((response) => {
-          if (response.data.sessionId) {
-            sessionStorage.setItem('sessionId', response.data.sessionId)
-            sessionStorage.setItem('nowUser', response.data.u.username)
-            this.$store.state.userNow = response.data.u.username
+          if (response.data.data.sessionId) {
+            sessionStorage.setItem('sessionId', response.data.data.sessionId)
+            sessionStorage.setItem('nowUser', response.data.data.username)
+            this.$store.state.userNow = response.data.data.username
           } else {
             this.$alert('自动登录失效', '提示', {
               confirmButtonText: '确定',
