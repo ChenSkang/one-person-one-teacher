@@ -39,49 +39,21 @@ export default{
     // 搜索历史
     Vue.prototype.searchHistory = function () {
       if (sessionStorage.getItem('sessionId')) {
-        let url = this.$store.state.urls.url + 'GetHistoryServlet'
+        let url = this.$store.state.urls.url + 'user/getHistory'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
-        this.$axios.post(url, formData, {
+        this.$axios.get(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
           },
           withCredentials: true
         }).then((response) => {
+          console.log(response)
           this.$store.state.history.find = false
-          this.$store.state.history.searched = response.data
+          this.$store.state.history.searched = response.data.data
           if (this.$route.path !== '/searched') {
             this.$router.push('/searched')
-          }
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
-      } else {
-        this.signShows()
-        this.$message('请先登录')
-      }
-    }
-    // 历史试题
-    Vue.prototype.goMyExam = function () {
-      if (sessionStorage.getItem('sessionId')) {
-        let url = this.$store.state.urls.url + 'GetPaperServlet'
-        let sessionId = sessionStorage.getItem('sessionId')
-        let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.history.myexam = false
-          this.$store.state.history.exam = []
-          for (let i = 0; i < response.data.length; i++) {
-            this.$store.state.history.exam.push({time: response.data[i].time, title: response.data[i].title, id: response.data[i].id})
-          }
-          if (this.$route.path !== '/myexam') {
-            this.$router.push('/myexam')
           }
         }, (response) => {
           this.$message.error('请求服务端失败')
@@ -145,46 +117,6 @@ export default{
         this.$store.state.signShow = true
       }
     }
-    // 文字搜索
-    Vue.prototype.wordSearch = function (msg) {
-      const way = this.$store.state.value ? this.$store.state.value + 1 : 1
-      this.$store.state.history.loading = true
-      const kind = this.$store.state.select + '题'
-      let formData = new FormData()
-      if (way === 3) {
-        let ms = this.$store.state.zsdTreeTags.join('；')
-        formData.append('word', ms)
-      } else {
-        formData.append('word', msg)
-      }
-      formData.append('way', way)
-      formData.append('kind', kind)
-      let url = this.$store.state.urls.url + 'wordServlet'
-      this.$axios.post(url, formData, {
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        withCredentials: true
-      }).then((response) => {
-        this.$store.state.cropImg = ''
-        sessionStorage.removeItem('defaultSrc')
-        this.$store.state.history.loading = false
-        sessionStorage.setItem('subj', JSON.stringify(response.data))
-        console.log(response.data)
-        this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-        if (way === 1) {
-          sessionStorage.setItem('title_number', 'true')
-        } else {
-          sessionStorage.setItem('title_number', 'false')
-        }
-        this.$store.state.history.nowHomePage = 1
-      }, (response) => {
-        this.$store.state.history.loading = false
-        this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
-          confirmButtonText: '确定'
-        })
-      })
-    }
     // 重新推题
     Vue.prototype.againSearch = function (msg) {
       this.$store.state.history.loading = true
@@ -220,11 +152,11 @@ export default{
     }
     Vue.prototype.getPaperList = function () {
       if (sessionStorage.getItem('sessionId')) {
-        let url = this.$store.state.urls.url + '/paper/getList'
+        let url = this.$store.state.urls.url + 'paper/getList'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
-        this.$axios.post(url, formData, {
+        this.$axios.get(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
           },
@@ -241,7 +173,7 @@ export default{
       }
     }
     Vue.prototype.createPaper = function (value) {
-      let url = this.$store.state.urls.url + '/paper/create'
+      let url = this.$store.state.urls.url + 'paper/create'
       let sessionId = sessionStorage.getItem('sessionId')
       let formData = new FormData()
       formData.append('sessionId', sessionId)
@@ -253,12 +185,13 @@ export default{
         withCredentials: true
       }).then((response) => {
         console.log(response.data)
+        this.$store.state.paperList = response.data.data
       }, (response) => {
         this.$message.error('请求服务端失败')
       })
     }
     Vue.prototype.getPaper = function (x) {
-      let url = this.$store.state.urls.url + 'GetPaperServlet'
+      let url = this.$store.state.urls.url + 'paper/getPaper'
       let sessionId = sessionStorage.getItem('sessionId')
       let formData = new FormData()
       formData.append('sessionId', sessionId)
@@ -275,7 +208,7 @@ export default{
       })
     }
     Vue.prototype.deletePaper = function (x) {
-      let url = this.$store.state.urls.url + 'DeletePaperServlet'
+      let url = this.$store.state.urls.url + 'paper/deletePaper'
       let sessionId = sessionStorage.getItem('sessionId')
       let formData = new FormData()
       formData.append('sessionId', sessionId)
@@ -286,13 +219,13 @@ export default{
         },
         withCredentials: true
       }).then((response) => {
-        console.log(response.data)
+        console.log(response)
       }, (response) => {
         this.$message.error('请求服务端失败')
       })
     }
     Vue.prototype.signOut = function () {
-      let url = this.$store.state.urls.url + '/user/logout'
+      let url = this.$store.state.urls.url + 'user/logout'
       let sessionId = sessionStorage.getItem('sessionId')
       let formData = new FormData()
       formData.append('sessionId', sessionId)
@@ -313,7 +246,7 @@ export default{
       })
     }
     Vue.prototype.imgSearch = function () {
-      this.$store.state.history.loading = true
+      let sessionId = sessionStorage.getItem('sessionId') ? sessionStorage.getItem('sessionId') : ''
       const page = this.$store.state.cropImg
       let arr = page.split(',')
       let mime = arr[0].match(/:(.*?);/)[1]
@@ -326,21 +259,15 @@ export default{
       const obj = new Blob([u8arr], {type: mime})
       const fd = new FormData()
       fd.append('upfile', obj, 'image.png')
-      let url = this.$store.state.urls.url + 'pictureServlet'
+      fd.append('sessionId', sessionId)
+      let url = this.$store.state.urls.url + 'search/pictureSearch'
       this.$axios.post(url, fd, {
         headers: {
           'Content-Type': 'application/json;charset=utf-8'
         },
         withCredentials: true
       }).then((response) => {
-        this.$store.state.history.loading = false
-        this.$store.state.nowSub = ''
-        sessionStorage.setItem('defaultSrc', this.$store.state.cropImg)
-        sessionStorage.setItem('subj', JSON.stringify(response.data))
-        this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-        this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}})
-        this.$store.state.history.nowHomePage = 1
-        console.log(response.data)
+        console.log(response)
       }, (response) => {
         this.$store.state.history.loading = false
         this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
@@ -351,9 +278,11 @@ export default{
     }
     Vue.prototype.searchQuestion = function (msg, page) {
       this.$store.state.history.loadingTwo = true
+      let sessionId = sessionStorage.getItem('sessionId') ? sessionStorage.getItem('sessionId') : ''
       let formData = new FormData()
       formData.append('question', msg)
       formData.append('page', page)
+      formData.append('sessionId', sessionId)
       let url = this.$store.state.urls.url + 'search/wordSearch'
       this.$axios.post(url, formData, {
         headers: {
