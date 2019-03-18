@@ -3,7 +3,7 @@
     <div class="top">
       <div class="row"><div class="logo" @click="$router.push('/')">OPOT</div></div>
       <div class="row"><div class="navigation" @click="$router.push('/')">搜索</div></div>
-      <div class="row"><div class="navigation" @click="$router.push('/')">我的试卷</div></div>
+      <div class="row"><div class="navigation" @click="goPapers()">我的试卷</div></div>
       <div class="row"><div class="navigation" @click="searchHistory()">搜索历史</div></div>
     </div>
     <div class="user">
