@@ -123,9 +123,10 @@
           this.$message('请输入正确的手机号')
           this.$router.push({path: '/safe', query: {now: 'phone', step: 0}})
         } else {
-          let url = this.$store.state.urls.url + 'GetCodeServlet'
+          let url = this.$store.state.urls.url + '/user/sendCode'
           let fd = new FormData()
           fd.append('phone', this.phone)
+          fd.append('way', 1)
           this.$axios.post(url, fd, {
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -151,7 +152,7 @@
         if (this.code.length < 4) {
           this.$message('请输入正确的验证码')
         } else {
-          let url = this.$store.state.urls.url + 'CheckCodeServlet'
+          let url = this.$store.state.urls.url + '/user/checkCode'
           let session = sessionStorage.getItem('session')
           let fd = new FormData()
           fd.append('code', this.code)
@@ -162,12 +163,12 @@
             },
             withCredentials: true
           }).then((response) => {
-            if (response.data.status === 0) {
-              console.log(response)
-              this.$message.error('请输入正确的验证码')
-            } else {
+            if (response.data.msg === '成功') {
               console.log(response)
               this.$router.push({path: '/safe', query: {now: 'pass_input', step: 2}})
+            } else {
+              console.log(response)
+              this.$message.error('请输入正确的验证码')
             }
           }, (response) => {
             this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
