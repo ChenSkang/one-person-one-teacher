@@ -23,7 +23,7 @@
            :data="searchArray"
            @row-dblclick="showExams">
           <el-table-column
-            prop="time"
+            prop="create_time"
             label="搜索时间"
             width="200">
           </el-table-column>
@@ -50,7 +50,6 @@
             layout="prev, pager, next"
             :page-size="6"
             :current-page.sync="pageNow"
-            @current-change="nextPage"
             :total="$store.state.history.searched.length">
           </el-pagination>
         </div>
@@ -87,28 +86,17 @@
         console.log(row)
         if (row.image) {
           this.searchQue = row.que
-          this.searchWay = row.way
-          this.searchKind = row.kind
           this.searchImage = row.image
           this.imgVisible = true
         } else {
           this.searchQue = row.que
-          this.searchWay = row.way
-          this.searchKind = row.kind
           this.imgVisibles = true
         }
       },
-      searchAgainImg (que, way, kind) {
+      searchAgainImg (que) {
         this.imgVisible = false
         this.imgVisibles = false
-        let k = '全部'
-        let w = way
-        this.$store.state.select = k
-        this.$store.state.value = parseInt(w)
-        if (w === 2) {
-          this.$store.state.zsdTreeTags = que.split('；')
-        }
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', kind: k, msg: que, way: w}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch'}})
       },
       searchAgainWord (que, way, kind) {
         this.imgVisible = false
