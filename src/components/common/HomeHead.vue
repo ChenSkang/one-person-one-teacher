@@ -28,6 +28,11 @@
         imgSrc: require('../../img/user.png')
       }
     },
+    methods: {
+      goPapers () {
+        this.getPaperList()
+      }
+    },
     created () {
     }
   }
