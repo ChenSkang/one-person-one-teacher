@@ -133,6 +133,7 @@
             },
             withCredentials: true
           }).then((response) => {
+            console.log(response)
             if (response.data.status === 0) {
               this.$message.error('当前用户不存在')
             } else {
@@ -180,11 +181,10 @@
       passSure (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            let url = this.$store.state.urls.url + 'SetPassServlet'
-            let session = sessionStorage.getItem('session')
+            let url = this.$store.state.urls.url + '/user/reset'
             let fd = new FormData()
-            fd.append('pass', this.passForm.pass)
-            fd.append('sessionId', session)
+            fd.append('password', this.passForm.pass)
+            fd.append('phone', this.phone)
             this.$axios.post(url, fd, {
               headers: {
                 'Content-Type': 'application/json;charset=utf-8'
