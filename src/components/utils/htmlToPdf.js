@@ -167,6 +167,24 @@ export default{
         this.$message.error('请求服务端失败')
       })
     }
+    Vue.prototype.addQue = function (pid, que) {
+      let url = this.$store.state.urls.url + 'paper/addQue'
+      let sessionId = sessionStorage.getItem('sessionId')
+      let formData = new FormData()
+      formData.append('sessionId', sessionId)
+      formData.append('pid', pid)
+      formData.append('md5', que)
+      this.$axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        withCredentials: true
+      }).then((response) => {
+        console.log(response.data)
+      }, (response) => {
+        this.$message.error('请求服务端失败')
+      })
+    }
     Vue.prototype.deletePaper = function (x) {
       let url = this.$store.state.urls.url + 'paper/deletePaper'
       let sessionId = sessionStorage.getItem('sessionId')

@@ -22,8 +22,6 @@ export default {
         this.$store.state.nowSub = response.data.data
         this.$store.state.nowSubs = response.data.msg
         this.$store.state.history.loadingTwo = false
-        /* console.log(response.data)
-         this.$store.state.nowSub = JSON.parse(sessionStorage.subj) */
         this.$store.state.history.nowHomePage = page
       }, (response) => {
         this.$store.state.history.loadingTwo = false
@@ -56,9 +54,9 @@ export default {
         withCredentials: true
       }).then((response) => {
         console.log(response)
+        this.$store.state.nowSub = response.data.data
+        this.$store.state.nowSubs = response.data.msg
       }, (response) => {
-        this.$store.state.history.loading = false
-        this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
         this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
           confirmButtonText: '确定'
         })
