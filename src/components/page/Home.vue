@@ -4,6 +4,17 @@
     <my-head></my-head>
     <mySpace></mySpace>
     <top-search v-if="topFixed"></top-search>
+    <el-dialog title="选择试卷" :visible.sync="paperVisible" width="60%" center :append-to-body="true">
+      <ul class="paperList-ul">
+        <li v-for="(value, index) in $store.state.paperList" class="paperList-li" @click="add(value.id)">
+          {{index + 1 + '.  ' + value.title}}
+        </li>
+      </ul>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="newPaper()">创 建</el-button>
+        <el-button @click="paperVisible = false" type="warning">取 消</el-button>
+      </span>
+    </el-dialog>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" center :append-to-body="true">
       <vue-cropper ref='cropper'
                    :src="imageSrc"
@@ -19,9 +30,6 @@
         <el-button type="primary" @click="sureCrop">确 定</el-button>
         <el-button @click="cancelCrop" type="warning">取 消</el-button>
       </span>
-    </el-dialog>
-    <el-dialog :visible.sync="imgVisible" width="70%" :append-to-body="true">
-      <img style="max-height: 60vh; margin-left: 50%; transform: translateX(-50%)" :src="$store.state.cropImg">
     </el-dialog>
     <div class="query">{{nowQuery}}</div>
     <div class="home-main" :style="{minHeight: minHeight + 'px'}">
@@ -45,8 +53,8 @@
           <div class="screen">
             <div class="screen-title">
               <div class="screen-name" @click="screenShow = !screenShow">筛选</div>
-              <div class="screen-menu"><img src="../../img/menu.png" alt="" /></div>
-              <div class="screen-edition">人教版：七年级上</div>
+              <!--<div class="screen-menu"><img src="../../img/menu.png" alt="" /></div>
+              <div class="screen-edition">人教版：七年级上</div>-->
             </div>
             <transition name="el-zoom-in-top">
               <div class="screen-window" v-if="screenShow">
@@ -76,9 +84,8 @@
                element-loading-background="rgba(0, 0, 0, 0.1)"
                >
             <div>
-              <img :src="$store.state.cropImg" @click="imgVisible = true" class="pre-img">
               <ul>
-                <li class="ques" v-for="(value, index) in $store.state.nowSub" :key="value.unique">
+                <li class="ques" v-for="(value, index) in $store.state.nowSub" :key="value.md5">
                   <div class="up">
                     <span class="TH">{{$store.state.nowSubs}}{{index + 1}}</span>
                     <span class="QUE" v-html="value.question"></span>
@@ -90,7 +97,7 @@
                   </div>-->
                   <div class="low">
                     <div><el-button type="primary" size="mini" @click="showJX(index)">查看解析</el-button></div>
-                    <div><el-button type="primary" @click="getPaperLi()" size="mini">添加试题</el-button></div>
+                    <div><el-button type="primary" @click="addPaper(value.md5)" size="mini">添加试题</el-button></div>
                     <div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</el-button></div>
                   </div>
                 </li>
@@ -112,7 +119,7 @@
             <div class="hot-search">热门搜索</div>
             <div class="hot-list">
               <ul>
-                <li class="list" v-for="(value, index) in searchHot">
+                <li class="list" v-for="(value, index) in searchHot" @click="searchHotMsg(value)">
                   <img v-if="index < 3" src="../../img/fire.png" width="16px" style="transform: translateY(-3px);margin-right: 3px" alt="" />{{index + 1}}. {{value}}
                 </li>
               </ul>
@@ -145,7 +152,8 @@
     },
     data () {
       return {
-        imgVisible: false,
+        nowUnique: '',
+        paperVisible: false,
         imageSrc: '',
         visible: false,
         minHeight: 0,
@@ -228,30 +236,48 @@
         this.$store.state.myTest[0].analysis = this.$store.state.nowSub[x].analysis
         this.$store.state.IFJX = true
       },
-      getPaperLi () {
-        this.getPaperList()
-      },
       addPaper (x) {
+        this.nowUnique = x
         let sessionId = sessionStorage.getItem('sessionId')
         if (sessionId) {
-          let ida = this.$store.state.nowSub[x].unique
+          let url = this.$store.state.urls.url + 'paper/getList'
           let formData = new FormData()
           formData.append('sessionId', sessionId)
-          formData.append('unique', ida)
-          let url = this.$store.state.urls.url + 'AddQueServlet'
           this.$axios.post(url, formData, {
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
             },
             withCredentials: true
           }).then((response) => {
-            this.$message.success('试题添加成功')
+            console.log(response.data)
+            this.$store.state.paperList = response.data.data
+            this.paperVisible = true
           }, (response) => {
             this.$message.error('请求服务端失败')
           })
         } else {
           this.signShows()
         }
+      },
+      add (pid) {
+        let que = this.nowUnique
+        this.addQue(pid, que)
+      },
+      newPaper () {
+        this.$prompt('请输入试卷名字', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /\S/,
+          inputErrorMessage: '不能为空',
+          inputValue: this.examName
+        }).then(({ value }) => {
+          this.createPaper(value)
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          })
+        })
       },
       /* titleNumber: function (index) {
         if (sessionStorage.getItem('title_number') === 'false') {
@@ -268,6 +294,14 @@
         this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: val}})
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
+      },
+      searchHotMsg (hot) {
+        let num = Math.random() * 10000
+        let routeData = this.$router.resolve({
+          path: '/index',
+          query: {servlet: 'wordSearch', msg: hot, page: 1, num: num}
+        })
+        window.open(routeData.href, '_blank')
       },
       handleScroll () {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
@@ -296,17 +330,9 @@
     watch: {
       nowQuery: function (val) {
         if (this.$route.path === '/index') {
-          switch (val.servlet) {
-            case 'wordSearch':
-              this.$store.state.input_message = val.msg
-              let page = parseInt(val.page)
-              this.searchQuestion(val.msg, page)
-              break
-            case 'imgSearch':
-              this.$store.state.cropImg = val.msg
-              this.imgSearch()
-              break
-          }
+          this.$store.state.input_message = val.msg
+          let page = parseInt(val.page)
+          this.searchQuestion(val.msg, page)
         }
       }
     },
@@ -317,17 +343,10 @@
     }, */
     created () {
       this.minHeight = document.documentElement.clientHeight - 251
-      this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
-      switch (this.$route.query.servlet) {
-        case 'wordSearch':
-          this.$store.state.input_message = this.$route.query.msg
-          let page = parseInt(this.$route.query.page)
-          this.searchQuestion(this.$route.query.msg, page)
-          break
-        case 'imgSearch':
-          this.$store.state.cropImg = this.$route.query.msg
-          this.imgSearch()
-          break
+      if (this.$route.query) {
+        this.$store.state.input_message = this.$route.query.msg
+        let page = parseInt(this.$route.query.page)
+        this.searchQuestion(this.$route.query.msg, page)
       }
       /* if (localStorage.getItem('ifFirsts') === 'true') {
         this.popoverFirst = true
@@ -484,7 +503,12 @@
     height: 30px;
     line-height: 30px;
     font-size: 14px;
+    cursor: pointer;
   }
+ .list:hover{
+   text-decoration: underline;
+   color: #409EFF;
+ }
   .pre-img{
     max-width: 96%;
     max-height: 200px;
@@ -556,5 +580,10 @@
     top: 50px;
     height: 0;
     opacity: 0;
+  }
+  .paperList-ul{
+  }
+  .paperList-li{
+    height: 40px;
   }
 </style>
