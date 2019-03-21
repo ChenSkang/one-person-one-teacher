@@ -29,14 +29,23 @@
         </el-form-item>
         <el-form-item>
           <el-col :span="11">
-            <el-input placeholder="手机验证码"></el-input>
+            <el-input placeholder="手机验证码" v-model="code"></el-input>
           </el-col>
           <el-col :offset="1" :span="12">
-            <div class="btn-primary get-btn">点击获取手机验证码</div>
+            <div class="btn-primary get-btn" @click="getCode()">点击获取手机验证码</div>
           </el-col>
         </el-form-item>
         <el-form-item>
-          <div class="btn-primary register-btn" @click="submitRegisterForm('registerForm')">注册</div>
+          选择年级：
+          <el-radio-group v-model="radio">
+            <el-radio label="七年级"></el-radio>
+            <el-radio label="八年级"></el-radio>
+            <el-radio label="九年级"></el-radio>
+            <el-radio label="全部"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>
+          <div class="btn-primary register-btn" @click="prove()">注册</div>
         </el-form-item>
         <hr>
         <p>已经有账号，马上去<span class="to" @click="gosign()">登录</span></p>
@@ -103,12 +112,15 @@
         }
       }
       return {
+        code: '',
+        sessionID: '',
         msg: '用户名密码登录',
         checked: true,
         signForm: {
           usr: '',
           pass: ''
         },
+        radio: '全部',
         signRule: {
           usr: [
             {required: true, message: '请输入用户名', trigger: 'blur'}
@@ -120,7 +132,6 @@
         ms: '用户注册',
         registerShow: false,
         registerForm: {
-          user: '', // 昵称
           pass: '', // 密码
           ifPass: '', // 确认密码
           name: '', // 用户名
@@ -161,7 +172,7 @@
               withCredentials: true
             }).then((response) => {
               console.log(response)
-              if (response.data.data.sessionId) {
+              if (response.data.data) {
                 sessionStorage.setItem('sessionId', response.data.data.sessionId)
                 sessionStorage.setItem('nowUser', response.data.data.username)
                 this.$store.state.userNow = response.data.data.username
@@ -220,15 +231,69 @@
       clearCookie: function () {
         this.setCookie('', '', -1)
       },
+      getCode () {
+        let url = this.$store.state.urls.url + 'user/sendCode'
+        let fd = new FormData()
+        fd.append('phone', this.registerForm.tel)
+        fd.append('way', 0)
+        this.$axios.post(url, fd, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response)
+          if (response.data.msg === '用该手机号已注册') {
+            this.$message.error('当前手机号已经注册')
+          } else {
+            this.sessionID = response.data.data.sessionId
+          }
+        }, (response) => {
+          this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
+            confirmButtonText: '确定'
+          })
+        })
+      },
+      prove () {
+        if (this.code.length < 4) {
+          this.$message('请输入正确的验证码')
+        } else {
+          let url = this.$store.state.urls.url + '/user/checkCode'
+          let session = this.sessionID
+          let fd = new FormData()
+          fd.append('code', this.code)
+          fd.append('sessionId', session)
+          this.$axios.post(url, fd, {
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            withCredentials: true
+          }).then((response) => {
+            if (response.data.msg === '成功') {
+              console.log(response)
+              this.submitRegisterForm('registerForm')
+            } else {
+              console.log(response)
+              this.$message.error('请输入正确的验证码')
+            }
+          }, (response) => {
+            this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
+              confirmButtonText: '确定'
+            })
+          })
+        }
+      },
       submitRegisterForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let formData = new FormData()
-            formData.append('name', this.registerForm.user)
             formData.append('username', this.registerForm.name)
-            formData.append('pass', this.registerForm.pass)
+            formData.append('password', this.registerForm.pass)
             formData.append('phone', this.registerForm.tel)
-            let url = this.$store.state.urls.url + 'RegisterServlet'
+            formData.append('sessionId', this.sessionID)
+            formData.append('nianji', this.radio)
+            formData.append('jiaocai', this.radio)
+            let url = this.$store.state.urls.url + 'user/register'
             this.$axios.post(url, formData, {
               headers: {
                 'Content-Type': 'application/json;charset=utf-8'
