@@ -171,7 +171,8 @@
           <div class="right">
             <div class="right_up">
               <div class="set_title">试卷操作</div>
-              <div><el-button class="btn" @click="wordDown()" type="primary" icon="el-icon-download">下载试题</el-button></div>
+              <div><el-button class="btn" type="primary" icon="el-icon-download">下载试题</el-button></div>
+              <div><el-button class="btn" @click="changePaper()" type="primary" icon="el-icon-document">保存修改</el-button></div>
               <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
             </div>
             <div class="right_down">
@@ -227,7 +228,7 @@
         deleteall: false,
         cities: firstOptions,
         mations: secondOptions,
-        showSet: [true, false, false, true, true],
+        showSet: [true, false, false, false, true],
         showSets: [false, false, false, false, false],
         examName: '初中数学测试试卷',
         examSecondName: '试卷副标题',
@@ -271,63 +272,41 @@
     },
     methods: {
       endMove () {
-        let arr = []
-        for (let i = 0; i < this.XZ.length; i++) {
-          arr.push(this.XZ[i].unique)
-        }
-        for (let i = 0; i < this.TK.length; i++) {
-          arr.push(this.TK[i].unique)
-        }
-        for (let i = 0; i < this.JD.length; i++) {
-          arr.push(this.JD[i].unique)
-        }
-        let sessionId = sessionStorage.getItem('sessionId')
-        let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        formData.append('questions', arr)
-        let url = this.$store.state.urls.url + 'MoveBasketServlet'
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          console.log('success')
-        }, (response) => {
-          this.$message.error('未知错误')
-        })
+        console.log('move')
       },
       showJX1 (x) {
-        this.$store.state.myTest[0].que = this.XZ[x].que
+        this.$store.state.myTest[0].question = this.XZ[x].que
         this.$store.state.myTest[0].kddp = ''
         this.$store.state.myTest[0].zsd = ''
         this.$store.state.myTest[0].answer = this.XZ[x].answer
-        this.$store.state.myTest[0].jx = this.XZ[x].jx
+        this.$store.state.myTest[0].analysis = this.XZ[x].jx
         this.$store.state.IFJX = true
       },
       showJX2 (x) {
-        this.$store.state.myTest[0].que = this.TK[x].que
+        this.$store.state.myTest[0].question = this.TK[x].que
+        this.$store.state.myTest[0].knowledge = ''
         this.$store.state.myTest[0].kddp = ''
-        this.$store.state.myTest[0].zsd = ''
         this.$store.state.myTest[0].answer = this.TK[x].answer
-        this.$store.state.myTest[0].jx = this.TK[x].jx
+        this.$store.state.myTest[0].analysis = this.TK[x].jx
         this.$store.state.IFJX = true
       },
       showJX3 (x) {
-        this.$store.state.myTest[0].que = this.JD[x].que
+        this.$store.state.myTest[0].question = this.JD[x].que
         this.$store.state.myTest[0].kddp = ''
         this.$store.state.myTest[0].zsd = ''
         this.$store.state.myTest[0].answer = this.JD[x].answer
-        this.$store.state.myTest[0].jx = this.JD[x].jx
+        this.$store.state.myTest[0].analysis = this.JD[x].jx
         this.$store.state.IFJX = true
       },
       deleteT (x) {
         let sessionId = sessionStorage.getItem('sessionId')
         let ida = this.TK[x].unique
+        let pid = this.$route.query.paperId
         let formData = new FormData()
         formData.append('sessionId', sessionId)
-        formData.append('uniqueId', ida)
-        let url = this.$store.state.urls.url + 'RemoveQueServlet'
+        formData.append('md5', ida)
+        formData.append('pid', pid)
+        let url = this.$store.state.urls.url + 'paper/deleteQue'
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -343,10 +322,12 @@
       deleteJ (x) {
         let sessionId = sessionStorage.getItem('sessionId')
         let ida = this.JD[x].unique
+        let pid = this.$route.query.paperId
         let formData = new FormData()
         formData.append('sessionId', sessionId)
-        formData.append('uniqueId', ida)
-        let url = this.$store.state.urls.url + 'RemoveQueServlet'
+        formData.append('md5', ida)
+        formData.append('pid', pid)
+        let url = this.$store.state.urls.url + 'paper/deleteQue'
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -362,16 +343,19 @@
       deleteX (x) {
         let sessionId = sessionStorage.getItem('sessionId')
         let ida = this.XZ[x].unique
+        let pid = this.$route.query.paperId
         let formData = new FormData()
         formData.append('sessionId', sessionId)
-        formData.append('uniqueId', ida)
-        let url = this.$store.state.urls.url + 'RemoveQueServlet'
+        formData.append('md5', ida)
+        formData.append('pid', pid)
+        let url = this.$store.state.urls.url + 'paper/deleteQue'
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
           },
           withCredentials: true
         }).then((response) => {
+          console.log(response)
           this.$message.success('删除成功')
           this.XZ.splice(x, 1)
         }, (response) => {
@@ -463,12 +447,53 @@
           this.$message.error('请求服务端失败')
         })
       },
-      deleteAll () {
-        this.deleteall = false
-        let url = this.$store.state.urls.url + 'CleanBasketServlet'
+      changePaper () {
+        let arr = []
+        let arrTwo = []
+        for (let i = 0; i < this.XZ.length; i++) {
+          arr.push(this.XZ[i].unique)
+          arrTwo.push(this.XZ[i].area)
+        }
+        for (let i = 0; i < this.TK.length; i++) {
+          arr.push(this.TK[i].unique)
+          arrTwo.push(this.TK[i].area)
+        }
+        for (let i = 0; i < this.JD.length; i++) {
+          arr.push(this.JD[i].unique)
+          arrTwo.push(this.JD[i].area)
+        }
         let sessionId = sessionStorage.getItem('sessionId')
+        let config = this.showSet.concat(this.showSets)
+        let pid = this.$route.query.paperId
         let formData = new FormData()
         formData.append('sessionId', sessionId)
+        formData.append('questions', arr)
+        formData.append('title', this.examName)
+        formData.append('title2', this.examSecondName)
+        formData.append('shijuanxinxi', this.examThirdName)
+        formData.append('config', config)
+        formData.append('hangju', arrTwo)
+        formData.append('pid', pid)
+        let url = this.$store.state.urls.url + 'paper/updatePaper'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response)
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      },
+      deleteAll () {
+        this.deleteall = false
+        let url = this.$store.state.urls.url + 'paper/cleanPaper'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let pid = this.$route.query.paperId
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('pid', pid)
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -489,6 +514,48 @@
       }
     },
     created () {
+      if (this.$route.query) {
+        let url = this.$store.state.urls.url + 'paper/getPaper'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('pid', this.$route.query.paperId)
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response.data)
+          this.examName = response.data.data.title
+          this.examSecondName = response.data.data.title2
+          this.examThirdName = response.data.data.shijuanxinxi
+          for (let i = 0; i < 5; i++) {
+            this.$set(this.showSet, i, response.data.data.config[i])
+            this.$set(this.showSets, i, response.data.data.config[i + 5])
+          }
+          this.XZ = []
+          this.TK = []
+          this.JD = []
+          for (let i = 0; i < response.data.data.que.length; i++) {
+            switch (response.data.data.que[i].question_kind) {
+              case '选择题':
+                this.XZ.push({que: response.data.data.que[i].question, unique: response.data.data.que[i].md5, jx: response.data.data.que[i].analysis, answer: response.data.data.que[i].answer, area: 0})
+                break
+              case '填空题':
+                this.TK.push({que: response.data.data.que[i].question, unique: response.data.data.que[i].md5, jx: response.data.data.que[i].analysis, answer: response.data.data.que[i].answer, area: 0})
+                break
+              case '解答题':
+                this.JD.push({que: response.data.data.que[i].question, unique: response.data.data.que[i].md5, jx: response.data.data.que[i].analysis, answer: response.data.data.que[i].answer, area: 0})
+                break
+              default:
+                this.push({que: response.data.data.que[i].question, unique: response.data.data.que[i].md5, jx: response.data.data.que[i].analysis, answer: response.data.data.que[i].answer, area: 0})
+            }
+          }
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      }
     },
     computed: {
       strjd: function () {
