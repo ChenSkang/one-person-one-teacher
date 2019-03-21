@@ -66,7 +66,6 @@ export default{
     // 试题篮
     Vue.prototype.goBasket = function () {
       if (sessionStorage.getItem('sessionId')) {
-        this.$store.state.history.loading = true
         let url = this.$store.state.urls.url + 'GetBasketServlet'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
@@ -77,7 +76,6 @@ export default{
           },
           withCredentials: true
         }).then((response) => {
-          this.$store.state.history.basket = false
           this.$store.state.XZ = []
           this.$store.state.TK = []
           this.$store.state.JD = []
@@ -96,12 +94,7 @@ export default{
                 this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
             }
           }
-          this.$store.state.history.loading = false
-          if (this.$route.path !== '/basket') {
-            this.$router.push('/basket')
-          }
         }, (response) => {
-          this.$store.state.history.loading = false
           this.$message.error('请求服务端失败')
         })
       } else {
@@ -116,39 +109,6 @@ export default{
       } else {
         this.$store.state.signShow = true
       }
-    }
-    // 重新推题
-    Vue.prototype.againSearch = function (msg) {
-      this.$store.state.history.loading = true
-      let formData = new FormData()
-      formData.append('md5', msg)
-      let url = this.$store.state.urls.url + 'GetSimilarServlet'
-      this.$axios.post(url, formData, {
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        withCredentials: true
-      }).then((response) => {
-        this.$store.state.cropImg = ''
-        sessionStorage.removeItem('defaultSrc')
-        this.$store.state.history.loading = false
-        sessionStorage.setItem('subj', JSON.stringify(response.data))
-        console.log(response.data)
-        this.$store.state.nowSub = JSON.parse(sessionStorage.subj)
-        document.body.scrollTop = 0
-        document.documentElement.scrollTop = 0
-        sessionStorage.setItem('title_number', 'true')
-        this.$store.state.history.nowHomePage = 1
-        this.$router.push({path: '/index', query: {servlet: 'againSearch', msg: msg}})
-      }, (response) => {
-        this.$store.state.history.loading = false
-        this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
-          confirmButtonText: '确定'
-        })
-      })
-    }
-    Vue.prototype.zsdTagsClose = function (tag) {
-      this.$store.state.zsdTreeTags.splice(this.$store.state.zsdTreeTags.indexOf(tag), 1)
     }
     Vue.prototype.getPaperList = function () {
       if (sessionStorage.getItem('sessionId')) {
@@ -220,6 +180,7 @@ export default{
         withCredentials: true
       }).then((response) => {
         console.log(response)
+        this.$store.state.paperList = response.data.data
       }, (response) => {
         this.$message.error('请求服务端失败')
       })
