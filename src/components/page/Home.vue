@@ -262,6 +262,7 @@
       add (pid) {
         let que = this.nowUnique
         this.addQue(pid, que)
+        this.paperVisible = false
       },
       newPaper () {
         this.$prompt('请输入试卷名字', '提示', {
