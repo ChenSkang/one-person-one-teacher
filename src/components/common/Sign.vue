@@ -174,12 +174,15 @@
       },
       cancelCrop () {
         this.visible = false
-        this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       },
       sureCrop () {
         this.visible = false
-        this.imgSearch()
-        /* this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}}) */
+        let num = Math.random() * 10000
+        let routeData = this.$router.resolve({
+          path: '/imgSearch',
+          query: {msg: this.$store.state.cropImg, page: 1, num: num}
+        })
+        window.open(routeData.href, '_blank')
       },
       searchMsg () {
         let num = Math.random() * 10000
