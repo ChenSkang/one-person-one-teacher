@@ -47,10 +47,10 @@
             </div>
           </div>
 
-          <div v-if="$store.state.XZ.length" class="TM">一.选择题（共{{$store.state.XZ.length}}小题）</div>
-          <draggable v-model="$store.state.XZ" @end="endMove" :options="dragOption1">
+          <div v-if="XZ.length" class="TM">一.选择题（共{{XZ.length}}小题）</div>
+          <draggable v-model="XZ" @end="endMove" :options="dragOption1">
             <transition-group tag="div" class="item-ul">
-              <div v-for="(value, index) in $store.state.XZ" class="ques" :key="value.unique">
+              <div v-for="(value, index) in XZ" class="ques" :key="value.unique">
                 <div class="up">
                   <span class="TH">{{index + 1}}.</span>
                   <span v-html="value.que"></span>
@@ -68,7 +68,7 @@
                     <div @click="deleteX(index)">删除</div>
                     <div @click="upX(index)">上移</div>
                     <div @click="downX(index)">下移</div>
-                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>        
+                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
                     <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
                     <div @click="value.area += 50">增加答题区</div>
                   </div>
@@ -77,12 +77,12 @@
             </transition-group>
           </draggable>
 
-          <div v-if="$store.state.TK.length" class="TM">{{$store.state.XZ.length ? '二' : '一'}}.填空题（共{{$store.state.TK.length}}小题）</div>
-          <draggable v-model="$store.state.TK" @end="endMove" :options="dragOption2">
+          <div v-if="TK.length" class="TM">{{XZ.length ? '二' : '一'}}.填空题（共{{TK.length}}小题）</div>
+          <draggable v-model="TK" @end="endMove" :options="dragOption2">
             <transition-group tag="div" class="item-ul">
-              <div v-for="(value, index) in $store.state.TK" class="ques" :key="value.unique">
+              <div v-for="(value, index) in TK" class="ques" :key="value.unique">
                 <div class="up">
-                  <span class="TH">{{$store.state.XZ.length + index + 1}}.</span>
+                  <span class="TH">{{XZ.length + index + 1}}.</span>
                   <span v-html="value.que"></span>
                   <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
                   <div v-if="showSet[4]">
@@ -98,7 +98,7 @@
                     <div @click="deleteT(index)">删除</div>
                     <div @click="upT(index)">上移</div>
                     <div @click="downT(index)">下移</div>
-                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>          
+                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
                     <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
                     <div @click="value.area += 50">增加答题区</div>
                   </div>
@@ -107,12 +107,12 @@
             </transition-group>
           </draggable>
 
-          <div v-if="$store.state.JD.length" class="TM">{{strjd}}.解答题（共{{$store.state.JD.length}}小题）</div>
-          <draggable v-model="$store.state.JD" @end="endMove" :options="dragOption3">
+          <div v-if="JD.length" class="TM">{{strjd}}.解答题（共{{JD.length}}小题）</div>
+          <draggable v-model="JD" @end="endMove" :options="dragOption3">
             <transition-group tag="div" class="item-ul">
-              <div v-for="(value, index) in $store.state.JD" class="ques" :key="value.unique">
+              <div v-for="(value, index) in JD" class="ques" :key="value.unique">
                 <div class="up">
-                  <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>
+                  <span class="TH">{{XZ.length + TK.length + index + 1}}.</span>
                   <span v-html="value.que"></span>
                   <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
                   <div v-if="showSet[4]">
@@ -138,7 +138,7 @@
           </draggable>
 
           <div v-if="showSets[3] || showSets[4]">
-            <div v-for="(value, index) in $store.state.XZ" class="ques" :key="value.answer">
+            <div v-for="(value, index) in XZ" class="ques" :key="value.answer">
               <div class="up">
                 <div>
                   <span>{{index + 1}}.</span>
@@ -147,19 +147,19 @@
                 </div>
               </div>
             </div>
-            <div v-for="(value, index) in $store.state.TK" class="ques" :key="value.answer">
+            <div v-for="(value, index) in TK" class="ques" :key="value.answer">
               <div class="up">
                 <div>
-                  <span>{{$store.state.XZ.length + index + 1}}.</span>
+                  <span>{{XZ.length + index + 1}}.</span>
                   <span v-if="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
                   <span v-if="showSets[3]">解答：<span v-html="value.answer"></span></span>
                 </div>
               </div>
             </div>
-            <div v-for="(value, index) in $store.state.JD" class="ques" :key="value.answer">
+            <div v-for="(value, index) in JD" class="ques" :key="value.answer">
               <div class="up">
                 <div>
-                  <span>{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>
+                  <span>{{XZ.length + TK.length + index + 1}}.</span>
                   <span v-if="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
                   <span v-if="showSets[3]">解答：<span v-html="value.answer"></span></span>
                 </div>
@@ -171,9 +171,7 @@
           <div class="right">
             <div class="right_up">
               <div class="set_title">试卷操作</div>
-              <div><el-button class="btn" @click="goIndex()" icon="el-icon-back" type="primary">继续选题</el-button></div>
               <div><el-button class="btn" @click="wordDown()" type="primary" icon="el-icon-download">下载试题</el-button></div>
-              <div><el-button class="btn" @click="saveExam()" type="primary" icon="el-icon-tickets">保存试题</el-button></div>
               <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
             </div>
             <div class="right_down">
@@ -239,6 +237,9 @@
           '答题前填写好自己的姓名、班级、学号',
           '请将答案填写到答题卡上面'
         ],
+        XZ: [],
+        TK: [],
+        JD: [],
         dragOption1: {
           animation: 120,
           scroll: true,
@@ -271,14 +272,14 @@
     methods: {
       endMove () {
         let arr = []
-        for (let i = 0; i < this.$store.state.XZ.length; i++) {
-          arr.push(this.$store.state.XZ[i].unique)
+        for (let i = 0; i < this.XZ.length; i++) {
+          arr.push(this.XZ[i].unique)
         }
-        for (let i = 0; i < this.$store.state.TK.length; i++) {
-          arr.push(this.$store.state.TK[i].unique)
+        for (let i = 0; i < this.TK.length; i++) {
+          arr.push(this.TK[i].unique)
         }
-        for (let i = 0; i < this.$store.state.JD.length; i++) {
-          arr.push(this.$store.state.JD[i].unique)
+        for (let i = 0; i < this.JD.length; i++) {
+          arr.push(this.JD[i].unique)
         }
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
@@ -297,32 +298,32 @@
         })
       },
       showJX1 (x) {
-        this.$store.state.myTest[0].que = this.$store.state.XZ[x].que
+        this.$store.state.myTest[0].que = this.XZ[x].que
         this.$store.state.myTest[0].kddp = ''
         this.$store.state.myTest[0].zsd = ''
-        this.$store.state.myTest[0].answer = this.$store.state.XZ[x].answer
-        this.$store.state.myTest[0].jx = this.$store.state.XZ[x].jx
+        this.$store.state.myTest[0].answer = this.XZ[x].answer
+        this.$store.state.myTest[0].jx = this.XZ[x].jx
         this.$store.state.IFJX = true
       },
       showJX2 (x) {
-        this.$store.state.myTest[0].que = this.$store.state.TK[x].que
+        this.$store.state.myTest[0].que = this.TK[x].que
         this.$store.state.myTest[0].kddp = ''
         this.$store.state.myTest[0].zsd = ''
-        this.$store.state.myTest[0].answer = this.$store.state.TK[x].answer
-        this.$store.state.myTest[0].jx = this.$store.state.TK[x].jx
+        this.$store.state.myTest[0].answer = this.TK[x].answer
+        this.$store.state.myTest[0].jx = this.TK[x].jx
         this.$store.state.IFJX = true
       },
       showJX3 (x) {
-        this.$store.state.myTest[0].que = this.$store.state.JD[x].que
+        this.$store.state.myTest[0].que = this.JD[x].que
         this.$store.state.myTest[0].kddp = ''
         this.$store.state.myTest[0].zsd = ''
-        this.$store.state.myTest[0].answer = this.$store.state.JD[x].answer
-        this.$store.state.myTest[0].jx = this.$store.state.JD[x].jx
+        this.$store.state.myTest[0].answer = this.JD[x].answer
+        this.$store.state.myTest[0].jx = this.JD[x].jx
         this.$store.state.IFJX = true
       },
       deleteT (x) {
         let sessionId = sessionStorage.getItem('sessionId')
-        let ida = this.$store.state.TK[x].unique
+        let ida = this.TK[x].unique
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('uniqueId', ida)
@@ -334,14 +335,14 @@
           withCredentials: true
         }).then((response) => {
           this.$message.success('删除成功')
-          this.$store.state.TK.splice(x, 1)
+          this.TK.splice(x, 1)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
       },
       deleteJ (x) {
         let sessionId = sessionStorage.getItem('sessionId')
-        let ida = this.$store.state.JD[x].unique
+        let ida = this.JD[x].unique
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('uniqueId', ida)
@@ -353,14 +354,14 @@
           withCredentials: true
         }).then((response) => {
           this.$message.success('删除成功')
-          this.$store.state.JD.splice(x, 1)
+          this.JD.splice(x, 1)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
       },
       deleteX (x) {
         let sessionId = sessionStorage.getItem('sessionId')
-        let ida = this.$store.state.XZ[x].unique
+        let ida = this.XZ[x].unique
         let formData = new FormData()
         formData.append('sessionId', sessionId)
         formData.append('uniqueId', ida)
@@ -372,126 +373,73 @@
           withCredentials: true
         }).then((response) => {
           this.$message.success('删除成功')
-          this.$store.state.XZ.splice(x, 1)
+          this.XZ.splice(x, 1)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
       },
       upT (x) {
         if (x > 0) {
-          let temp = this.$store.state.TK[x]
-          this.$store.state.TK.splice(x, 1)
-          this.$store.state.TK.splice(x - 1, 0, temp)
+          let temp = this.TK[x]
+          this.TK.splice(x, 1)
+          this.TK.splice(x - 1, 0, temp)
           this.endMove()
         }
       },
       upX (x) {
         if (x > 0) {
-          let temp = this.$store.state.XZ[x]
-          this.$store.state.XZ.splice(x, 1)
-          this.$store.state.XZ.splice(x - 1, 0, temp)
+          let temp = this.XZ[x]
+          this.XZ.splice(x, 1)
+          this.XZ.splice(x - 1, 0, temp)
           this.endMove()
         }
       },
       upJ (x) {
         if (x > 0) {
-          let temp = this.$store.state.JD[x]
-          this.$store.state.JD.splice(x, 1)
-          this.$store.state.JD.splice(x - 1, 0, temp)
+          let temp = this.JD[x]
+          this.JD.splice(x, 1)
+          this.JD.splice(x - 1, 0, temp)
           this.endMove()
         }
       },
       downT (x) {
-        if (x < this.$store.state.TK.length) {
-          let temp = this.$store.state.TK[x]
-          this.$store.state.TK.splice(x, 1)
-          this.$store.state.TK.splice(x + 1, 0, temp)
+        if (x < this.TK.length) {
+          let temp = this.TK[x]
+          this.TK.splice(x, 1)
+          this.TK.splice(x + 1, 0, temp)
           this.endMove()
         }
       },
       downX (x) {
-        if (x < this.$store.state.XZ.length) {
-          let temp = this.$store.state.XZ[x]
-          this.$store.state.XZ.splice(x, 1)
-          this.$store.state.XZ.splice(x + 1, 0, temp)
+        if (x < this.XZ.length) {
+          let temp = this.XZ[x]
+          this.XZ.splice(x, 1)
+          this.XZ.splice(x + 1, 0, temp)
           this.endMove()
         }
       },
       downJ (x) {
-        if (x < this.$store.state.JD.length) {
-          let temp = this.$store.state.JD[x]
-          this.$store.state.JD.splice(x, 1)
-          this.$store.state.JD.splice(x + 1, 0, temp)
+        if (x < this.JD.length) {
+          let temp = this.JD[x]
+          this.JD.splice(x, 1)
+          this.JD.splice(x + 1, 0, temp)
           this.endMove()
         }
-      },
-      saveExam () {
-        this.$prompt('请输入试题名字', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputPattern: /\S/,
-          inputErrorMessage: '不能为空',
-          inputValue: this.examName
-        }).then(({ value }) => {
-          let arr = []
-          let arrTwo = []
-          for (let i = 0; i < this.$store.state.XZ.length; i++) {
-            arr.push(this.$store.state.XZ[i].unique)
-            arrTwo.push(this.$store.state.XZ[i].area)
-          }
-          for (let i = 0; i < this.$store.state.TK.length; i++) {
-            arr.push(this.$store.state.TK[i].unique)
-            arrTwo.push(this.$store.state.TK[i].area)
-          }
-          for (let i = 0; i < this.$store.state.JD.length; i++) {
-            arr.push(this.$store.state.JD[i].unique)
-            arrTwo.push(this.$store.state.JD[i].area)
-          }
-          let config = this.showSet.concat(this.showSets)
-          let sessionId = sessionStorage.getItem('sessionId')
-          let formData = new FormData()
-          formData.append('sessionId', sessionId)
-          formData.append('name', value)
-          formData.append('nameTwo', this.examSecondName)
-          formData.append('shijuanxinxi', this.examThirdName)
-          formData.append('config', config)
-          formData.append('questions', arr)
-          formData.append('hangju', arrTwo)
-          let url = this.$store.state.urls.url + 'AddPaperServlet'
-          this.$axios.post(url, formData, {
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            withCredentials: true
-          }).then((response) => {
-            this.$message({
-              type: 'success',
-              message: '试卷 ' + value + ' 保存成功'
-            })
-          }, (response) => {
-            this.$message.error('请求服务端失败')
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          })
-        })
       },
       wordDown () {
         let arr = []
         let arrTwo = []
-        for (let i = 0; i < this.$store.state.XZ.length; i++) {
-          arr.push(this.$store.state.XZ[i].unique)
-          arrTwo.push(this.$store.state.XZ[i].area)
+        for (let i = 0; i < this.XZ.length; i++) {
+          arr.push(this.XZ[i].unique)
+          arrTwo.push(this.XZ[i].area)
         }
-        for (let i = 0; i < this.$store.state.TK.length; i++) {
-          arr.push(this.$store.state.TK[i].unique)
-          arrTwo.push(this.$store.state.TK[i].area)
+        for (let i = 0; i < this.TK.length; i++) {
+          arr.push(this.TK[i].unique)
+          arrTwo.push(this.TK[i].area)
         }
-        for (let i = 0; i < this.$store.state.JD.length; i++) {
-          arr.push(this.$store.state.JD[i].unique)
-          arrTwo.push(this.$store.state.JD[i].area)
+        for (let i = 0; i < this.JD.length; i++) {
+          arr.push(this.JD[i].unique)
+          arrTwo.push(this.JD[i].area)
         }
         let sessionId = sessionStorage.getItem('sessionId')
         let config = this.showSet.concat(this.showSets)
@@ -527,9 +475,9 @@
           },
           withCredentials: true
         }).then((response) => {
-          this.$store.state.XZ = []
-          this.$store.state.TK = []
-          this.$store.state.JD = []
+          this.XZ = []
+          this.TK = []
+          this.JD = []
           this.$notify({
             title: '提示',
             message: '清空试题篮成功',
@@ -538,54 +486,15 @@
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
-      },
-      goIndex () {
-        this.$router.push('/index')
-      },
-      creat () {
-        if (this.$store.state.history.basket) {
-          let url = this.$store.state.urls.url + 'GetBasketServlet'
-          let sessionId = sessionStorage.getItem('sessionId')
-          let formData = new FormData()
-          formData.append('sessionId', sessionId)
-          this.$axios.post(url, formData, {
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            withCredentials: true
-          }).then((response) => {
-            this.$store.state.XZ = []
-            this.$store.state.TK = []
-            this.$store.state.JD = []
-            for (let i = 0; i < response.data.length; i++) {
-              switch (response.data[i].kind) {
-                case '选择题':
-                  this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                case '填空题':
-                  this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                case '解答题':
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                  break
-                default:
-                  this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-              }
-            }
-          }, (response) => {
-            this.$message.error('请求服务端失败')
-          })
-        }
       }
     },
     created () {
-      this.creat()
     },
     computed: {
       strjd: function () {
-        if (this.$store.state.XZ.length && this.$store.state.TK.length) {
+        if (this.XZ.length && this.TK.length) {
           return '三'
-        } else if (this.$store.state.XZ.length || this.$store.state.TK.length) {
+        } else if (this.XZ.length || this.TK.length) {
           return '二'
         } else {
           return '一'
@@ -595,9 +504,9 @@
         let str = {
           columns: ['题型', '题目数量'],
           rows: [
-            { '题型': '选择题', '题目数量': this.$store.state.XZ.length },
-            { '题型': '填空题', '题目数量': this.$store.state.TK.length },
-            { '题型': '解答题', '题目数量': this.$store.state.JD.length }
+            { '题型': '选择题', '题目数量': this.XZ.length },
+            { '题型': '填空题', '题目数量': this.TK.length },
+            { '题型': '解答题', '题目数量': this.JD.length }
           ]
         }
         return str
