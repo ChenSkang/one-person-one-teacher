@@ -61,7 +61,6 @@
           query: { title: title, paperId: pid }
         })
         window.open(routeData.href, '_blank')
-        this.getPaper(pid)
       },
       deletePapert (val) {
         this.deletePaper(val)
@@ -95,7 +94,7 @@
     cursor: pointer;
     box-sizing: border-box;
     text-align: center;
-    border: 1px solid #fff;
+    border: 1px solid #fbfbfb;
   }
   .table-delete{
   }
@@ -122,7 +121,7 @@
     bottom: 0;
     width: 100%;
     height: 40px;
-    background-color: #fff;
+    background-color: #fbfbfb;
     display: flex;
     flex-direction: row;
   }
@@ -135,8 +134,8 @@
     height: 28px;
     line-height: 28px;
     font-size: 14px;
-    color: #fff;
-    border: 1px solid #fff;
+    color: #fbfbfb;
+    border: 1px solid #fbfbfb;
     border-radius: 3px;
     margin: 0 auto;
   }
