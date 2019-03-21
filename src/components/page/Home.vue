@@ -297,9 +297,6 @@
       nowQuery: function (val) {
         if (this.$route.path === '/index') {
           switch (val.servlet) {
-            case 'againSearch':
-              this.againSearch(val.msg)
-              break
             case 'wordSearch':
               this.$store.state.input_message = val.msg
               let page = parseInt(val.page)
@@ -322,9 +319,6 @@
       this.minHeight = document.documentElement.clientHeight - 251
       this.$store.state.cropImg = sessionStorage.getItem('defaultSrc')
       switch (this.$route.query.servlet) {
-        case 'againSearch':
-          this.againSearch(this.$route.query.msg)
-          break
         case 'wordSearch':
           this.$store.state.input_message = this.$route.query.msg
           let page = parseInt(this.$route.query.page)
