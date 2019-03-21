@@ -30,7 +30,10 @@
     },
     methods: {
       goPapers () {
-        this.getPaperList()
+        let routeData = this.$router.resolve({
+          path: '/testPapers'
+        })
+        window.open(routeData.href, '_blank')
       }
     },
     created () {
