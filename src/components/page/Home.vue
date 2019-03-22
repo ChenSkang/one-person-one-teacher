@@ -98,8 +98,8 @@
                   <div class="low">
                     <div><el-button type="primary" size="mini" @click="showJX(index)">查看解析</el-button></div>
                     <div><el-button type="primary" @click="addPaper(value.md5)" size="mini">添加试题</el-button></div>
-                    <div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</el-button></div>
-                  </div>
+                    <!--<div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'wordSearch', page: 1, msg:value.question}})">相似推荐</el-button></div>
+              --></div>
                 </li>
               </ul>
               <el-pagination
@@ -210,7 +210,12 @@
       },
       sureCrop () {
         this.visible = false
-        this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}})
+        let num = Math.random() * 10000
+        let routeData = this.$router.resolve({
+          path: '/imgSearch',
+          query: {msg: this.$store.state.cropImg, page: 1, num: num}
+        })
+        window.open(routeData.href, '_blank')
       },
       searchMsg () {
         let num = Math.random() * 10000
