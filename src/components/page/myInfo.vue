@@ -2,9 +2,23 @@
   <div>
     <my-head></my-head>
     <my-space></my-space>
+    <el-dialog :visible.sync="visible" width="50%" center :append-to-body="true">
+      <vue-cropper ref='cropper'
+                   :src="imageSrc"
+                   :ready="cropImage"
+                   :zoom="cropImage"
+                   :cropmove="cropImage"
+                   :autoCropArea = "1"
+                   style="width:100%;height:100%;max-height: 60vh">
+      </vue-cropper>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="sureCrop">确 定</el-button>
+        <el-button @click="cancelCrop" type="warning">取 消</el-button>
+      </span>
+    </el-dialog>
     <div class="main" :style="{minHeight: minHeight + 'px'}">
       <div class="title">
-        <div class="title-info"><p>个人中心</p></div>
+        <div class="title-info">个人中心</div>
       </div>
       <div class="changeInfo">
         <div class="left">
@@ -19,6 +33,7 @@
             </div>
             <div class="change-img">
               更换头像
+              <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage"/>
             </div>
             <div class="three-info">
               <el-form label-position="right" label-width="80px" :model="threeInfo">
@@ -46,7 +61,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item>
-                  <div class="change-btn">保存</div>
+                  <div class="change-btn" @click="changeYourInfo()">保存</div>
                 </el-form-item>
               </el-form>
             </div>
@@ -66,7 +81,7 @@
                 </el-form-item>
                 <el-form-item>
                   <el-button @click="passReset('passForm')">重置</el-button>
-                  <el-button type="primary" @click="passSure('passForm')">提交</el-button>
+                  <el-button type="primary" @click="changePass('passForm')">提交</el-button>
                 </el-form-item>
               </el-form>
             </div>
@@ -74,27 +89,47 @@
 
           <div class="your-info" v-if="nowStep == 2">
             <div class="three-info">
-              <el-form label-position="right" label-width="80px" :model="threeInfo">
+              <el-form label-position="right" label-width="80px">
                 <el-form-item label="当前手机">
-                  {{18831299176}}
+                  {{phoneNow}}
                 </el-form-item>
                 <el-form-item label="验证信息">
                   <el-col :span="11">
                     <el-input placeholder="手机验证码" v-model="code"></el-input>
                   </el-col>
                   <el-col :offset="1" :span="12">
-                    <div class="btn-primary get-btn" @click="getCode()">点击获取验证码</div>
+                    <div class="btn-primary get-btn" @click="getCode(phoneNow)" v-if="total === '点击获取验证码'">{{total}}</div>
+                    <div class="btn-primary get-btn" v-else>{{total}}</div>
                   </el-col>
                 </el-form-item>
-                <el-form-item label="新的手机">
-                  <el-input v-model="phone" placeholder="手机号" value="number" @keyup.native.enter="myPhone()" clearable></el-input>
-                </el-form-item>
                 <el-form-item>
-                  <div class="change-btn">确定</div>
+                  <div class="change-btn" @click="checkNowPhone()">下一步</div>
                 </el-form-item>
               </el-form>
             </div>
           </div>
+
+          <div class="your-info" v-if="nowStep == 3">
+            <div class="three-info">
+              <el-form label-position="right" label-width="80px">
+                <el-form-item label="新的手机">
+                  <el-input v-model="phone" placeholder="手机号" value="number" @keyup.native.enter="myPhone()" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="验证信息">
+                  <el-col :span="11">
+                    <el-input placeholder="手机验证码" v-model="code"></el-input>
+                  </el-col>
+                  <el-col :offset="1" :span="12">
+                    <div class="btn-primary get-btn" @click="getCode(phone)">{{total}}</div>
+                  </el-col>
+                </el-form-item>
+                <el-form-item>
+                  <div class="change-btn" @click="phoneChanged()">确定</div>
+                </el-form-item>
+              </el-form>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -135,9 +170,14 @@
         }
       }
       return {
+        visible: false,
+        phoneNow: '',
+        imageSrc: '',
         threeInfo: {
           name: ''
         },
+        idSession: '',
+        cropImg: '',
         classValue: '',
         teachValue: '',
         theClasses: [{
@@ -226,30 +266,50 @@
             { required: true, validator: validatePass2, trigger: 'blur' }
           ]
         },
-        getCode: true,
         totalTime: 60,
-        total: ''
+        total: '点击获取验证码'
       }
     },
     methods: {
-      myPhone () {
-        if (this.phone.length < 11) {
-          this.$alert('请输入正确的手机号', '手机号错误', {
-            confirmButtonText: '确定'
-          })
-        } else {
-          this.$router.push({path: '/safe', query: {now: 'identity', step: 1}})
+      setImage (e) {
+        const file = e.target.files[0]
+        if (!file.type.includes('image/')) {
+          return
         }
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          this.visible = true
+          this.imageSrc = event.target.result
+          this.$refs.cropper && this.$refs.cropper.replace(event.target.result)
+          e.target.value = ''
+        }
+        reader.readAsDataURL(file)
       },
-      prove () {
-        if (this.phone.length < 11) {
-          this.$message('请输入正确的手机号')
-          this.$router.push({path: '/safe', query: {now: 'phone', step: 0}})
-        } else {
-          let url = this.$store.state.urls.url + '/user/sendCode'
-          let fd = new FormData()
-          fd.append('phone', this.phone)
-          fd.append('way', 1)
+      cropImage () {
+        this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL()
+      },
+      cancelCrop () {
+        this.visible = false
+        this.cropImg = this.$store.state.imgSrc
+      },
+      sureCrop () {
+        this.visible = false
+        let sessionId = sessionStorage.getItem('sessionId')
+        if (sessionId) {
+          const page = this.cropImg
+          let arr = page.split(',')
+          let mime = arr[0].match(/:(.*?);/)[1]
+          let bstr = atob(arr[1])
+          let n = bstr.length
+          let u8arr = new Uint8Array(n)
+          while (n--) {
+            u8arr[n] = bstr.charCodeAt(n)
+          }
+          const obj = new Blob([u8arr], {type: mime})
+          const fd = new FormData()
+          fd.append('image', obj, 'image.png')
+          fd.append('sessionId', sessionId)
+          let url = this.$store.state.urls.url + 'user/changeHead'
           this.$axios.post(url, fd, {
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -257,68 +317,67 @@
             withCredentials: true
           }).then((response) => {
             console.log(response)
-            if (response.data.status === 0) {
-              this.$message.error('当前用户不存在')
-            } else {
-              this.$message.success('验证码已发送')
-              this.getCode = false
-              this.timeTo()
-              sessionStorage.setItem('session', response.data.sessionId)
-            }
+            sessionStorage.setItem('headImg', response.data.data)
+            this.$store.state.imgSrc = response.data.data
           }, (response) => {
             this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
               confirmButtonText: '确定'
             })
           })
+        } else {
+          this.$message('请重新登录')
         }
       },
-      proveOver () {
-        if (this.code.length < 4) {
-          this.$message('请输入正确的验证码')
-        } else {
-          let url = this.$store.state.urls.url + '/user/checkCode'
-          let session = sessionStorage.getItem('session')
-          let fd = new FormData()
-          fd.append('code', this.code)
-          fd.append('sessionId', session)
+      changeYourInfo () {
+        let sessionId = sessionStorage.getItem('sessionId')
+        if (sessionId) {
+          const fd = new FormData()
+          fd.append('jiaocai', this.teachValue)
+          fd.append('nianji', this.classValue)
+          fd.append('username', this.threeInfo.name)
+          fd.append('sessionId', sessionId)
+          let url = this.$store.state.urls.url + 'user/updateSelf'
           this.$axios.post(url, fd, {
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
             },
             withCredentials: true
           }).then((response) => {
-            if (response.data.msg === '成功') {
-              console.log(response)
-              this.$router.push({path: '/safe', query: {now: 'pass_input', step: 2}})
-            } else {
-              console.log(response)
-              this.$message.error('请输入正确的验证码')
-            }
+            console.log(response)
+            sessionStorage.setItem('nowUser', response.data.data.username)
+            sessionStorage.setItem('jiaocai', response.data.data.jiaocai)
+            sessionStorage.setItem('nianji', response.data.data.nianji)
+            this.$store.state.userNow = response.data.data.username
+            this.$store.state.jiaocai = response.data.data.jiaocai
+            this.$store.state.nianji = response.data.data.nianji
           }, (response) => {
             this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
               confirmButtonText: '确定'
             })
           })
+        } else {
+          this.$message('请重新登录')
         }
       },
-      passSure (formName) {
+      changePass (formName) {
+        let sessionId = sessionStorage.getItem('sessionId')
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            let url = this.$store.state.urls.url + '/user/reset'
+            let url = this.$store.state.urls.url + '/user/checkOldPass'
             let fd = new FormData()
             fd.append('password', this.passForm.oldpass)
-            fd.append('password', this.passForm.pass)
+            fd.append('sessionId', sessionId)
             this.$axios.post(url, fd, {
               headers: {
                 'Content-Type': 'application/json;charset=utf-8'
               },
               withCredentials: true
             }).then((response) => {
-              if (response.data.status === 0) {
-                this.$message.error('超时，请重试')
-                this.$router.push({path: '/safe', query: {now: 'phone', step: 0}})
+              console.log(response)
+              if (response.data.msg === '旧密码验证正确') {
+                this.changePassOver()
               } else {
-                this.$router.push({path: '/safe', query: {now: 'finish', step: 4}})
+                this.$message.error('原密码验证失败')
               }
             }, (response) => {
               this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
@@ -331,13 +390,127 @@
           }
         })
       },
+      changePassOver () {
+        let sessionId = sessionStorage.getItem('sessionId')
+        let url = this.$store.state.urls.url + '/user/resetPass'
+        let fd = new FormData()
+        fd.append('password', this.passForm.pass)
+        fd.append('sessionId', sessionId)
+        this.$axios.post(url, fd, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response)
+          this.$message.success('修改密码成功')
+          this.passReset('passForm')
+        }, (response) => {
+          this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
+            confirmButtonText: '确定'
+          })
+        })
+      },
+      getCode (num) {
+        let url = this.$store.state.urls.url + 'user/sendCode'
+        let fd = new FormData()
+        fd.append('phone', num)
+        fd.append('way', 1)
+        this.$axios.post(url, fd, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response)
+          this.idSession = response.data.data.sessionId
+          this.timeTo()
+        }, (response) => {
+          this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
+            confirmButtonText: '确定'
+          })
+        })
+      },
+      checkNowPhone () {
+        let url = this.$store.state.urls.url + 'user/checkCode'
+        let fd = new FormData()
+        fd.append('sessionId', this.idSession)
+        fd.append('code', this.code)
+        this.$axios.post(url, fd, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          if (response.data.msg === '成功') {
+            this.code = ''
+            this.total = '点击获取验证码'
+            this.totalTime = -1
+            this.$router.push({path: '/userInfo', query: {info: '3'}})
+          } else {
+            this.$message.error('验证出错')
+          }
+          console.log(response)
+        }, (response) => {
+          this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
+            confirmButtonText: '确定'
+          })
+        })
+      },
+      phoneChanged () {
+        let url = this.$store.state.urls.url + 'user/checkCode'
+        let fd = new FormData()
+        fd.append('sessionId', this.idSession)
+        fd.append('code', this.code)
+        this.$axios.post(url, fd, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          if (response.data.msg === '成功') {
+            this.code = ''
+            this.total = '点击获取验证码'
+            this.totalTime = -1
+            this.changePhone()
+          } else {
+            this.$message.error('验证出错')
+          }
+          console.log(response)
+        }, (response) => {
+          this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
+            confirmButtonText: '确定'
+          })
+        })
+      },
+      changePhone () {
+        let sessionId = sessionStorage.getItem('sessionId')
+        let url = this.$store.state.urls.url + 'user/resetPhone'
+        let fd = new FormData()
+        fd.append('sessionId', sessionId)
+        fd.append('phone', this.phone)
+        this.$axios.post(url, fd, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response)
+          if (response.data.msg === '成功') {
+            this.$message.success('更改成功')
+            this.phone = ''
+            this.$router.push({path: '/userInfo', query: {info: '1'}})
+          } else {
+            this.$message.error('验证出错')
+          }
+        }, (response) => {
+          this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
+            confirmButtonText: '确定'
+          })
+        })
+      },
       passReset (formName) {
         this.$refs[formName].resetFields()
-      },
-      passFinishi () {
-        this.$router.push('/')
-        sessionStorage.removeItem('session')
-        this.$store.state.signShow = true
       },
       timeTo () {
         this.total = this.totalTime + 's后重新获取'
@@ -346,7 +519,7 @@
           this.total = this.totalTime + 's后重新获取'
           if (this.totalTime <= 0) {
             window.clearInterval(clock)
-            this.getCode = true
+            this.total = '点击获取验证码'
           }
         }, 1000)
       }
@@ -364,6 +537,10 @@
     },
     created () {
       this.minHeight = document.documentElement.clientHeight - 100
+      this.threeInfo.name = this.$store.state.userNow
+      this.classValue = this.$store.state.nianji
+      this.teachValue = this.$store.state.jiaocai
+      this.phoneNow = this.$store.state.phone
     }
   }
 </script>
@@ -379,18 +556,20 @@
     position: absolute;
     left: 10%;
     width: 80%;
-    height: 150px;
-    background-color: blue;
+    height: 120px;
   }
   .title-info{
-    font-size: 20px;
+    margin-top: 50px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
     color: #303133;
-    z-index: 999;
+    border-bottom: 1px solid #DCDFE6;
   }
   .changeInfo{
     position: absolute;
     left: 10%;
-    top: 150px;
+    top: 120px;
     width: 80%;
     height: 420px;
     display: flex;
