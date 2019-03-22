@@ -15,6 +15,9 @@ export default new Vuex.Store({
     nowSub: [],
     nowSubs: '',
     userNow: '',
+    jiaocai: '',
+    nianji: '',
+    phone: '',
     imgSrc: '', // 头像
     cropImg: '', // 裁切的图片
     TK: [], // 试题篮填空题
