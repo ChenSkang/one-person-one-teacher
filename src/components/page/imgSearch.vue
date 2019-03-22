@@ -96,8 +96,8 @@
                   <div class="low">
                     <div><el-button type="primary" size="mini" @click="showJX(index)">查看解析</el-button></div>
                     <div><el-button type="primary" @click="addPaper(value.md5)" size="mini">添加试题</el-button></div>
-                    <div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</el-button></div>
-                  </div>
+                    <!--<div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'wordSearch', page: 1, msg:value.question}})">相似推荐</el-button></div>
+                  --></div>
                 </li>
               </ul>
               <el-pagination
