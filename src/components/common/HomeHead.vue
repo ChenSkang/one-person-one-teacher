@@ -10,10 +10,10 @@
       <div class="name" v-if="$store.state.userNow">{{$store.state.userNow}}</div>
       <div class="name" v-else><div @click="signShows()">登录</div></div>
       <div class="port">
-        <img :src="imgSrc" alt="">
+        <img :src="$store.state.imgSrc" alt="">
       </div>
       <div v-if="$store.state.userNow" class="user-info">
-        <div class="info">个人中心</div>
+        <div class="info" @click="goYourSpace()">个人中心</div>
         <a href="http://support.qq.com/product/38530" target="_blank" style="color: #333"><div class="info">用户反馈</div></a>
         <div class="info" @click="signOut()">退出登录</div>
       </div>
@@ -25,13 +25,19 @@
   export default {
     data () {
       return {
-        imgSrc: require('../../img/user.png')
       }
     },
     methods: {
       goPapers () {
         let routeData = this.$router.resolve({
           path: '/testPapers'
+        })
+        window.open(routeData.href, '_blank')
+      },
+      goYourSpace () {
+        let routeData = this.$router.resolve({
+          path: '/userInfo',
+          query: { info: '0' }
         })
         window.open(routeData.href, '_blank')
       }
