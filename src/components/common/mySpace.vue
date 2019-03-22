@@ -358,6 +358,7 @@
             sessionStorage.setItem('sessionId', response.data.data.sessionId)
             sessionStorage.setItem('nowUser', response.data.data.username)
             this.$store.state.userNow = response.data.data.username
+            this.$store.state.imgSrc = response.data.data.head
           } else {
             this.$alert('自动登录失效', '提示', {
               confirmButtonText: '确定',
