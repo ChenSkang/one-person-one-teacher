@@ -29,20 +29,35 @@
         </el-form-item>
         <el-form-item>
           <el-col :span="11">
+            年级：
+            <el-select v-model="classValue" placeholder="八年级">
+              <el-option
+                v-for="item in theClasses"
+                :key="item.value"
+                :label="item.value"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col :offset="1" :span="12">
+            教材版本：
+            <el-select v-model="teachValue" placeholder="人教版">
+              <el-option
+                v-for="item in theTeach"
+                :key="item.value"
+                :label="item.value"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-form-item>
+        <el-form-item>
+          <el-col :span="11">
             <el-input placeholder="手机验证码" v-model="code"></el-input>
           </el-col>
           <el-col :offset="1" :span="12">
             <div class="btn-primary get-btn" @click="getCode()">点击获取手机验证码</div>
           </el-col>
-        </el-form-item>
-        <el-form-item>
-          选择年级：
-          <el-radio-group v-model="radio">
-            <el-radio label="七年级"></el-radio>
-            <el-radio label="八年级"></el-radio>
-            <el-radio label="九年级"></el-radio>
-            <el-radio label="全部"></el-radio>
-          </el-radio-group>
         </el-form-item>
         <el-form-item>
           <div class="btn-primary register-btn" @click="prove()">注册</div>
@@ -112,6 +127,74 @@
         }
       }
       return {
+        classValue: '',
+        teachValue: '',
+        theClasses: [{
+          value: '七年级上'
+        }, {
+          value: '七年级下'
+        }, {
+          value: '八年级上'
+        }, {
+          value: '八年级下'
+        }, {
+          value: '九年级上'
+        }, {
+          value: '九年级下'
+        }],
+        theTeach: [{
+          value: '人教新版'
+        }, {
+          value: '北师大新版'
+        }, {
+          value: '华师大新版'
+        }, {
+          value: '苏科新版'
+        }, {
+          value: '湘教新版'
+        }, {
+          value: '青鸟新版'
+        }, {
+          value: '浙教新版'
+        }, {
+          value: '冀教新版'
+        }, {
+          value: '沪科新版'
+        }, {
+          value: '鲁教五四新版'
+        }, {
+          value: '北京课改新版'
+        }, {
+          value: '沪教新版'
+        }, {
+          value: '人教五四新版'
+        }, {
+          value: '人教版'
+        }, {
+          value: '北师大版'
+        }, {
+          value: '华师大版'
+        }, {
+          value: '苏科版'
+        }, {
+          value: '湘教版'
+        }, {
+          value: '青鸟版'
+        }, {
+          value: '浙教版'
+        }, {
+          value: '冀教版'
+        }, {
+          value: '沪科版'
+        }, {
+          value: '鲁教五四版'
+        }, {
+          value: '北京课改版'
+        }, {
+          value: '沪教版'
+        }, {
+          value: '人教五四版'
+        }],
         code: '',
         sessionID: '',
         msg: '用户名密码登录',
@@ -175,7 +258,15 @@
               if (response.data.data) {
                 sessionStorage.setItem('sessionId', response.data.data.sessionId)
                 sessionStorage.setItem('nowUser', response.data.data.username)
+                sessionStorage.setItem('jiaocai', response.data.data.jiaocai)
+                sessionStorage.setItem('nianji', response.data.data.nianji)
+                sessionStorage.setItem('phone', response.data.data.phone)
+                sessionStorage.setItem('headImg', response.data.data.head)
                 this.$store.state.userNow = response.data.data.username
+                this.$store.state.imgSrc = response.data.data.head
+                this.$store.state.jiaocai = response.data.data.jiaocai
+                this.$store.state.nianji = response.data.data.nianji
+                this.$store.state.phone = response.data.data.phone
                 if (this.checked === true) {
                   this.clearCookie()
                   this.setCookie(name, pass, 7)
@@ -291,8 +382,8 @@
             formData.append('password', this.registerForm.pass)
             formData.append('phone', this.registerForm.tel)
             formData.append('sessionId', this.sessionID)
-            formData.append('nianji', this.radio)
-            formData.append('jiaocai', this.radio)
+            formData.append('nianji', this.classValue)
+            formData.append('jiaocai', this.teachValue)
             let url = this.$store.state.urls.url + 'user/register'
             this.$axios.post(url, formData, {
               headers: {
@@ -357,8 +448,15 @@
           if (response.data.data.sessionId) {
             sessionStorage.setItem('sessionId', response.data.data.sessionId)
             sessionStorage.setItem('nowUser', response.data.data.username)
+            sessionStorage.setItem('jiaocai', response.data.data.jiaocai)
+            sessionStorage.setItem('nianji', response.data.data.nianji)
+            sessionStorage.setItem('phone', response.data.data.phone)
+            sessionStorage.setItem('headImg', response.data.data.head)
             this.$store.state.userNow = response.data.data.username
             this.$store.state.imgSrc = response.data.data.head
+            this.$store.state.jiaocai = response.data.data.jiaocai
+            this.$store.state.nianji = response.data.data.nianji
+            this.$store.state.phone = response.data.data.phone
           } else {
             this.$alert('自动登录失效', '提示', {
               confirmButtonText: '确定',
