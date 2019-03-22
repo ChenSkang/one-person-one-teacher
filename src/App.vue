@@ -17,6 +17,10 @@
     mounted () {
       if (sessionStorage.getItem('sessionId')) {
         this.$store.state.userNow = sessionStorage.getItem('nowUser')
+        this.$store.state.imgSrc = sessionStorage.getItem('headImg')
+        this.$store.state.jiaocai = sessionStorage.getItem('jiaocai')
+        this.$store.state.nianji = sessionStorage.getItem('nianji')
+        this.$store.state.phone = sessionStorage.getItem('phone')
       }
     }
   }
