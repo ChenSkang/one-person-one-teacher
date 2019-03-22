@@ -66,6 +66,11 @@ export default new Router({
       path: '/imgSearch',
       name: 'ImgSearch',
       component: resolve => require(['@/components/page/imgSearch'], resolve)
+    },
+    {
+      path: '/userInfo',
+      name: 'UserInfo',
+      component: resolve => require(['@/components/page/myInfo'], resolve)
     }
   ]
 })
