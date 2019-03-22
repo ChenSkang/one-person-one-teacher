@@ -56,11 +56,7 @@
         })
       },
       getPapert (pid, title) {
-        let routeData = this.$router.resolve({
-          path: '/basket',
-          query: { title: title, paperId: pid }
-        })
-        window.open(routeData.href, '_blank')
+        this.$router.push({path: '/basket', query: { title: title, paperId: pid }})
       },
       deletePapert (val) {
         this.deletePaper(val)

@@ -35,11 +35,7 @@
         window.open(routeData.href, '_blank')
       },
       goYourSpace () {
-        let routeData = this.$router.resolve({
-          path: '/userInfo',
-          query: { info: '0' }
-        })
-        window.open(routeData.href, '_blank')
+        this.$router.push({path: '/userInfo', query: { info: '0' }})
       }
     },
     created () {
