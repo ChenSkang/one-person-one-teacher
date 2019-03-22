@@ -153,7 +153,7 @@
         if (this.code.length < 4) {
           this.$message('请输入正确的验证码')
         } else {
-          let url = this.$store.state.urls.url + '/user/checkCode'
+          let url = this.$store.state.urls.url + 'user/checkCode'
           let session = sessionStorage.getItem('session')
           let fd = new FormData()
           fd.append('code', this.code)
