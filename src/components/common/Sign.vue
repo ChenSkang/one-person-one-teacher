@@ -188,7 +188,15 @@
         let num = Math.random() * 10000
         let routeData = this.$router.resolve({
           path: '/index',
-          query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, num: num}
+          query: {
+            servlet: 'wordSearch',
+            msg: this.$store.state.input_message,
+            page: 1,
+            kind: '全部',
+            nianji: this.$store.state.nianji,
+            jiaocai: this.$store.state.jiaocai,
+            num: num
+          }
         })
         window.open(routeData.href, '_blank')
       },
@@ -196,7 +204,15 @@
         let num = Math.random() * 10000
         let routeData = this.$router.resolve({
           path: '/index',
-          query: {servlet: 'wordSearch', msg: hot, page: 1, num: num}
+          query: {
+            servlet: 'wordSearch',
+            msg: hot,
+            page: 1,
+            kind: '全部',
+            nianji: this.$store.state.nianji,
+            jiaocai: this.$store.state.jiaocai,
+            num: num
+          }
         })
         window.open(routeData.href, '_blank')
       },
