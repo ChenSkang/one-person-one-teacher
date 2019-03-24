@@ -50,7 +50,6 @@ export default{
           withCredentials: true
         }).then((response) => {
           console.log(response)
-          this.$store.state.history.find = false
           this.$store.state.history.searched = response.data.data
           if (this.$route.path !== '/searched') {
             this.$router.push('/searched')
@@ -123,6 +122,10 @@ export default{
           withCredentials: true
         }).then((response) => {
           console.log(response.data)
+          if (response.data.msg === '登陆超时，请重新登陆') {
+            this.$message.error('登录超时')
+            this.signOut()
+          }
           this.$store.state.paperList = response.data.data
         }, (response) => {
           this.$message.error('请求服务端失败')
@@ -133,22 +136,26 @@ export default{
       }
     }
     Vue.prototype.createPaper = function (value) {
-      let url = this.$store.state.urls.url + 'paper/create'
-      let sessionId = sessionStorage.getItem('sessionId')
-      let formData = new FormData()
-      formData.append('sessionId', sessionId)
-      formData.append('title', value)
-      this.$axios.post(url, formData, {
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        withCredentials: true
-      }).then((response) => {
-        console.log(response.data)
-        this.$store.state.paperList = response.data.data
-      }, (response) => {
-        this.$message.error('请求服务端失败')
-      })
+      if (this.$store.state.paperList.length >= 15) {
+        this.$message('最多创建十五张试卷')
+      } else {
+        let url = this.$store.state.urls.url + 'paper/create'
+        let sessionId = sessionStorage.getItem('sessionId')
+        let formData = new FormData()
+        formData.append('sessionId', sessionId)
+        formData.append('title', value)
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response.data)
+          this.$store.state.paperList = response.data.data
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+      }
     }
     Vue.prototype.getPaper = function (x) {
       let url = this.$store.state.urls.url + 'paper/getPaper'
