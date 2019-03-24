@@ -4,6 +4,10 @@
     <mySpace></mySpace>
     <div>
       <div class="main" :style="{minHeight: minHeight + 'px'}">
+        <div class="table-delete" @click="newPaper()">
+          <img src="../../img/newpaper.png" alt="">
+          <div class="table-title">创建试卷</div>
+        </div>
         <div class="papers" v-if="$store.state.paperList.length">
           <div class="papers-col" v-for="(value,index) in $store.state.paperList">
             <div class="file">
@@ -17,7 +21,6 @@
           </div>
         </div>
       </div>
-      <div class="table-delete"><el-button size="small" type="primary" @click="newPaper()">创建新的试卷</el-button></div>
     </div>
     <myFoot></myFoot>
   </div>
@@ -63,7 +66,7 @@
       }
     },
     created () {
-      this.minHeight = document.documentElement.clientHeight - 161
+      this.minHeight = document.documentElement.clientHeight - 51
       this.getPaperList()
     }
   }
@@ -74,29 +77,36 @@
     width: 100%;
     position: relative;
     top: 50px;
-    margin-bottom: 60px;
     background-color: #fbfbfb
   }
   .papers{
     width: 90%;
-    margin-left: 8%;
+    margin-left: 10%;
   }
   .papers-col{
     position: relative;
     float: left;
-    width: 15%;
-    margin-right: 4%;
-    margin-top: 25px;
+    width: 14%;
+    margin-right: 5%;
+    margin-top: 15px;
     cursor: pointer;
     box-sizing: border-box;
     text-align: center;
     border: 1px solid #fbfbfb;
   }
   .table-delete{
+    position: absolute;
+    right: 4%;
+    top: 30px;
+    cursor: pointer;
+  }
+  .table-title{
+    font-size: 14px;
+    color: #409EFF;
   }
   .file{
     width: 80%;
-    height: 100px;
+    height: 95px;
     margin: 20px 10% 80px 10%;
     background-color: #fff;
     box-sizing: border-box;
@@ -136,7 +146,7 @@
     margin: 0 auto;
   }
   .papers-col:hover{
-    border: 1px solid #2d8cf0;
+    border: 1px solid #C0C4CC;
   }
   .papers-col:hover .paper-foot{
     background-color: #2d8cf0;
