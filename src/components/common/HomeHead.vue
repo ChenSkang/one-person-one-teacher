@@ -106,6 +106,7 @@
     width: 28px;
     height: 28px;
     cursor: pointer;
+    border-radius: 50%;
   }
   .user:hover .user-info{
     display: block;
