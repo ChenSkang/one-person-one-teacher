@@ -4,31 +4,38 @@
 export default {
   install (Vue, options) {
     // 文字搜索
-    Vue.prototype.searchQuestion = function (msg, page) {
-      this.$store.state.history.loadingTwo = true
-      let sessionId = sessionStorage.getItem('sessionId') ? sessionStorage.getItem('sessionId') : ''
-      let formData = new FormData()
-      formData.append('question', msg)
-      formData.append('page', page)
-      formData.append('sessionId', sessionId)
-      let url = this.$store.state.urls.url + 'search/wordSearch'
-      this.$axios.post(url, formData, {
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        withCredentials: true
-      }).then((response) => {
-        console.log(response)
-        this.$store.state.nowSub = response.data.data
-        this.$store.state.nowSubs = response.data.msg
-        this.$store.state.history.loadingTwo = false
-        this.$store.state.history.nowHomePage = page
-      }, (response) => {
-        this.$store.state.history.loadingTwo = false
-        this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
-          confirmButtonText: '确定'
+    Vue.prototype.searchQuestion = function (msg, page, kind, nianji, jiaocai) {
+      if (msg.length === 0) {
+        this.$message.error('搜索内容不能为空')
+      } else {
+        this.$store.state.history.loadingTwo = true
+        let sessionId = sessionStorage.getItem('sessionId') ? sessionStorage.getItem('sessionId') : ''
+        let formData = new FormData()
+        formData.append('question', msg)
+        formData.append('page', page)
+        formData.append('sessionId', sessionId)
+        formData.append('kind', kind)
+        formData.append('nianji', nianji)
+        formData.append('jiaocai', jiaocai)
+        let url = this.$store.state.urls.url + 'search/wordSearch'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response)
+          this.$store.state.nowSub = response.data.data
+          this.$store.state.nowSubs = response.data.msg
+          this.$store.state.history.loadingTwo = false
+          this.$store.state.history.nowHomePage = page
+        }, (response) => {
+          this.$store.state.history.loadingTwo = false
+          this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
+            confirmButtonText: '确定'
+          })
         })
-      })
+      }
     }
     // 图片搜索
     Vue.prototype.imgSearch = function () {
@@ -61,6 +68,32 @@ export default {
           confirmButtonText: '确定'
         })
       })
+    }
+    // 以题推题
+    Vue.prototype.searchSimilar = function (msg) {
+      if (msg.length === 0) {
+        this.$message.error('搜索内容不能为空')
+      } else {
+        this.$store.state.history.loadingTwo = true
+        let sessionId = sessionStorage.getItem('sessionId') ? sessionStorage.getItem('sessionId') : ''
+        let formData = new FormData()
+        formData.append('md5', msg)
+        formData.append('sessionId', sessionId)
+        let url = this.$store.state.urls.url + 'search/similarSearch'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          console.log(response)
+        }, (response) => {
+          this.$store.state.history.loadingTwo = false
+          this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
+            confirmButtonText: '确定'
+          })
+        })
+      }
     }
   }
 }
