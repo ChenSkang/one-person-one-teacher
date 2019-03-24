@@ -69,8 +69,7 @@
         </div>
       </div>
     </div>
-    <gotop></gotop>
-    <myFoot style="position: relative; bottom: 0"></myFoot>
+    <myFoot></myFoot>
   </div>
 </template>
 

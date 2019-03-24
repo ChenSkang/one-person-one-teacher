@@ -53,31 +53,30 @@
           <div class="screen">
             <div class="screen-title">
               <div class="screen-name" @click="screenShow = !screenShow">筛选</div>
-              <!--<div class="screen-menu"><img src="../../img/menu.png" alt="" /></div>
-              <div class="screen-edition">人教版：七年级上</div>-->
+              <div class="screen-edition">人教版</div>
             </div>
             <transition name="el-zoom-in-top">
               <div class="screen-window" v-if="screenShow">
                 <div class="screen-list">
                   <div class="screen-ul">题型</div>
-                  <div class="screen-li" :class="{choice: screenChoiceOne[0]}" @click="choiceOne(0)">全部</div>
-                  <div class="screen-li" :class="{choice: screenChoiceOne[1]}" @click="choiceOne(1)">选择题</div>
-                  <div class="screen-li" :class="{choice: screenChoiceOne[2]}" @click="choiceOne(2)">填空题</div>
-                  <div class="screen-li" :class="{choice: screenChoiceOne[3]}" @click="choiceOne(3)">解答题</div>
+                  <div class="screen-li" v-for="(value, index) in queKind" :class="{choice: screenChoiceOne[index]}" @click="choiceOne(index)">{{value}}</div>
                 </div>
                 <div class="screen-list">
-                  <div class="screen-ul">难度</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[0]}" @click="choiceTwo(0)">全部</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[1]}" @click="choiceTwo(1)">易</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[2]}" @click="choiceTwo(2)">较易</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[3]}" @click="choiceTwo(3)">中档</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[4]}" @click="choiceTwo(4)">较难</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[5]}" @click="choiceTwo(5)">难</div>
+                  <div class="screen-ul">年级</div>
+                  <div class="screen-li" v-for="(value, index) in classKind" :class="{choice: screenChoiceTwo[index]}" @click="choiceTwo(index)">{{value}}</div>
+                </div>
+              </div>
+            </transition>
+            <transition name="el-zoom-in-top">
+              <div class="screen-window" v-if="screenShow">
+                <div class="screen-list">
+                  <div class="screen-ul">教材</div>
+                  <div class="screen-li" v-for="(value, index) in theTeach" :class="{choice: screenChoiceTwo[index]}" @click="choiceTwo(index)">{{value}}</div>
                 </div>
               </div>
             </transition>
           </div>
-          <div class="block" v-if="$store.state.nowSub.length"
+          <div class="block" v-if="$store.state.nowSub.length !== 0"
                v-loading="$store.state.history.loadingTwo"
                element-loading-text="加载中"
                element-loading-spinner="el-icon-loading"
@@ -98,8 +97,8 @@
                   <div class="low">
                     <div><el-button type="primary" size="mini" @click="showJX(index)">查看解析</el-button></div>
                     <div><el-button type="primary" @click="addPaper(value.md5)" size="mini">添加试题</el-button></div>
-                    <!--<div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'wordSearch', page: 1, msg:value.question}})">相似推荐</el-button></div>
-              --></div>
+                    <div><el-button type="danger" size="mini" @click="searchSimilar(value.md5)">相似推荐</el-button></div>
+                  </div>
                 </li>
               </ul>
               <el-pagination
@@ -113,6 +112,9 @@
               </el-pagination>
             </div>
           </div>
+        </div>
+        <div v-if="$store.state.nowSub.length === 0" :style="{minHeight: minHeight + 'px'}">
+          <p style="position: absolute; top: 300px; left: 30%; transform: translateX(-50%)">暂没有与搜索内容相关的题目</p>
         </div>
         <div class="main-right">
           <div class="right-fix">
@@ -129,9 +131,6 @@
       </div>
     </div>
     <answer></answer>
-    <div v-if="!$store.state.nowSub.length" :style="{minHeight: minHeight + 'px'}">
-      <p style="position: absolute; top: 250px; left: 50%; transform: translateX(-50%)">暂没有与搜索内容相关的题目</p>
-    </div>
   </div>
 </template>
 
@@ -163,6 +162,9 @@
         screenShow: true,
         screenChoiceOne: [true, false, false, false],
         screenChoiceTwo: [true, false, false, false, false, false],
+        queKind: ['全部', '选择题', '填空题', '解答题'],
+        classKind: ['七年级上', '七年级下', '八年级上', '八年级下', '九年级上', '九年级下'],
+        theTeach: ['人教新版', '北师大新版', '华师大新版', '苏科新版', '湘教新版', '青鸟新版', '浙教新版', '冀教新版', '沪科新版', '鲁教五四新版', '北京课改新版', '沪教新版', '人教五四新版', '人教版', '北师大版', '华师大版', '苏科版', '湘教版', '青鸟版', '浙教版', '冀教版', '沪科版', '鲁教五四版', '北京课改版', '沪教版', '人教五四版'],
         searchHot: [
           '三角形辅助线做法',
           '二次函数综合题',
@@ -219,19 +221,21 @@
       },
       searchMsg () {
         let num = Math.random() * 10000
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, num: num}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, num: num}})
       },
       choiceOne (num) {
         for (let i = 0; i < this.screenChoiceOne.length; i++) {
           this.screenChoiceOne[i] = false
         }
         this.$set(this.screenChoiceOne, num, true)
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.queKind[num], nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, num: num}})
       },
       choiceTwo (num) {
         for (let i = 0; i < this.screenChoiceTwo.length; i++) {
           this.screenChoiceTwo[i] = false
         }
         this.$set(this.screenChoiceTwo, num, true)
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.classKind[num], jiaocai: this.$route.query.jiaocai, num: num}})
       },
       showJX (x) {
         this.$store.state.myTest[0].question = this.$store.state.nowSub[x].question
@@ -297,7 +301,7 @@
         }
       }, */
       nextPage (val) {
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: val}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: val, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai}})
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
       },
@@ -305,7 +309,15 @@
         let num = Math.random() * 10000
         let routeData = this.$router.resolve({
           path: '/index',
-          query: {servlet: 'wordSearch', msg: hot, page: 1, num: num}
+          query: {
+            servlet: 'wordSearch',
+            msg: hot,
+            page: 1,
+            kind: '全部',
+            nianji: this.$store.state.nianji,
+            jiaocai: this.$store.state.jiaocai,
+            num: num
+          }
         })
         window.open(routeData.href, '_blank')
       },
@@ -338,7 +350,10 @@
         if (this.$route.path === '/index') {
           this.$store.state.input_message = val.msg
           let page = parseInt(val.page)
-          this.searchQuestion(val.msg, page)
+          let kind = val.kind
+          let nianji = val.nianji
+          let jiaocai = val.jiaocai
+          this.searchQuestion(val.msg, page, kind, nianji, jiaocai)
         }
       }
     },
@@ -352,7 +367,10 @@
       if (this.$route.query) {
         this.$store.state.input_message = this.$route.query.msg
         let page = parseInt(this.$route.query.page)
-        this.searchQuestion(this.$route.query.msg, page)
+        let kind = this.$route.query.kind
+        let nianji = this.$route.query.nianji
+        let jiaocai = this.$route.query.jiaocai
+        this.searchQuestion(this.$route.query.msg, page, kind, nianji, jiaocai)
       }
       /* if (localStorage.getItem('ifFirsts') === 'true') {
         this.popoverFirst = true
@@ -450,13 +468,6 @@
     cursor: pointer;
     color: #409EFF;
     font-weight: bold;
-  }
-  .screen-menu{
-    margin-top: 8px;
-  }
-  .screen-menu img{
-    width: 32px;
-    height: 25px;
   }
   .screen-window{
     border-radius: 5px;
