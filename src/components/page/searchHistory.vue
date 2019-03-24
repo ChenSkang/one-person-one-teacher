@@ -5,13 +5,13 @@
     <el-dialog :visible.sync="imgVisible" width="60%">
       <img style="max-height: 55vh; margin-left: 50%; transform: translateX(-50%)" :src="searchImage">
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="searchAgainImg(searchQue, searchWay, searchKind)">重新搜索</el-button>
+        <el-button type="primary" @click="searchAgainImg(msg)">重新搜索</el-button>
       </span>
     </el-dialog>
     <el-dialog :visible.sync="imgVisibles" width="60%">
       <p v-html="searchQue"></p>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="searchAgainWord(searchQue, searchWay, searchKind)">重新搜索</el-button>
+        <el-button type="primary" @click="searchAgainWord()">重新搜索</el-button>
       </span>
     </el-dialog>
     <div>
@@ -72,6 +72,9 @@
         searchQue: '',
         searchWay: '',
         searchKind: '',
+        nianji: '',
+        jiaocai: '',
+        kind: '',
         minHeight: 0,
         pageNow: 1
       }
@@ -90,28 +93,21 @@
           this.imgVisible = true
         } else {
           this.searchQue = row.que
+          this.jiaocai = row.jiaocai
+          this.nianji = row.nianji
+          this.kind = row.kind
           this.imgVisibles = true
         }
       },
       searchAgainImg (que) {
-        this.imgVisible = false
-        this.imgVisibles = false
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch'}})
       },
-      searchAgainWord (que, way, kind) {
-        this.imgVisible = false
+      searchAgainWord (msg) {
         this.imgVisibles = false
-        let k = kind.slice(0, 2)
-        let w = way - 1
-        this.$store.state.select = k
-        this.$store.state.value = w
-        if (w === 2) {
-          this.$store.state.zsdTreeTags = que.split('；')
-        }
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', kind: k, msg: que, way: w}})
+        let num = Math.random() * 10000
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.searchQue, nianji: this.nianji, jiaocai: this.jiaocai, kind: this.kind, page: 1, num: num}})
       },
       clearSearched () {
-        let url = this.$store.state.urls.url + 'CleanHistoryServlet'
+        let url = this.$store.state.urls.url + 'user/cleanHistory'
         let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
         formData.append('sessionId', sessionId)
@@ -121,7 +117,11 @@
           },
           withCredentials: true
         }).then((response) => {
-          this.$store.state.history.searched = []
+          if (response.data.msg === '登陆超时，请重新登陆') {
+            this.$message.error('登录超时')
+            this.signOut()
+          }
+          console.log(response)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
@@ -149,26 +149,11 @@
         return arr
       }
     },
+    updated () {
+    },
     created () {
-      this.minHeight = document.documentElement.clientHeight - 161
-      if (this.$store.state.userNow) {
-        if (this.$store.state.history.find) {
-          let url = this.$store.state.urls.url + 'GetHistoryServlet'
-          let sessionId = sessionStorage.getItem('sessionId')
-          let formData = new FormData()
-          formData.append('sessionId', sessionId)
-          this.$axios.post(url, formData, {
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            withCredentials: true
-          }).then((response) => {
-            this.$store.state.history.searched = response.data
-          }, (response) => {
-            this.$message.error('请求服务端失败')
-          })
-        }
-      }
+      this.minHeight = document.documentElement.clientHeight - 101
+      this.searchHistory()
     }
   }
 </script>
@@ -177,8 +162,7 @@
   .main{
     width: 100%;
     position: relative;
-    top: 40px;
-    margin-bottom: 60px;
+    top: 50px;
     background-color: #fbfbfb;
   }
   .table{
