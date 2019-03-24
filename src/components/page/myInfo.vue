@@ -22,9 +22,9 @@
       </div>
       <div class="changeInfo">
         <div class="left">
-          <div class="info-name" @click="$router.push({path: '/userInfo', query: {info: '0'}})">个人信息</div>
+          <div class="info-name" @click="routerChange(0)">个人信息</div>
           <div class="info-name" @click="$router.push({path: '/userInfo', query: {info: '1'}})">密码修改</div>
-          <div class="info-name" @click="$router.push({path: '/userInfo', query: {info: '2'}})">手机绑定</div>
+          <div class="info-name" @click="routerChange(2)">手机绑定</div>
         </div>
         <div class="right">
           <div class="your-info" v-if="nowStep == 0">
@@ -256,7 +256,7 @@
         },
         passRule: {
           oldpass: [
-            { required: true, trigger: 'blur' }
+            { required: true, trigger: 'blur', message: '请输入原密码' }
           ],
           pass: [
             { required: true, validator: validatePass, trigger: 'blur' },
@@ -328,6 +328,10 @@
           this.$message('请重新登录')
         }
       },
+      routerChange (msg) {
+        this.$router.push({path: '/userInfo', query: {info: msg}})
+        this.passReset('passForm')
+      },
       changeYourInfo () {
         let sessionId = sessionStorage.getItem('sessionId')
         if (sessionId) {
@@ -350,6 +354,9 @@
             this.$store.state.userNow = response.data.data.username
             this.$store.state.jiaocai = response.data.data.jiaocai
             this.$store.state.nianji = response.data.data.nianji
+            this.$alert('修改个人信息成功', '成功', {
+              confirmButtonText: '确定'
+            })
           }, (response) => {
             this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
               confirmButtonText: '确定'
@@ -376,6 +383,9 @@
               console.log(response)
               if (response.data.msg === '旧密码验证正确') {
                 this.changePassOver()
+              } else if (response.data.msg === '登陆超时，请重新登陆') {
+                this.$message.error('登录超时')
+                this.signOut()
               } else {
                 this.$message.error('原密码验证失败')
               }
@@ -403,7 +413,9 @@
           withCredentials: true
         }).then((response) => {
           console.log(response)
-          this.$message.success('修改密码成功')
+          this.$alert('修改密码成功，下次请用新密码登录', '成功', {
+            confirmButtonText: '确定'
+          })
           this.passReset('passForm')
         }, (response) => {
           this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
@@ -513,6 +525,7 @@
         this.$refs[formName].resetFields()
       },
       timeTo () {
+        this.totalTime = 60
         this.total = this.totalTime + 's后重新获取'
         let clock = window.setInterval(() => {
           this.totalTime --
@@ -612,6 +625,9 @@
     height: 80px;
     border-radius: 50%;
     border: 1px solid #DCDFE6;
+  }
+  .head-img img{
+    border-radius: 50%;
   }
   .change-img {
     position: absolute;
