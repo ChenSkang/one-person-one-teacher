@@ -31,7 +31,6 @@
     width: 100%;
     height: 50px;
     position: relative;
-    top: 50px;
     bottom: 0;
     background-color: #3f464e;
   }
