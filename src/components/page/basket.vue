@@ -17,11 +17,11 @@
       <div class="concern">
         <div class="exam">
           <div class="exam_something">
-            <div v-if="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName"></div>
-            <div v-if="showSets[0]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
-            <div v-if="showSets[1]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
-            <div v-if="showSet[1]" title="点击设置考生信息"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
-            <div class="scores" v-if="showSet[2]" title="打分栏">
+            <div v-show="showSet[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="examName"></div>
+            <div v-show="showSets[0]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="examSecondName"></div>
+            <div v-show="showSets[1]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="examThirdName"></div>
+            <div v-show="showSet[1]" title="点击设置考生信息"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
+            <div class="scores" v-show="showSet[2]" title="打分栏">
               <table border="1" cellspacing="0" cellpadding="0" align="center">
                 <tr>
                   <td>题号</td>
@@ -39,7 +39,7 @@
                 </tr>
               </table>
             </div>
-            <div class="attentions" v-if="showSets[2]" title="注意事项">
+            <div class="attentions" v-show="showSets[2]" title="注意事项">
               <span>注意事项：</span>
               <p v-for="(attention, index) in attentions" :key="attention">
                 {{index + 1 + '.'+ '&nbsp;' + attention}}
@@ -55,10 +55,10 @@
                   <span class="TH">{{index + 1}}.</span>
                   <span v-html="value.que"></span>
                   <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
-                  <div v-if="showSet[4]">
+                  <div v-show="showSet[4]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
-                  <div v-if="showSet[3]">
+                  <div v-show="showSet[3]">
                     <span class="jx">解答：</span><span v-html="value.answer"></span>
                   </div>
                 </div>
@@ -85,10 +85,10 @@
                   <span class="TH">{{XZ.length + index + 1}}.</span>
                   <span v-html="value.que"></span>
                   <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
-                  <div v-if="showSet[4]">
+                  <div v-show="showSet[4]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
-                  <div v-if="showSet[3]">
+                  <div v-show="showSet[3]">
                     <span class="jx">解答：</span><span v-html="value.answer"></span>
                   </div>
                 </div>
@@ -115,10 +115,10 @@
                   <span class="TH">{{XZ.length + TK.length + index + 1}}.</span>
                   <span v-html="value.que"></span>
                   <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
-                  <div v-if="showSet[4]">
+                  <div v-show="showSet[4]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
-                  <div v-if="showSet[3]">
+                  <div v-show="showSet[3]">
                     <span class="jx">解答：</span><span v-html="value.answer"></span>
                   </div>
                 </div>
@@ -137,13 +137,13 @@
             </transition-group>
           </draggable>
 
-          <div v-if="showSets[3] || showSets[4]">
+          <div v-show="showSets[3] || showSets[4]">
             <div v-for="(value, index) in XZ" class="ques" :key="value.answer">
               <div class="up">
                 <div>
                   <span>{{index + 1}}.</span>
-                  <span v-if="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-if="showSets[3]">解答：<span v-html="value.answer"></span></span>
+                  <span v-show="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-show="showSets[3]">解答：<span v-html="value.answer"></span></span>
                 </div>
               </div>
             </div>
@@ -151,8 +151,8 @@
               <div class="up">
                 <div>
                   <span>{{XZ.length + index + 1}}.</span>
-                  <span v-if="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-if="showSets[3]">解答：<span v-html="value.answer"></span></span>
+                  <span v-show="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-show="showSets[3]">解答：<span v-html="value.answer"></span></span>
                 </div>
               </div>
             </div>
@@ -160,8 +160,8 @@
               <div class="up">
                 <div>
                   <span>{{XZ.length + TK.length + index + 1}}.</span>
-                  <span v-if="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-if="showSets[3]">解答：<span v-html="value.answer"></span></span>
+                  <span v-show="showSets[4]">解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-show="showSets[3]">解答：<span v-html="value.answer"></span></span>
                 </div>
               </div>
             </div>
@@ -212,8 +212,6 @@
   import myFoot from '../common/footer.vue'
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   import answer from '../common/anwer.vue'
-  const firstOptions = ['主标题', '考生信息', '总分栏', '显示答案', '显示解析']
-  const secondOptions = ['副标题', '试卷信息', '注意事项', '答案后置', '解析后置']
   export default {
     data () {
       this.chartSettings = {
@@ -226,9 +224,9 @@
       }
       return {
         deleteall: false,
-        cities: firstOptions,
-        mations: secondOptions,
-        showSet: [true, false, false, false, true],
+        cities: ['主标题', '考生信息', '总分栏', '显示答案', '显示解析'],
+        mations: ['副标题', '试卷信息', '注意事项', '答案后置', '解析后置'],
+        showSet: [true, false, false, false, false],
         showSets: [false, false, false, false, false],
         examName: '初中数学测试试卷',
         examSecondName: '试卷副标题',
@@ -241,6 +239,7 @@
         XZ: [],
         TK: [],
         JD: [],
+        config: [],
         dragOption1: {
           animation: 120,
           scroll: true,
@@ -526,14 +525,15 @@
           },
           withCredentials: true
         }).then((response) => {
+          if (response.data.msg === '登陆超时，请重新登陆') {
+            this.$message.error('登录超时')
+            this.signOut()
+          }
           console.log(response.data)
           this.examName = response.data.data.title
-          this.examSecondName = response.data.data.title2
-          this.examThirdName = response.data.data.shijuanxinxi
-          for (let i = 0; i < 5; i++) {
-            this.$set(this.showSet, i, response.data.data.config[i])
-            this.$set(this.showSets, i, response.data.data.config[i + 5])
-          }
+          this.examSecondName = response.data.data.title2 ? response.data.data.title2 : this.examSecondName
+          this.examThirdName = response.data.data.shijuanxinxi ? response.data.data.shijuanxinxi : this.examThirdName
+          this.config = response.data.data.config.split(',')
           this.XZ = []
           this.TK = []
           this.JD = []
@@ -549,12 +549,20 @@
                 this.JD.push({que: response.data.data.que[i].question, unique: response.data.data.que[i].md5, jx: response.data.data.que[i].analysis, answer: response.data.data.que[i].answer, area: 0})
                 break
               default:
-                this.push({que: response.data.data.que[i].question, unique: response.data.data.que[i].md5, jx: response.data.data.que[i].analysis, answer: response.data.data.que[i].answer, area: 0})
+                this.XZ.push({que: response.data.data.que[i].question, unique: response.data.data.que[i].md5, jx: response.data.data.que[i].analysis, answer: response.data.data.que[i].answer, area: 0})
             }
           }
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
+      }
+    },
+    mounted () {
+      if (this.config.length !== 0) {
+        for (let i = 0; i < 5; i++) {
+          this.showSet[i] = this.config[i]
+          this.showSets[i] = this.config[i + 5]
+        }
       }
     },
     computed: {
