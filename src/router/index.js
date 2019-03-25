@@ -71,6 +71,11 @@ export default new Router({
       path: '/userInfo',
       name: 'UserInfo',
       component: resolve => require(['@/components/page/myInfo'], resolve)
+    },
+    {
+      path: '/similarSearch',
+      name: 'SimilarSearch',
+      component: resolve => require(['@/components/page/similarSearch'], resolve)
     }
   ]
 })
