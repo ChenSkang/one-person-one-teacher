@@ -187,6 +187,10 @@ export default{
         },
         withCredentials: true
       }).then((response) => {
+        if (response.data.msg === '登陆超时，请重新登陆') {
+          this.$message.error('登录超时')
+          this.signOut()
+        }
         console.log(response.data)
       }, (response) => {
         this.$message.error('请求服务端失败')
