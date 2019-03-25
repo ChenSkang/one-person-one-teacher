@@ -53,25 +53,26 @@
           <div class="screen">
             <div class="screen-title">
               <div class="screen-name" @click="screenShow = !screenShow">筛选</div>
-              <div class="screen-edition">人教版</div>
+              <div>&nbsp;</div>
+              <div class="screen-edition" @click="screenShowTwo = !screenShowTwo">{{$route.query.jiaocai}}</div>
             </div>
             <transition name="el-zoom-in-top">
               <div class="screen-window" v-if="screenShow">
                 <div class="screen-list">
                   <div class="screen-ul">题型</div>
-                  <div class="screen-li" v-for="(value, index) in queKind" :class="{choice: screenChoiceOne[index]}" @click="choiceOne(index)">{{value}}</div>
+                  <div class="screen-li" v-for="(value, index) in queKind" :class="{choice: value.check}" @click="choiceO(index)">{{value.value}}</div>
                 </div>
                 <div class="screen-list">
                   <div class="screen-ul">年级</div>
-                  <div class="screen-li" v-for="(value, index) in classKind" :class="{choice: screenChoiceTwo[index]}" @click="choiceTwo(index)">{{value}}</div>
+                  <div class="screen-li" v-for="(value, index) in classKind" :class="{choice: value.check}" @click="choiceT(index)">{{value.value}}</div>
                 </div>
               </div>
             </transition>
             <transition name="el-zoom-in-top">
-              <div class="screen-window" v-if="screenShow">
-                <div class="screen-list">
-                  <div class="screen-ul">教材</div>
-                  <div class="screen-li" v-for="(value, index) in theTeach" :class="{choice: screenChoiceTwo[index]}" @click="choiceTwo(index)">{{value}}</div>
+              <div class="screen-window" v-if="screenShowTwo">
+                <div class="screen-list-two">
+                  <div class="screen-ul-two">教材</div>
+                  <div class="screen-li-two" v-for="(value, index) in theTeach" :class="{choice: value.check}" @click="choiceTh(index)">{{value.value}}</div>
                 </div>
               </div>
             </transition>
@@ -97,7 +98,7 @@
                   <div class="low">
                     <div><el-button type="primary" size="mini" @click="showJX(index)">查看解析</el-button></div>
                     <div><el-button type="primary" @click="addPaper(value.md5)" size="mini">添加试题</el-button></div>
-                    <div><el-button type="danger" size="mini" @click="searchSimilar(value.md5)">相似推荐</el-button></div>
+                    <div><el-button type="danger" size="mini" @click="similarSearch(value.md5)">相似推荐</el-button></div>
                   </div>
                 </li>
               </ul>
@@ -160,11 +161,118 @@
         topFixed: false,
         // popoverFirst: false,
         screenShow: true,
-        screenChoiceOne: [true, false, false, false],
-        screenChoiceTwo: [true, false, false, false, false, false],
-        queKind: ['全部', '选择题', '填空题', '解答题'],
-        classKind: ['七年级上', '七年级下', '八年级上', '八年级下', '九年级上', '九年级下'],
-        theTeach: ['人教新版', '北师大新版', '华师大新版', '苏科新版', '湘教新版', '青鸟新版', '浙教新版', '冀教新版', '沪科新版', '鲁教五四新版', '北京课改新版', '沪教新版', '人教五四新版', '人教版', '北师大版', '华师大版', '苏科版', '湘教版', '青鸟版', '浙教版', '冀教版', '沪科版', '鲁教五四版', '北京课改版', '沪教版', '人教五四版'],
+        screenShowTwo: false,
+        queKind: [{
+          check: false,
+          value: '全部'
+        }, {
+          check: false,
+          value: '选择题'
+        }, {
+          check: false,
+          value: '填空题'
+        }, {
+          check: false,
+          value: '解答题'
+        }],
+        classKind: [{
+          check: false,
+          value: '七年级上'
+        }, {
+          check: false,
+          value: '七年级下'
+        }, {
+          check: false,
+          value: '八年级上'
+        }, {
+          check: false,
+          value: '八年级下'
+        }, {
+          check: false,
+          value: '九年级上'
+        }, {
+          check: false,
+          value: '九年级下'
+        }],
+        theTeach: [{
+          check: false,
+          value: '人教新版'
+        }, {
+          check: false,
+          value: '北师大新版'
+        }, {
+          check: false,
+          value: '华师大新版'
+        }, {
+          check: false,
+          value: '苏科新版'
+        }, {
+          check: false,
+          value: '湘教新版'
+        }, {
+          check: false,
+          value: '青鸟新版'
+        }, {
+          check: false,
+          value: '浙教新版'
+        }, {
+          check: false,
+          value: '冀教新版'
+        }, {
+          check: false,
+          value: '沪科新版'
+        }, {
+          check: false,
+          value: '鲁教五四新版'
+        }, {
+          check: false,
+          value: '北京课改新版'
+        }, {
+          check: false,
+          value: '沪教新版'
+        }, {
+          check: false,
+          value: '人教五四新版'
+        }, {
+          check: false,
+          value: '人教版'
+        }, {
+          check: false,
+          value: '北师大版'
+        }, {
+          check: false,
+          value: '华师大版'
+        }, {
+          check: false,
+          value: '苏科版'
+        }, {
+          check: false,
+          value: '湘教版'
+        }, {
+          check: false,
+          value: '青鸟版'
+        }, {
+          check: false,
+          value: '浙教版'
+        }, {
+          check: false,
+          value: '冀教版'
+        }, {
+          check: false,
+          value: '沪科版'
+        }, {
+          check: false,
+          value: '鲁教五四版'
+        }, {
+          check: false,
+          value: '北京课改版'
+        }, {
+          check: false,
+          value: '沪教版'
+        }, {
+          check: false,
+          value: '人教五四版'
+        }],
         searchHot: [
           '三角形辅助线做法',
           '二次函数综合题',
@@ -224,18 +332,31 @@
         this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, num: num}})
       },
       choiceOne (num) {
-        for (let i = 0; i < this.screenChoiceOne.length; i++) {
-          this.screenChoiceOne[i] = false
+        for (let i = 0; i < this.queKind.length; i++) {
+          this.queKind[i].check = false
         }
-        this.$set(this.screenChoiceOne, num, true)
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.queKind[num], nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, num: num}})
+        this.$set(this.queKind[num], 'check', true)
       },
       choiceTwo (num) {
-        for (let i = 0; i < this.screenChoiceTwo.length; i++) {
-          this.screenChoiceTwo[i] = false
+        for (let i = 0; i < this.classKind.length; i++) {
+          this.classKind[i].check = false
         }
-        this.$set(this.screenChoiceTwo, num, true)
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.classKind[num], jiaocai: this.$route.query.jiaocai, num: num}})
+        this.$set(this.classKind[num], 'check', true)
+      },
+      choiceThree (num) {
+        for (let i = 0; i < this.theTeach.length; i++) {
+          this.theTeach[i].check = false
+        }
+        this.$set(this.theTeach[num], 'check', true)
+      },
+      choiceO (num) {
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.queKind[num].value, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, num: num}})
+      },
+      choiceT (num) {
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.classKind[num].value, jiaocai: this.$route.query.jiaocai, num: num}})
+      },
+      choiceTh (num) {
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.theTeach[num].value, num: num}})
       },
       showJX (x) {
         this.$store.state.myTest[0].question = this.$store.state.nowSub[x].question
@@ -305,21 +426,12 @@
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
       },
-      searchHotMsg (hot) {
-        let num = Math.random() * 10000
-        let routeData = this.$router.resolve({
-          path: '/index',
-          query: {
-            servlet: 'wordSearch',
-            msg: hot,
-            page: 1,
-            kind: '全部',
-            nianji: this.$store.state.nianji,
-            jiaocai: this.$store.state.jiaocai,
-            num: num
+      fnIndex (arr, val) {
+        for (let i = 0; i < arr.length; i++) {
+          if (val === arr[i].value) {
+            return i
           }
-        })
-        window.open(routeData.href, '_blank')
+        }
       },
       handleScroll () {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
@@ -353,6 +465,12 @@
           let kind = val.kind
           let nianji = val.nianji
           let jiaocai = val.jiaocai
+          let x = this.fnIndex(this.queKind, kind)
+          let y = this.fnIndex(this.classKind, nianji)
+          let z = this.fnIndex(this.theTeach, jiaocai)
+          this.choiceOne(x)
+          this.choiceTwo(y)
+          this.choiceThree(z)
           this.searchQuestion(val.msg, page, kind, nianji, jiaocai)
         }
       }
@@ -370,6 +488,12 @@
         let kind = this.$route.query.kind
         let nianji = this.$route.query.nianji
         let jiaocai = this.$route.query.jiaocai
+        let x = this.fnIndex(this.queKind, kind)
+        let y = this.fnIndex(this.classKind, nianji)
+        let z = this.fnIndex(this.theTeach, jiaocai)
+        this.choiceOne(x)
+        this.choiceTwo(y)
+        this.choiceThree(z)
         this.searchQuestion(this.$route.query.msg, page, kind, nianji, jiaocai)
       }
       /* if (localStorage.getItem('ifFirsts') === 'true') {
@@ -482,6 +606,10 @@
     flex-direction: row;
     color: #333;
   }
+ .screen-list-two{
+   margin: 10px 0 10px 20px;
+   color: #333;
+ }
   .screen-ul{
     font-size: 14px;
     font-weight: 600;
@@ -497,6 +625,23 @@
     padding: 2px 3px;
     cursor: pointer;
   }
+ .screen-ul-two{
+   font-size: 14px;
+   font-weight: 600;
+   font-family: "PingFang SC";
+   letter-spacing: 1px;
+   margin-right: 20px;
+   display: inline-block;
+ }
+ .screen-li-two{
+   display: inline-block;
+   font-size: 14px;
+   letter-spacing: 1px;
+   margin-right: 20px;
+   border-radius: 3px;
+   padding: 2px 3px;
+   cursor: pointer;
+ }
   .choice{
     background-color: #409EFF;
     color: #fff;
