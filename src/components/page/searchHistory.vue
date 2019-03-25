@@ -4,8 +4,9 @@
     <mySpace></mySpace>
     <el-dialog :visible.sync="imgVisible" width="60%">
       <img style="max-height: 55vh; margin-left: 50%; transform: translateX(-50%)" :src="searchImage">
+      <p v-html="searchQue"></p>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="searchAgainImg(msg)">重新搜索</el-button>
+        <el-button type="primary" @click="searchAgainImg()">重新搜索</el-button>
       </span>
     </el-dialog>
     <el-dialog :visible.sync="imgVisibles" width="60%">
@@ -37,7 +38,7 @@
             width="180">
             <template slot-scope="scope">
               <div class="btn-small cell-btn1" @click="showExams(scope.row)">查看</div>
-              <div class="btn-small cell-btn2" @click="deleteHistory(scope.$index)">删除</div>
+              <div class="btn-small cell-btn2" @click="deleteHistory(scope.row)">删除</div>
             </template>
           </el-table-column>
         </el-table>
@@ -87,10 +88,11 @@
     methods: {
       showExams (row) {
         console.log(row)
-        if (row.image) {
+        if (row.pic_address) {
           this.searchQue = row.que
-          this.searchImage = row.image
+          this.searchImage = row.pic_address
           this.imgVisible = true
+          this.mdFive = row.md5
         } else {
           this.searchQue = row.que
           this.jiaocai = row.jiaocai
@@ -99,9 +101,11 @@
           this.imgVisibles = true
         }
       },
-      searchAgainImg (que) {
+      searchAgainImg () {
+        this.imgVisible = false
+        this.$router.push({path: '/similarSearch', query: {servlet: 'similarSearch', msg: this.mdFive}})
       },
-      searchAgainWord (msg) {
+      searchAgainWord () {
         this.imgVisibles = false
         let num = Math.random() * 10000
         this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.searchQue, nianji: this.nianji, jiaocai: this.jiaocai, kind: this.kind, page: 1, num: num}})
@@ -120,23 +124,31 @@
           if (response.data.msg === '登陆超时，请重新登陆') {
             this.$message.error('登录超时')
             this.signOut()
+          } else if (response.data.msg === '成功') {
+            this.$store.state.history.searched = []
           }
           console.log(response)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
       },
-      deleteHistory (x) {
-        let url = this.$store.state.urls.url + 'RemoveHistoryServlet'
+      deleteHistory (row) {
+        let url = this.$store.state.urls.url + 'user/deleteHistory'
+        let sessionId = sessionStorage.getItem('sessionId')
         let formData = new FormData()
-        formData.append('id', this.$store.state.history.searched[x].id)
+        formData.append('id', row.id)
+        formData.append('sessionId', sessionId)
         this.$axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
           },
           withCredentials: true
         }).then((response) => {
-          this.$store.state.history.searched.splice(x, 1)
+          if (response.data.msg === '登陆超时，请重新登陆') {
+            this.$message.error('登录超时')
+            this.signOut()
+          }
+          this.$store.state.history.searched = response.data.data
         }, (response) => {
           this.$message.error('请求服务端失败')
         })

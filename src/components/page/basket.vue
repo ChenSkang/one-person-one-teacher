@@ -471,6 +471,15 @@
           },
           withCredentials: true
         }).then((response) => {
+          if(response.data.msg === '成功') {
+            this.$notify({
+              title: '提示',
+              message: '保存修改成功',
+              type: 'success'
+            })
+          } else {
+            this.$message.error('错误')
+          }
           console.log(response)
         }, (response) => {
           this.$message.error('请求服务端失败')
