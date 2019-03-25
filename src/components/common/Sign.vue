@@ -200,22 +200,6 @@
         })
         window.open(routeData.href, '_blank')
       },
-      searchHotMsg (hot) {
-        let num = Math.random() * 10000
-        let routeData = this.$router.resolve({
-          path: '/index',
-          query: {
-            servlet: 'wordSearch',
-            msg: hot,
-            page: 1,
-            kind: '全部',
-            nianji: this.$store.state.nianji,
-            jiaocai: this.$store.state.jiaocai,
-            num: num
-          }
-        })
-        window.open(routeData.href, '_blank')
-      },
       showMore (num) {
         this.myTest[0].question = this.hotQuestions[num].question
         this.myTest[0].answer = this.hotQuestions[num].answer
