@@ -471,7 +471,7 @@
           },
           withCredentials: true
         }).then((response) => {
-          if(response.data.msg === '成功') {
+          if (response.data.msg === '成功') {
             this.$notify({
               title: '提示',
               message: '保存修改成功',

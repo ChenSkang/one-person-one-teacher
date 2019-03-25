@@ -97,7 +97,11 @@
           this.searchQue = row.que
           this.jiaocai = row.jiaocai
           this.nianji = row.nianji
-          this.kind = row.kind
+          if (row.kind === '全部题') {
+            this.kind = '全部'
+          } else {
+            this.kind = row.kind
+          }
           this.imgVisibles = true
         }
       },
