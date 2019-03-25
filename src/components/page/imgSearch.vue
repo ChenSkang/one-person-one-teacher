@@ -52,11 +52,11 @@
               <i class="el-icon-document">组卷</i>
             </div>
           </div>
-          <div class="screen">
+          <!--<div class="screen">
             <div class="screen-title">
               <div class="screen-name" @click="screenShow = !screenShow">筛选</div>
-              <!--<div class="screen-menu"><img src="../../img/menu.png" alt="" /></div>
-              <div class="screen-edition">人教版：七年级上</div>-->
+              &lt;!&ndash;<div class="screen-menu"><img src="../../img/menu.png" alt="" /></div>
+              <div class="screen-edition">人教版：七年级上</div>&ndash;&gt;
             </div>
             <transition name="el-zoom-in-top">
               <div class="screen-window" v-if="screenShow">
@@ -78,10 +78,10 @@
                 </div>
               </div>
             </transition>
-          </div>
+          </div>-->
           <div class="block" v-if="$store.state.nowSub.length"
                v-loading="$store.state.history.loadingTwo"
-               element-loading-text="加载中"
+               element-loading-text="拼命加载中"
                element-loading-spinner="el-icon-loading"
                element-loading-background="rgba(0, 0, 0, 0.1)"
           >
@@ -96,8 +96,8 @@
                   <div class="low">
                     <div><el-button type="primary" size="mini" @click="showJX(index)">查看解析</el-button></div>
                     <div><el-button type="primary" @click="addPaper(value.md5)" size="mini">添加试题</el-button></div>
-                    <!--<div><el-button type="danger" size="mini" @click="$router.push({path: '/index', query: {servlet: 'wordSearch', page: 1, msg:value.question}})">相似推荐</el-button></div>
-                  --></div>
+                    <div><el-button type="danger" size="mini" @click="similarSearch(value.md5)">相似推荐</el-button></div>
+                  </div>
                 </li>
               </ul>
               <el-pagination
@@ -208,13 +208,29 @@
       },
       sureCrop () {
         this.visible = false
-        this.$router.push({path: '/index', query: {servlet: 'imgSearch', msg: this.$store.state.cropImg}})
+        let num = Math.random() * 10000
+        let routeData = this.$router.resolve({
+          path: '/imgSearch',
+          query: {msg: this.$store.state.cropImg, page: 1, num: num}
+        })
+        window.open(routeData.href, '_blank')
       },
       searchMsg () {
         let num = Math.random() * 10000
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, num: num}})
+        this.$router.push({
+          path: '/index',
+          query: {
+            servlet: 'wordSearch',
+            msg: this.$store.state.input_message,
+            page: 1,
+            kind: '全部',
+            nianji: this.$store.state.nianji,
+            jiaocai: this.$store.state.jiaocai,
+            num: num
+          }
+        })
       },
-      choiceOne (num) {
+      /* choiceOne (num) {
         for (let i = 0; i < this.screenChoiceOne.length; i++) {
           this.screenChoiceOne[i] = false
         }
@@ -225,7 +241,7 @@
           this.screenChoiceTwo[i] = false
         }
         this.$set(this.screenChoiceTwo, num, true)
-      },
+      }, */
       showJX (x) {
         this.$store.state.myTest[0].question = this.$store.state.nowSub[x].question
         this.$store.state.myTest[0].kddp = this.$store.state.nowSub[x].kddp
@@ -280,14 +296,6 @@
       nextPage (val) {
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
-      },
-      searchHotMsg (hot) {
-        let num = Math.random() * 10000
-        let routeData = this.$router.resolve({
-          path: '/index',
-          query: {servlet: 'wordSearch', msg: hot, page: 1, num: num}
-        })
-        window.open(routeData.href, '_blank')
       },
       handleScroll () {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
