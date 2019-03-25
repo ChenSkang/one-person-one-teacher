@@ -23,6 +23,10 @@ export default new Vuex.Store({
     TK: [], // 试题篮填空题
     XZ: [], // 试题篮选择题
     JD: [], // 试题篮解答题
+    config: [true, false, false, false, false, false, false, false, false, false],
+    examName: '初中数学测试试卷',
+    examSecondName: '试卷副标题',
+    examThirdName: '考试范围：xxx；考试时间：100分钟；命题人：xxx',
     input_message: '',
     myTest: [
       { question: '' },

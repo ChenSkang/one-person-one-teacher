@@ -10,10 +10,10 @@
         </div>
         <div class="papers" v-if="$store.state.paperList.length">
           <div class="papers-col" v-for="(value,index) in $store.state.paperList">
-            <div class="file">
+            <div class="file"  @click="getPapert(value.id, value.title)">
 
             </div>
-            <div class="paper-title">{{value.title}}</div>
+            <div class="paper-title"  @click="getPapert(value.id, value.title)">{{value.title}}</div>
             <div class="paper-foot">
               <div class="paper-foot-div"><div @click="getPapert(value.id, value.title)" class="paper-foot-btn">查看</div></div>
               <div class="paper-foot-div"><div @click="deletePapert(value.id)" class="paper-foot-btn">删除</div></div>
@@ -59,6 +59,7 @@
         })
       },
       getPapert (pid, title) {
+        this.getPaper(pid)
         this.$router.push({path: '/basket', query: { title: title, paperId: pid }})
       },
       deletePapert (val) {
@@ -96,7 +97,7 @@
   }
   .table-delete{
     position: absolute;
-    right: 4%;
+    left: 4%;
     top: 30px;
     cursor: pointer;
   }

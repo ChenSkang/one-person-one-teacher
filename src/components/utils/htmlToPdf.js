@@ -169,7 +169,47 @@ export default{
         },
         withCredentials: true
       }).then((response) => {
+        if (response.data.msg === '登陆超时，请重新登陆') {
+          this.$message.error('登录超时')
+          this.signOut()
+        }
         console.log(response.data)
+        this.$store.state.XZ = []
+        this.$store.state.TK = []
+        this.$store.state.JD = []
+        this.$store.state.config = []
+        this.$store.state.examName = response.data.data.title ? response.data.data.title : this.$store.state.examName
+        this.$store.state.examSecondName = response.data.data.title2 ? response.data.data.title2 : this.$store.state.examSecondName
+        this.$store.state.examThirdName = response.data.data.shijuanxinxi ? response.data.data.shijuanxinxi : this.$store.state.examThirdName
+        if (response.data.data.config) {
+          let arr = response.data.data.config.split(',')
+          for (let i = 0; i < 10; i++) {
+            if (arr[i].indexOf('true')) {
+              this.$store.state.config[i] = false
+            } else {
+              this.$store.state.config[i] = true
+            }
+          }
+          console.log(this.$store.state.config)
+        } else {
+          this.$store.state.config = [true, false, false, false, false, false, false, false, false, false]
+          console.log(this.$store.state.config)
+        }
+        for (let i = 0; i < response.data.data.que.length; i++) {
+          switch (response.data.data.que[i].question_kind) {
+            case '选择题':
+              this.$store.state.XZ.push({que: response.data.data.que[i].question, unique: response.data.data.que[i].md5, jx: response.data.data.que[i].analysis, answer: response.data.data.que[i].answer, area: 0})
+              break
+            case '填空题':
+              this.$store.state.TK.push({que: response.data.data.que[i].question, unique: response.data.data.que[i].md5, jx: response.data.data.que[i].analysis, answer: response.data.data.que[i].answer, area: 0})
+              break
+            case '解答题':
+              this.$store.state.JD.push({que: response.data.data.que[i].question, unique: response.data.data.que[i].md5, jx: response.data.data.que[i].analysis, answer: response.data.data.que[i].answer, area: 0})
+              break
+            default:
+              this.$store.state.XZ.push({que: response.data.data.que[i].question, unique: response.data.data.que[i].md5, jx: response.data.data.que[i].analysis, answer: response.data.data.que[i].answer, area: 0})
+          }
+        }
       }, (response) => {
         this.$message.error('请求服务端失败')
       })
@@ -227,9 +267,14 @@ export default{
       }).then((response) => {
         sessionStorage.removeItem('sessionId')
         sessionStorage.removeItem('nowUser')
+        sessionStorage.removeItem('nianji')
+        sessionStorage.removeItem('jiaocai')
+        sessionStorage.removeItem('phone')
+        sessionStorage.removeItem('headImg')
         localStorage.removeItem('thisUser')
         localStorage.removeItem('thisPass')
         this.$store.state.userNow = ''
+        this.$store.state.imgSrc = ''
         this.$router.push('/')
       }, (response) => {
         this.$message.error('请求服务端失败')
