@@ -11,7 +11,7 @@
         <div class="papers" v-if="$store.state.paperList.length">
           <div class="papers-col" v-for="(value,index) in $store.state.paperList">
             <div class="file"  @click="getPapert(value.id, value.title)">
-
+              <img src="../../img/filess.png" alt="">
             </div>
             <div class="paper-title"  @click="getPapert(value.id, value.title)">{{value.title}}</div>
             <div class="paper-foot">
@@ -109,10 +109,14 @@
     width: 80%;
     height: 95px;
     margin: 20px 10% 80px 10%;
-    background-color: #fff;
-    box-sizing: border-box;
-    border: 1px solid #C0C4CC;
     border-radius: 3px;
+  }
+  .file img{
+    width: 100%;
+    height: 120px;
+    position: absolute;
+    left: 0;
+    top:5px;
   }
   .paper-title{
     width: 100%;
