@@ -68,7 +68,7 @@
                     <div @click="deleteX(index)">删除</div>
                     <div @click="upX(index)">上移</div>
                     <div @click="downX(index)">下移</div>
-                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
+                    <div @click="similarSearch(value.unique)">相似推荐</div>
                     <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
                     <div @click="value.area += 50">增加答题区</div>
                   </div>
@@ -98,7 +98,7 @@
                     <div @click="deleteT(index)">删除</div>
                     <div @click="upT(index)">上移</div>
                     <div @click="downT(index)">下移</div>
-                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
+                    <div @click="similarSearch(value.unique)">相似推荐</div>
                     <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
                     <div @click="value.area += 50">增加答题区</div>
                   </div>
@@ -128,7 +128,7 @@
                     <div @click="deleteJ(index)">删除</div>
                     <div @click="upJ(index)">上移</div>
                     <div @click="downJ(index)">下移</div>
-                    <div @click="$router.push({path: '/index', query: {servlet: 'againSearch', msg:value.unique}})">相似推荐</div>
+                    <div @click="similarSearch(value.unique)">相似推荐</div>
                     <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
                     <div @click="value.area += 50">增加答题区</div>
                   </div>
