@@ -115,7 +115,7 @@
           </div>
         </div>
         <div v-if="$store.state.nowSub.length === 0" :style="{minHeight: minHeight + 'px'}">
-          <p style="position: absolute; top: 300px; left: 30%; transform: translateX(-50%)">暂没有与搜索内容相关的题目</p>
+          <p style="position: absolute; top: 400px; left: 30%; transform: translateX(-50%)">暂没有与搜索内容相关的题目</p>
         </div>
         <div class="main-right">
           <div class="right-fix">
@@ -161,7 +161,7 @@
         topFixed: false,
         // popoverFirst: false,
         screenShow: true,
-        screenShowTwo: false,
+        screenShowTwo: true,
         queKind: [{
           check: false,
           value: '全部'
@@ -616,6 +616,7 @@
     font-family: "PingFang SC";
     letter-spacing: 1px;
     margin-right: 20px;
+    padding: 2px 3px;
   }
   .screen-li{
     font-size: 14px;
@@ -630,14 +631,16 @@
    font-weight: 600;
    font-family: "PingFang SC";
    letter-spacing: 1px;
-   margin-right: 20px;
+   margin-right: 15px;
    display: inline-block;
+   padding: 2px 3px;
  }
  .screen-li-two{
    display: inline-block;
    font-size: 14px;
    letter-spacing: 1px;
    margin-right: 20px;
+   margin-top: 5px;
    border-radius: 3px;
    padding: 2px 3px;
    cursor: pointer;
@@ -671,15 +674,6 @@
    text-decoration: underline;
    color: #409EFF;
  }
-  .pre-img{
-    max-width: 96%;
-    max-height: 200px;
-    border: 1px solid #eee;
-    border-radius: 5px;
-    box-sizing: border-box;
-    margin-left: 50%;
-    transform: translateX(-50%);
-  }
   .header-concern {
     display: flex;
     flex-direction: row;
