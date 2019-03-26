@@ -15,7 +15,7 @@
     </el-dialog>
     <div class="main">
       <div class="concern">
-        <div class="exam">
+        <div class="exam" id="pdfDom">
           <div class="exam_something">
             <div v-show="$store.state.config[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="$store.state.examName"></div>
             <div v-show="$store.state.config[5]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="$store.state.examSecondName"></div>
@@ -171,7 +171,7 @@
           <div class="right">
             <div class="right_up">
               <div class="set_title">试卷操作</div>
-              <div><el-button class="btn" type="primary" icon="el-icon-download">下载试题</el-button></div>
+              <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
               <div><el-button class="btn" @click="changePaper()" type="primary" icon="el-icon-document">保存修改</el-button></div>
               <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
             </div>
