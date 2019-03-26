@@ -264,8 +264,8 @@
                 sessionStorage.setItem('headImg', response.data.data.head)
                 this.$store.state.userNow = response.data.data.username
                 this.$store.state.imgSrc = response.data.data.head
-                this.$store.state.jiaocai = response.data.data.jiaocai
-                this.$store.state.nianji = response.data.data.nianji
+                this.$store.state.jiaocai = response.data.data.jiaocai ? response.data.data.jiaocai : this.$store.state.jiaocai
+                this.$store.state.nianji = response.data.data.nianji ? response.data.data.nianji : this.$store.state.nianji
                 this.$store.state.phone = response.data.data.phone
                 if (this.checked === true) {
                   this.clearCookie()
@@ -454,8 +454,8 @@
             sessionStorage.setItem('headImg', response.data.data.head)
             this.$store.state.userNow = response.data.data.username
             this.$store.state.imgSrc = response.data.data.head
-            this.$store.state.jiaocai = response.data.data.jiaocai
-            this.$store.state.nianji = response.data.data.nianji
+            this.$store.state.jiaocai = response.data.data.jiaocai ? response.data.data.jiaocai : this.$store.state.jiaocai
+            this.$store.state.nianji = response.data.data.nianji ? response.data.data.nianji : this.$store.state.nianji
             this.$store.state.phone = response.data.data.phone
           } else {
             this.$alert('自动登录失效', '提示', {
