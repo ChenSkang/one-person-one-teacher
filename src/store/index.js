@@ -15,8 +15,8 @@ export default new Vuex.Store({
     nowSub: [],
     nowSubs: '',
     userNow: '',
-    jiaocai: '',
-    nianji: '',
+    jiaocai: '人教新版',
+    nianji: '七年级上',
     phone: '',
     imgSrc: '', // 头像
     cropImg: '', // 裁切的图片

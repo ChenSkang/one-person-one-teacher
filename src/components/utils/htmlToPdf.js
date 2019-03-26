@@ -6,7 +6,7 @@ import JsPDF from 'jspdf'
 export default{
   install (Vue, options) {
     Vue.prototype.getPdf = function () {
-      let title = this.htmlTitle
+      let title = this.$store.state.examName
       html2Canvas(document.querySelector('#pdfDom'), {
         scale: 2,
         allowTaint: false,
