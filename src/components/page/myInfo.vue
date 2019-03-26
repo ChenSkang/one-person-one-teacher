@@ -41,7 +41,7 @@
                   <el-input v-model="threeInfo.name" :placeholder="$store.state.userNow"></el-input>
                 </el-form-item>
                 <el-form-item label="年级">
-                  <el-select v-model="classValue" placeholder="八年级">
+                  <el-select v-model="classValue">
                     <el-option
                       v-for="item in theClasses"
                       :key="item.value"
@@ -51,7 +51,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="教材版本">
-                  <el-select v-model="teachValue" placeholder="人教版">
+                  <el-select v-model="teachValue">
                     <el-option
                       v-for="item in theTeach"
                       :key="item.value"
