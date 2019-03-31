@@ -4,7 +4,7 @@
     <my-head></my-head>
     <mySpace></mySpace>
     <top-search v-if="topFixed"></top-search>
-    <el-dialog title="选择试卷" :visible.sync="paperVisible" width="60%" center :append-to-body="true">
+    <el-dialog title="选择试卷" :visible.sync="paperVisible" width="30%" center :append-to-body="true">
       <ul class="paperList-ul">
         <li v-for="(value, index) in $store.state.paperList" class="paperList-li" @click="add(value.id)">
           {{index + 1 + '.  ' + value.title}}
@@ -741,5 +741,10 @@
   }
   .paperList-li{
     height: 40px;
+    cursor: pointer;
+    line-height: 40px;
+  }
+  .paperList-li:hover {
+    background-color: #F2F6FC;
   }
 </style>
