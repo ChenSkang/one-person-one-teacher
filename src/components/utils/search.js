@@ -5,7 +5,7 @@ export default {
   install (Vue, options) {
     // 文字搜索
     Vue.prototype.searchQuestion = function (msg, page, kind, nianji, jiaocai) {
-      if (msg.length === 0) {
+      if (msg.length === 0 || msg.split(' ').join('').length === 0) {
         this.$message.error('搜索内容不能为空')
       } else {
         this.$store.state.history.loadingTwo = true
@@ -121,6 +121,7 @@ export default {
       })
       window.open(routeData.href, '_blank')
     }
+    // md5推题
     Vue.prototype.similarSearch = function (msg) {
       let num = Math.random() * 10000
       let routeData = this.$router.resolve({
@@ -132,6 +133,24 @@ export default {
         }
       })
       window.open(routeData.href, '_blank')
+    }
+    // 列表获取
+    Vue.prototype.getWordList = function (msg) {
+      let url = this.$store.state.urls.url + 'search/getMould'
+      let formData = new FormData()
+      formData.append('question', msg)
+      if (msg.length > 0 && msg.split(' ').join('').length > 0) {
+        this.$axios.post(url, formData).then((res) => {
+          if (res.data.code === 1) {
+            this.$store.state.myData = res.data.data
+          }
+          console.log(res)
+        }, (res) => {
+          console.log('error')
+        })
+      } else {
+        this.$store.state.myData = []
+      }
     }
   }
 }
