@@ -28,6 +28,7 @@ export default new Vuex.Store({
     examSecondName: '试卷副标题',
     examThirdName: '考试范围：xxx；考试时间：100分钟；命题人：xxx',
     input_message: '',
+    myData: [],
     myTest: [
       { question: '' },
       { kddp: '' },
