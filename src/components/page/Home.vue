@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="showSearchLi = false">
     <!--<div id="mask" :style="{minHeights: minHeights + 'px'}" v-if="popoverFirst && $store.state.nowSub.length"></div>-->
     <my-head></my-head>
     <mySpace></mySpace>
@@ -36,8 +36,25 @@
       <div class="main-middle">
         <div class="main-left">
           <div class="header-concern">
-            <div style="width: 100%; position: relative">
-              <el-input v-model="$store.state.input_message" @keyup.native.enter="searchMsg()" placeholder="题干/知识点/试卷"></el-input>
+            <div style="width: 100%; position: relative" @click.stop="showSearchLi = true">
+              <el-input v-model="$store.state.input_message"
+                        @keyup.native.enter="searchMsg()"
+                        @keyup.native="getEvent($event)"
+                        @keydown.native.up="selectUp"
+                        @keydown.native.down="selectDown"
+                        placeholder="题干/知识点/试卷"></el-input>
+              <div class="search-ul" v-if="showSearchLi">
+                <ul>
+                  <li class="search-li"
+                      v-for="(value, index) in $store.state.myData"
+                      :class="{selectback: index == nowLi}"
+                      @mouseover="selectHover(index)"
+                      @click="selectClick(index)"
+                      :key="value">
+                    {{value}}
+                  </li>
+                </ul>
+              </div>
               <div style="position: absolute; right: 15px; top: 6px; cursor: pointer">
                 <img src="../../img/phone.png" width="28px" />
                 <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage"/>
@@ -152,6 +169,8 @@
     },
     data () {
       return {
+        nowLi: -1,
+        showSearchLi: true,
         nowUnique: '',
         paperVisible: false,
         imageSrc: '',
@@ -326,6 +345,35 @@
           query: {msg: this.$store.state.cropImg, page: 1, num: num}
         })
         window.open(routeData.href, '_blank')
+      },
+      getEvent (ev) {
+        if (ev.keyCode === 38 || ev.keyCode === 40) {
+          return
+        }
+        this.getWordList(this.$store.state.input_message)
+        this.showSearchLi = true
+      },
+      selectUp () {
+        this.nowLi --
+        if (this.nowLi === -1) {
+          this.nowLi = this.$store.state.myData.length - 1
+        }
+        this.$store.state.input_message = this.$store.state.myData[this.nowLi]
+      },
+      selectDown () {
+        this.nowLi ++
+        if (this.nowLi === this.$store.state.myData.length) {
+          this.nowLi = 0
+        }
+        this.$store.state.input_message = this.$store.state.myData[this.nowLi]
+      },
+      selectHover (index) {
+        this.nowLi = index
+      },
+      selectClick (index) {
+        this.$store.state.input_message = this.$store.state.myData[index]
+        this.searchMsg()
+        this.$store.state.myData = []
       },
       searchMsg () {
         let num = Math.random() * 10000
@@ -747,4 +795,24 @@
   .paperList-li:hover {
     background-color: #F2F6FC;
   }
+ .selectback {
+   background-color: #eee !important;
+   cursor: pointer
+ }
+ .search-ul{
+   position: absolute;
+   width: 100%;
+   background-color: #fbfbfb;
+   box-sizing: border-box;
+ }
+ .search-li{
+   border: 1px solid #d4d4d4;
+   border-top: none;
+   border-bottom: none;
+   background-color: #fff;
+   width: 100%;
+   box-sizing: border-box;
+   padding: 7px 10px;
+   transition: all .3s;
+ }
 </style>
