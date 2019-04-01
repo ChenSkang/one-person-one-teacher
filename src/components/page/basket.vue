@@ -171,7 +171,7 @@
           <div class="right">
             <div class="right_up">
               <div class="set_title">试卷操作</div>
-              <div><el-button class="btn" @click="getPdf()" type="primary" icon="el-icon-download">下载试题</el-button></div>
+              <div><el-button class="btn" @click="downPaper()" type="primary" icon="el-icon-download">下载试题</el-button></div>
               <div><el-button class="btn" @click="changePaper()" type="primary" icon="el-icon-document">保存修改</el-button></div>
               <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
             </div>
@@ -400,39 +400,13 @@
           this.endMove()
         }
       },
-      wordDown () {
-        let arr = []
-        let arrTwo = []
-        for (let i = 0; i < this.$store.state.XZ.length; i++) {
-          arr.push(this.$store.state.XZ[i].unique)
-          arrTwo.push(this.$store.state.XZ[i].area)
-        }
-        for (let i = 0; i < this.$store.state.TK.length; i++) {
-          arr.push(this.$store.state.TK[i].unique)
-          arrTwo.push(this.$store.state.TK[i].area)
-        }
-        for (let i = 0; i < this.$store.state.JD.length; i++) {
-          arr.push(this.$store.state.JD[i].unique)
-          arrTwo.push(this.$store.state.JD[i].area)
-        }
-        let sessionId = sessionStorage.getItem('sessionId')
-        let config = this.$store.state.config
+      downPaper () {
+        let pid = this.$route.query.paperId
         let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        formData.append('questions', arr)
-        formData.append('name', this.$store.state.examName)
-        formData.append('nameTwo', this.$store.state.examSecondName)
-        formData.append('shijuanxinxi', this.$store.state.examThirdName)
-        formData.append('config', config)
-        formData.append('hangju', arrTwo)
-        let url = this.$store.state.urls.url + 'BasketDownJump'
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          window.open(response.data)
+        formData.append('pid', pid)
+        let url = this.$store.state.urls.url + 'paper/downPaper'
+        this.$axios.post(url, formData).then((response) => {
+          console.log(response)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
