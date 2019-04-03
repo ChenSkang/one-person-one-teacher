@@ -401,15 +401,22 @@
         }
       },
       downPaper () {
-        let pid = this.$route.query.paperId
+        /* let pid = this.$route.query.paperId
         let formData = new FormData()
         formData.append('pid', pid)
-        let url = this.$store.state.urls.url + 'paper/downPaper'
-        this.$axios.post(url, formData).then((response) => {
+        let url = this.$store.state.urls.url + 'paper/getDownUrl'
+        this.$axios.get(url, {
+          params: {
+            pid: pid
+          }
+        }).then((response) => {
           console.log(response)
         }, (response) => {
           this.$message.error('请求服务端失败')
-        })
+        }) */
+        let pid = this.$route.query.paperId
+        let url = this.$store.state.urls.url + 'paper/downPaper' + '?pid=' + pid
+        window.open(url, '_blank')
       },
       changePaper () {
         let arr = []
