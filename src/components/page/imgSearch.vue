@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div @click="showSearchLi = false">
     <my-head></my-head>
     <mySpace></mySpace>
     <top-search v-if="topFixed"></top-search>
-    <el-dialog title="选择试卷" :visible.sync="paperVisible" width="60%" center :append-to-body="true">
+    <el-dialog title="选择试卷" :visible.sync="paperVisible" width="30%" center :append-to-body="true">
       <ul class="paperList-ul">
         <li v-for="(value, index) in $store.state.paperList" class="paperList-li" @click="add(value.id)">
           {{index + 1 + '.  ' + value.title}}
@@ -37,9 +37,26 @@
     <div class="home-main" :style="{minHeight: minHeight + 'px'}">
       <div class="main-middle">
         <div class="main-left">
-          <div class="header-concern">
+          <div class="header-concern" @click.stop="showSearchLi = true">
             <div style="width: 100%; position: relative">
-              <el-input v-model="$store.state.input_message" @keyup.native.enter="searchMsg()" placeholder="题干/知识点/试卷"></el-input>
+              <el-input v-model="$store.state.input_message"
+                        @keyup.native.enter="searchMsg()"
+                        @keyup.native="getEvent($event)"
+                        @keydown.native.up="selectUp"
+                        @keydown.native.down="selectDown"
+                        placeholder="题干/知识点/试卷"></el-input>
+              <div class="search-ul" v-if="showSearchLi">
+                <ul>
+                  <li class="search-li"
+                      v-for="(value, index) in $store.state.myData"
+                      :class="{selectback: index == nowLi}"
+                      @mouseover="selectHover(index)"
+                      @click="selectClick(index)"
+                      :key="value">
+                    {{value}}
+                  </li>
+                </ul>
+              </div>
               <div style="position: absolute; right: 15px; top: 6px; cursor: pointer">
                 <img src="../../img/phone.png" width="28px" />
                 <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage"/>
@@ -173,7 +190,9 @@
           '一元一次方程的基础测试',
           '一元一次方程的典型例题',
           '全等三角形培优经典题目'
-        ]
+        ],
+        nowLi: -1,
+        showSearchLi: true
       }
     },
     methods: {
@@ -214,6 +233,35 @@
           query: {msg: this.$store.state.cropImg, page: 1, num: num}
         })
         window.open(routeData.href, '_blank')
+      },
+      getEvent (ev) {
+        if (ev.keyCode === 38 || ev.keyCode === 40) {
+          return
+        }
+        this.getWordList(this.$store.state.input_message)
+        this.showSearchLi = true
+      },
+      selectUp () {
+        this.nowLi --
+        if (this.nowLi === -1) {
+          this.nowLi = this.$store.state.myData.length - 1
+        }
+        this.$store.state.input_message = this.$store.state.myData[this.nowLi]
+      },
+      selectDown () {
+        this.nowLi ++
+        if (this.nowLi === this.$store.state.myData.length) {
+          this.nowLi = 0
+        }
+        this.$store.state.input_message = this.$store.state.myData[this.nowLi]
+      },
+      selectHover (index) {
+        this.nowLi = index
+      },
+      selectClick (index) {
+        this.$store.state.input_message = this.$store.state.myData[index]
+        this.searchMsg()
+        this.$store.state.myData = []
       },
       searchMsg () {
         let num = Math.random() * 10000
@@ -373,6 +421,14 @@
     box-sizing: border-box;
     border: 1px solid #DCDFE6;
     position: fixed;
+  }
+  .paperList-li{
+    height: 40px;
+    cursor: pointer;
+    line-height: 40px;
+  }
+  .paperList-li:hover {
+    background-color: #F2F6FC;
   }
   .screen{
   }
