@@ -184,10 +184,11 @@ export default{
         if (response.data.data.config) {
           let arr = response.data.data.config.split(',')
           for (let i = 0; i < 10; i++) {
-            if (arr[i].indexOf('true')) {
-              this.$store.state.config[i] = false
-            } else {
+            console.log(arr[i])
+            if (arr[i] === '1') {
               this.$store.state.config[i] = true
+            } else {
+              this.$store.state.config[i] = false
             }
           }
           console.log(this.$store.state.config)
