@@ -230,7 +230,7 @@
           value: '湘教新版'
         }, {
           check: false,
-          value: '青鸟新版'
+          value: '青岛新版'
         }, {
           check: false,
           value: '浙教新版'
@@ -269,7 +269,7 @@
           value: '湘教版'
         }, {
           check: false,
-          value: '青鸟版'
+          value: '青岛版'
         }, {
           check: false,
           value: '浙教版'
