@@ -3,7 +3,7 @@
     <div class="header-concern">
       <div style="width: 100%; position: relative" @click.stop="showSearchLi = true">
         <el-input v-model="$store.state.input_message"
-                  @keyup.native.enter="searchMsg()"
+                  @keyup.native.enter="searchMsg(0)"
                   @keyup.native="getEvent($event)"
                   @keydown.native.up="selectUp"
                   @keydown.native.down="selectDown"
@@ -24,10 +24,10 @@
           <img src="../../img/phone.png" width="28px" />
         </div>
       </div>
-      <div class="btn-primary search-btn" @click="searchMsg()">
+      <div class="btn-primary search-btn" @click="searchMsg(0)">
         <i class="el-icon-search">搜题</i>
       </div>
-      <div class="btn-primary search-page" @click="searchMsg()">
+      <div class="btn-primary search-page" @click="searchMsg(0)">
         <i class="el-icon-document">组卷</i>
       </div>
     </div>
@@ -69,12 +69,12 @@
       },
       selectClick (index) {
         this.$store.state.input_message = this.$store.state.myData[index]
-        this.searchMsg()
+        this.searchMsg(1)
         this.$store.state.myData = []
       },
-      searchMsg () {
+      searchMsg (m) {
         let num = Math.random() * 10000
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, num: num}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, way: m, num: num}})
       }
     },
     created () {
