@@ -38,7 +38,7 @@
           <div class="header-concern">
             <div style="width: 100%; position: relative" @click.stop="showSearchLi = true">
               <el-input v-model="$store.state.input_message"
-                        @keyup.native.enter="searchMsg()"
+                        @keyup.native.enter="searchMsg(0)"
                         @keyup.native="getEvent($event)"
                         @keydown.native.up="selectUp"
                         @keydown.native.down="selectDown"
@@ -60,10 +60,10 @@
                 <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage"/>
               </div>
             </div>
-            <div class="btn-primary search-btn" @click="searchMsg()">
+            <div class="btn-primary search-btn" @click="searchMsg(0)">
               <i class="el-icon-search">搜题</i>
             </div>
-            <div class="btn-primary search-page" @click="searchMsg()">
+            <div class="btn-primary search-page" @click="searchMsg(0)">
               <i class="el-icon-document">组卷</i>
             </div>
           </div>
@@ -372,12 +372,12 @@
       },
       selectClick (index) {
         this.$store.state.input_message = this.$store.state.myData[index]
-        this.searchMsg()
+        this.searchMsg(1)
         this.$store.state.myData = []
       },
-      searchMsg () {
+      searchMsg (m) {
         let num = Math.random() * 10000
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, num: num}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: m, num: num}})
       },
       choiceOne (num) {
         for (let i = 0; i < this.queKind.length; i++) {
@@ -398,13 +398,13 @@
         this.$set(this.theTeach[num], 'check', true)
       },
       choiceO (num) {
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.queKind[num].value, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, num: num}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.queKind[num].value, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: this.$route.query.way, num: num}})
       },
       choiceT (num) {
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.classKind[num].value, jiaocai: this.$route.query.jiaocai, num: num}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.classKind[num].value, jiaocai: this.$route.query.jiaocai, way: this.$route.query.way, num: num}})
       },
       choiceTh (num) {
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.theTeach[num].value, num: num}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.theTeach[num].value, way: this.$route.query.way, num: num}})
       },
       showJX (x) {
         this.$store.state.myTest[0].question = this.$store.state.nowSub[x].question
@@ -470,7 +470,7 @@
         }
       }, */
       nextPage (val) {
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: val, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: val, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: this.$route.query.way}})
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
       },
@@ -513,13 +513,14 @@
           let kind = val.kind
           let nianji = val.nianji
           let jiaocai = val.jiaocai
+          let way = val.way
           let x = this.fnIndex(this.queKind, kind)
           let y = this.fnIndex(this.classKind, nianji)
           let z = this.fnIndex(this.theTeach, jiaocai)
           this.choiceOne(x)
           this.choiceTwo(y)
           this.choiceThree(z)
-          this.searchQuestion(val.msg, page, kind, nianji, jiaocai)
+          this.searchQuestion(val.msg, page, kind, nianji, jiaocai, way)
         }
       }
     },
@@ -536,13 +537,14 @@
         let kind = this.$route.query.kind
         let nianji = this.$route.query.nianji
         let jiaocai = this.$route.query.jiaocai
+        let way = this.$route.query.way
         let x = this.fnIndex(this.queKind, kind)
         let y = this.fnIndex(this.classKind, nianji)
         let z = this.fnIndex(this.theTeach, jiaocai)
         this.choiceOne(x)
         this.choiceTwo(y)
         this.choiceThree(z)
-        this.searchQuestion(this.$route.query.msg, page, kind, nianji, jiaocai)
+        this.searchQuestion(this.$route.query.msg, page, kind, nianji, jiaocai, way)
       }
       /* if (localStorage.getItem('ifFirsts') === 'true') {
         this.popoverFirst = true
