@@ -4,7 +4,7 @@
 export default {
   install (Vue, options) {
     // 文字搜索
-    Vue.prototype.searchQuestion = function (msg, page, kind, nianji, jiaocai) {
+    Vue.prototype.searchQuestion = function (msg, page, kind, nianji, jiaocai, way) {
       if (msg.length === 0 || msg.split(' ').join('').length === 0) {
         this.$message.error('搜索内容不能为空')
       } else {
@@ -17,6 +17,7 @@ export default {
         formData.append('kind', kind)
         formData.append('nianji', nianji)
         formData.append('jiaocai', jiaocai)
+        formData.append('way', way)
         let url = this.$store.state.urls.url + 'search/wordSearch'
         this.$axios.post(url, formData, {
           headers: {
@@ -116,6 +117,7 @@ export default {
           kind: '全部',
           nianji: this.$store.state.nianji,
           jiaocai: this.$store.state.jiaocai,
+          way: 1,
           num: num
         }
       })
