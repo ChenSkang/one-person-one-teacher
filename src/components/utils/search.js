@@ -117,7 +117,7 @@ export default {
           kind: '全部',
           nianji: this.$store.state.nianji,
           jiaocai: this.$store.state.jiaocai,
-          way: 1,
+          way: 0,
           num: num
         }
       })
