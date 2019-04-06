@@ -39,7 +39,7 @@
     data () {
       return {
         nowLi: -1,
-        showSearchLi: true
+        showSearchLi: false
       }
     },
     methods: {
@@ -74,7 +74,7 @@
       },
       searchMsg (m) {
         let num = Math.random() * 10000
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, way: m, num: num}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: m, num: num}})
       }
     },
     created () {
