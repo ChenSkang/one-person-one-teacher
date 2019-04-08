@@ -17,7 +17,7 @@ export default {
         formData.append('kind', kind)
         formData.append('nianji', nianji)
         formData.append('jiaocai', jiaocai)
-        formData.append('way', way)
+        /* formData.append('way', way) */
         let url = this.$store.state.urls.url + 'search/wordSearch'
         this.$axios.post(url, formData, {
           headers: {
@@ -33,7 +33,6 @@ export default {
             })
           } else {
             this.$store.state.nowSub = response.data.data
-            this.$store.state.nowSubs = response.data.msg
             this.$store.state.history.loadingTwo = false
             this.$store.state.history.nowHomePage = page
           }
