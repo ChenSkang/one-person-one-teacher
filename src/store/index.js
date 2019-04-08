@@ -13,7 +13,6 @@ export default new Vuex.Store({
   state: {
     signShow: false,
     nowSub: [],
-    nowSubs: '',
     userNow: '',
     jiaocai: '人教新版',
     nianji: '七年级上',
@@ -40,6 +39,11 @@ export default new Vuex.Store({
     paperList: []
   },
   mutations: {
+  },
+  getters: {
+    iptMsg: state => {
+      return state.input_message.substr(0, 60)
+    }
   },
   modules: {
     urls: urls,
