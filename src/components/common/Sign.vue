@@ -238,7 +238,7 @@
           path: '/index',
           query: {
             servlet: 'wordSearch',
-            msg: this.$store.state.input_message,
+            msg: this.$store.getters.iptMsg,
             page: 1,
             kind: '全部',
             nianji: this.$store.state.nianji,
