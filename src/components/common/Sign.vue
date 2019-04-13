@@ -71,7 +71,7 @@
             <i class="el-icon-document">组卷</i>
           </div>
         </div>
-        <div class="fire" @click="searchHotMsg(fireMsg)">
+        <div class="fire" @click="searchHotQue(fireMsg)">
           <img src="../../img/fire.png" width="16px" style="transform: translateY(-3px)" alt="" />&nbsp;&nbsp;<span>{{fireMsg}}</span>
         </div>
       </div>
@@ -102,7 +102,7 @@
             <div class="hot-search">热门搜索</div>
             <div class="hot-list">
               <ul>
-                <li class="list" v-for="(value, index) in searchHot" @click="searchHotMsg(value)">
+                <li class="list" v-for="(value, index) in searchHot" @click="searchHotQue(value)">
                   <img v-if="index < 3" src="../../img/fire.png" width="16px" style="transform: translateY(-3px);margin-right: 3px" alt="" />{{index + 1}}. {{value}}
                 </li>
               </ul>
@@ -197,11 +197,10 @@
       sureCrop () {
         this.visible = false
         let num = Math.random() * 10000
-        let routeData = this.$router.resolve({
+        this.$router.push({
           path: '/imgSearch',
           query: {msg: this.$store.state.cropImg, page: 1, num: num}
         })
-        window.open(routeData.href, '_blank')
       },
       getEvent (ev) {
         if (ev.keyCode === 38 || ev.keyCode === 40) {
@@ -234,7 +233,7 @@
       },
       searchMsg (m) {
         let num = Math.random() * 10000
-        let routeData = this.$router.resolve({
+        this.$router.push({
           path: '/index',
           query: {
             servlet: 'wordSearch',
@@ -247,7 +246,22 @@
             num: num
           }
         })
-        window.open(routeData.href, '_blank')
+      },
+      searchHotQue (hot) {
+        let num = Math.random() * 10000
+        this.$router.push({
+          path: '/index',
+          query: {
+            servlet: 'wordSearch',
+            msg: hot,
+            page: 1,
+            kind: '全部',
+            nianji: this.$store.state.nianji,
+            jiaocai: this.$store.state.jiaocai,
+            way: 0,
+            num: num
+          }
+        })
       },
       showMore (num) {
         this.myTest[0].question = this.hotQuestions[num].question
