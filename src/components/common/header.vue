@@ -29,10 +29,14 @@
     },
     methods: {
       goPapers () {
-        let routeData = this.$router.resolve({
-          path: '/testPapers'
-        })
-        window.open(routeData.href, '_blank')
+        if (this.$route.path === '/testPapers') {
+          this.getPaperList()
+        } else {
+          let routeData = this.$router.resolve({
+            path: '/testPapers'
+          })
+          window.open(routeData.href, '_blank')
+        }
       },
       goYourSpace () {
         this.$router.push({path: '/userInfo', query: { info: '0' }})

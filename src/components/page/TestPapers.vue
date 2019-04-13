@@ -69,6 +69,7 @@
     created () {
       this.minHeight = document.documentElement.clientHeight - 51
       this.getPaperList()
+      document.title = '我的试卷'
     }
   }
 </script>

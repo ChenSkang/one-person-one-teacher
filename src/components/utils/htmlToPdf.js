@@ -62,45 +62,6 @@ export default{
         this.$message('请先登录')
       }
     }
-    // 试题篮
-    Vue.prototype.goBasket = function () {
-      if (sessionStorage.getItem('sessionId')) {
-        let url = this.$store.state.urls.url + 'GetBasketServlet'
-        let sessionId = sessionStorage.getItem('sessionId')
-        let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          this.$store.state.XZ = []
-          this.$store.state.TK = []
-          this.$store.state.JD = []
-          for (let i = 0; i < response.data.length; i++) {
-            switch (response.data[i].kind) {
-              case '选择题':
-                this.$store.state.XZ.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                break
-              case '填空题':
-                this.$store.state.TK.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                break
-              case '解答题':
-                this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-                break
-              default:
-                this.$store.state.JD.push({que: response.data[i].que, unique: response.data[i].unique, jx: response.data[i].jx, answer: response.data[i].answer, area: 0})
-            }
-          }
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
-      } else {
-        this.signShows()
-        this.$message('请先登录')
-      }
-    }
     // 登录
     Vue.prototype.signShows = function () {
       if (sessionStorage.getItem('sessionId')) {
@@ -181,6 +142,7 @@ export default{
         this.$store.state.examName = response.data.data.title ? response.data.data.title : this.$store.state.examName
         this.$store.state.examSecondName = response.data.data.title2 ? response.data.data.title2 : this.$store.state.examSecondName
         this.$store.state.examThirdName = response.data.data.shijuanxinxi ? response.data.data.shijuanxinxi : this.$store.state.examThirdName
+        document.title = this.$store.state.examName
         if (response.data.data.config) {
           let arr = response.data.data.config.split(',')
           for (let i = 0; i < 10; i++) {

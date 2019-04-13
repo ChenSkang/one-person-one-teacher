@@ -29,10 +29,9 @@
     },
     methods: {
       goPapers () {
-        let routeData = this.$router.resolve({
+        this.$router.push({
           path: '/testPapers'
         })
-        window.open(routeData.href, '_blank')
       },
       goYourSpace () {
         this.$router.push({path: '/userInfo', query: { info: '0' }})
