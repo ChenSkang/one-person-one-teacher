@@ -521,6 +521,7 @@
           this.choiceTwo(y)
           this.choiceThree(z)
           this.searchQuestion(val.msg, page, kind, nianji, jiaocai, way)
+          document.title = val.msg
         }
       }
     },
@@ -545,6 +546,7 @@
         this.choiceTwo(y)
         this.choiceThree(z)
         this.searchQuestion(this.$route.query.msg, page, kind, nianji, jiaocai, way)
+        document.title = this.$route.query.msg
       }
       /* if (localStorage.getItem('ifFirsts') === 'true') {
         this.popoverFirst = true
