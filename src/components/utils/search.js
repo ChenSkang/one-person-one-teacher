@@ -8,7 +8,7 @@ export default {
       if (msg.length === 0 || msg.split(' ').join('').length === 0) {
         this.$message.error('搜索内容不能为空')
       } else {
-        this.$store.state.history.loadingTwo = true
+        this.$store.state.history.loading = true
         let sessionId = sessionStorage.getItem('sessionId') ? sessionStorage.getItem('sessionId') : ''
         let formData = new FormData()
         formData.append('question', msg)
@@ -27,13 +27,13 @@ export default {
         }).then((response) => {
           console.log(response)
           if (response.data.msg === '没有找到题目噢') {
-            this.$store.state.history.loadingTwo = false
+            this.$store.state.history.loading = false
             this.$alert('没有找到搜索相关的题目', '抱歉', {
               confirmButtonText: '确定'
             })
           } else {
             this.$store.state.nowSub = response.data.data
-            this.$store.state.history.loadingTwo = false
+            this.$store.state.history.loading = false
             this.$store.state.history.nowHomePage = page
           }
         }, (response) => {
@@ -84,6 +84,7 @@ export default {
       if (msg.length === 0) {
         this.$message.error('搜索内容不能为空')
       } else {
+        this.$store.state.history.loading = true
         let sessionId = sessionStorage.getItem('sessionId') ? sessionStorage.getItem('sessionId') : ''
         let formData = new FormData()
         formData.append('md5', msg)
@@ -98,7 +99,9 @@ export default {
           console.log(response)
           this.$store.state.nowSub = response.data.data
           this.$store.state.nowSubs = response.data.msg
+          this.$store.state.history.loading = false
         }, (response) => {
+          this.$store.state.history.loading = false
           this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
             confirmButtonText: '确定'
           })

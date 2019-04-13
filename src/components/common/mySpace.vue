@@ -1,6 +1,7 @@
 <template>
   <div  v-loading.fullscreen.lock="$store.state.history.loading"
-        element-loading-text="拼命加载中"
+        element-loading-text="题目加载中"
+        element-loading-background="rgba(0, 0, 0, 0.4)"
         element-loading-spinner="el-icon-loading">
     <div id="space" style="display: none">
       <div class="col col-hover" @click="$router.push('/')"><span>首页</span></div><div class="col">丨</div>
