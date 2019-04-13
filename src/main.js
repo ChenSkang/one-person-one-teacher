@@ -34,6 +34,9 @@ new Vue({
 
 /* 路由跳转验证 */
 router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
   if (to.matched.some(res => res.meta.requireAuth)) {
     if (sessionStorage.getItem('sessionId')) {
       next()
