@@ -451,10 +451,6 @@
         }).then(({ value }) => {
           this.createPaper(value)
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          })
         })
       },
       /* titleNumber: function (index) {
