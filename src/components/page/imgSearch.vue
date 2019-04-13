@@ -228,11 +228,10 @@
       sureCrop () {
         this.visible = false
         let num = Math.random() * 10000
-        let routeData = this.$router.resolve({
+        this.$router.push({
           path: '/imgSearch',
           query: {msg: this.$store.state.cropImg, page: 1, num: num}
         })
-        window.open(routeData.href, '_blank')
       },
       getEvent (ev) {
         if (ev.keyCode === 38 || ev.keyCode === 40) {
