@@ -376,7 +376,7 @@
     },
     watch: {
       nowQuery: function (val) {
-        if (this.$route.path === '/index') {
+        if (this.$route.path === '/imgSearch') {
           this.$store.state.cropImg = val.msg
           this.imgSearch()
         }
