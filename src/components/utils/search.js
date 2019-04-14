@@ -50,6 +50,7 @@ export default {
     // 图片搜索
     Vue.prototype.imgSearch = function () {
       let sessionId = sessionStorage.getItem('sessionId') ? sessionStorage.getItem('sessionId') : ''
+      this.noQue = false
       const page = this.$store.state.cropImg
       let arr = page.split(',')
       let mime = arr[0].match(/:(.*?);/)[1]
@@ -76,6 +77,7 @@ export default {
         this.$store.state.nowSubs = response.data.msg
         this.$store.state.history.loading = false
       }, (response) => {
+        this.noQue = true
         this.$store.state.history.loading = false
         this.$alert('请检查图片内容并确认网络是否正常', '未知错误', {
           confirmButtonText: '确定'

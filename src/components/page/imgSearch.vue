@@ -144,8 +144,8 @@
       </div>
     </div>
     <answer></answer>
-    <div v-if="!$store.state.nowSub.length" :style="{minHeight: minHeight + 'px'}">
-      <p style="position: absolute; top: 250px; left: 50%; transform: translateX(-50%)">暂没有与搜索内容相关的题目</p>
+    <div v-show="noQue" :style="{minHeight: minHeight + 'px'}">
+      <p style="position: absolute; top: 250px; left: 50%; transform: translateX(-50%)">暂没有与图片内容相关的题目</p>
     </div>
   </div>
 </template>
@@ -168,6 +168,7 @@
     data () {
       return {
         nowUnique: '',
+        noQue: false,
         paperVisible: false,
         imgVisible: false,
         imageSrc: '',
