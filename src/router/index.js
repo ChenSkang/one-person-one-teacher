@@ -8,6 +8,9 @@ export default new Router({
     {
       path: '/',
       name: 'Sign',
+      meta: {
+        title: 'OPOT|初中数学指导'
+      },
       component: resolve => require(['@/components/common/Sign'], resolve)
     },
     {

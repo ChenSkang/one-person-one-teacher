@@ -131,7 +131,7 @@
             </div>
           </div>
         </div>
-        <div v-if="$store.state.nowSub.length === 0" :style="{minHeight: minHeight + 'px'}">
+        <div v-show="noQue" :style="{minHeight: minHeight + 'px'}">
           <p style="position: absolute; top: 400px; left: 30%; transform: translateX(-50%)">暂没有与搜索内容相关的题目</p>
         </div>
         <div class="main-right">
@@ -170,6 +170,7 @@
     data () {
       return {
         nowLi: -1,
+        noQue: false,
         showSearchLi: true,
         nowUnique: '',
         paperVisible: false,

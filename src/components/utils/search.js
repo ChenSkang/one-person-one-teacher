@@ -9,6 +9,7 @@ export default {
         this.$message.error('搜索内容不能为空')
       } else {
         this.$store.state.history.loading = true
+        this.noQue = false
         let sessionId = sessionStorage.getItem('sessionId') ? sessionStorage.getItem('sessionId') : ''
         let formData = new FormData()
         formData.append('question', msg)
@@ -28,6 +29,7 @@ export default {
           console.log(response)
           if (response.data.msg === '没有找到题目噢') {
             this.$store.state.history.loading = false
+            this.noQue = true
             this.$alert('没有找到搜索相关的题目', '抱歉', {
               confirmButtonText: '确定'
             })
@@ -37,7 +39,8 @@ export default {
             this.$store.state.history.nowHomePage = page
           }
         }, (response) => {
-          this.$store.state.history.loadingTwo = false
+          this.noQue = true
+          this.$store.state.history.loading = false
           this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
             confirmButtonText: '确定'
           })
