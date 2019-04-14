@@ -9,7 +9,7 @@
                   @keydown.native.down="selectDown"
                   placeholder="题干/知识点/试卷"></el-input>
         <div class="search-ul" v-if="showSearchLi">
-          <ul>
+          <ul @mouseleave="showSearchLi = false">
             <li class="search-li"
                 v-for="(value, index) in $store.state.myData"
                 :class="{selectback: index == nowLi}"
