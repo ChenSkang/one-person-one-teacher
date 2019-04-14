@@ -371,7 +371,7 @@
     },
     watch: {
       nowQuery: function (val) {
-        if (this.$route.path === '/index') {
+        if (this.$route.path === '/similarSearch') {
           this.searchSimilar(val.msg)
         }
       }
