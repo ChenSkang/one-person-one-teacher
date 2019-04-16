@@ -466,7 +466,7 @@
         }
       }, */
       nextPage (val) {
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: val, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: this.$route.query.way}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$route.query.msg, page: val, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: this.$route.query.way}})
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
       },
