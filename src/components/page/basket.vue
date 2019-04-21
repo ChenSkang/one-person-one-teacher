@@ -205,7 +205,6 @@
   import mySpace from '../common/mySpace.vue'
   import myHead from '../common/header.vue'
   import draggable from 'vuedraggable'
-  import myFoot from '../common/footer.vue'
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   import answer from '../common/anwer.vue'
   export default {
@@ -252,7 +251,6 @@
       ElButton,
       myHead,
       draggable,
-      myFoot,
       gotop,
       answer
     },
