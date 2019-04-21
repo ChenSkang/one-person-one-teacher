@@ -137,31 +137,28 @@
             </transition-group>
           </draggable>
 
-          <div v-show="$store.state.config[2] || $store.state.config[9]">
+          <div v-if="$store.state.config[2] || $store.state.config[9]">
             <div v-for="(value, index) in $store.state.XZ" class="ques" :key="value.answer">
               <div class="up">
                 <div>
-                  <span>{{index + 1}}.</span>
-                  <span v-show="$store.state.config[9]">解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-show="$store.state.config[8]">解答：<span v-html="value.answer"></span></span>
+                  <span v-show="$store.state.config[9]"><span>{{index + 1}}.</span>解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-show="$store.state.config[8]"><span>{{index + 1}}.</span>解答：<span v-html="value.answer"></span></span>
                 </div>
               </div>
             </div>
             <div v-for="(value, index) in $store.state.TK" class="ques" :key="value.answer">
               <div class="up">
                 <div>
-                  <span>{{$store.state.XZ.length + index + 1}}.</span>
-                  <span v-show="$store.state.config[9]">解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-show="$store.state.config[8]">解答：<span v-html="value.answer"></span></span>
+                  <span v-show="$store.state.config[9]"><span>{{$store.state.XZ.length + index + 1}}.</span>解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-show="$store.state.config[8]"><span>{{$store.state.XZ.length + index + 1}}.</span>解答：<span v-html="value.answer"></span></span>
                 </div>
               </div>
             </div>
             <div v-for="(value, index) in $store.state.JD" class="ques" :key="value.answer">
               <div class="up">
                 <div>
-                  <span>{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>
-                  <span v-show="$store.state.config[9]">解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-show="$store.state.config[8]">解答：<span v-html="value.answer"></span></span>
+                  <span v-show="$store.state.config[9]"><span>{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>解析：<span v-html="value.jx"></span></span><br/>
+                  <span v-show="$store.state.config[8]"><span>{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>解答：<span v-html="value.answer"></span></span>
                 </div>
               </div>
             </div>
@@ -200,7 +197,6 @@
       </div>
     </div>
     <gotop></gotop>
-    <myFoot></myFoot>
   </div>
 </template>
 
@@ -529,28 +525,29 @@
   .main {
     width: 100%;
     position: relative;
-    top: 40px;
+    top: 50px;
     background-color: #F2F6FC;
-    padding-top: 20px;
-    padding-bottom: 20px;
     letter-spacing: 1px;
+    padding: 20px 0 50px;
     overflow: hidden;
+    min-height: 1000px;
   }
   .concern{
+    position: relative;
     width: 84%;
-    margin-left: 8%;
+    margin-left: 10%;
     display: flex;
     flex-direction: row
   }
-  .concern-right{
-    width: 25%;
-  }
   .exam{
-    width: 915px;
+    width: 815px;
     background-color: #fff;
     position: relative;
-    padding: 40px 50px 40px 50px;
-    min-height: 910px;
+    padding: 40px 50px 0 50px;
+    min-height: 950px;
+  }
+  .concern-right{
+     width: 25%;
   }
   .right{
     width: 90%;
