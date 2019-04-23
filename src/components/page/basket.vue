@@ -15,6 +15,37 @@
     </el-dialog>
     <div class="main">
       <div class="concern">
+        <div class="concern-right">
+          <div class="right">
+            <div class="right_up">
+              <div class="set_title">试卷操作</div>
+              <div><el-button class="btn" @click="downPaper()" type="primary" icon="el-icon-download">下载试题</el-button></div>
+              <div><el-button class="btn" @click="changePaper()" type="primary" icon="el-icon-document">保存修改</el-button></div>
+              <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
+            </div>
+            <div class="right_down">
+              <div class="set_title">试卷信息</div>
+              <div class="set_exam">
+                <el-row>
+                  <el-col :span="12">
+                    <div v-for="(city, index) in cities" :key="city">
+                      <el-checkbox  v-model="$store.state.config[index]" :key="city">{{city}}</el-checkbox>
+                    </div>
+                  </el-col>
+                  <el-col :span="12">
+                    <div v-for="(mation, index) in mations" :key="mation">
+                      <el-checkbox  v-model="$store.state.config[index + 5]" :key="mation">{{mation}}</el-checkbox>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+            <div class="right-foot">
+              <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
+            </div>
+          </div>
+        </div>
+
         <div class="exam" id="pdfDom">
           <div class="exam_something">
             <div v-show="$store.state.config[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="$store.state.examName"></div>
@@ -161,36 +192,6 @@
                   <span v-show="$store.state.config[8]"><span>{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>解答：<span v-html="value.answer"></span></span>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="concern-right">
-          <div class="right">
-            <div class="right_up">
-              <div class="set_title">试卷操作</div>
-              <div><el-button class="btn" @click="downPaper()" type="primary" icon="el-icon-download">下载试题</el-button></div>
-              <div><el-button class="btn" @click="changePaper()" type="primary" icon="el-icon-document">保存修改</el-button></div>
-              <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
-            </div>
-            <div class="right_down">
-              <div class="set_title">试卷信息</div>
-              <div class="set_exam">
-                <el-row>
-                  <el-col :span="12">
-                    <div v-for="(city, index) in cities" :key="city">
-                      <el-checkbox  v-model="$store.state.config[index]" :key="city">{{city}}</el-checkbox>
-                    </div>
-                  </el-col>
-                  <el-col :span="12">
-                    <div v-for="(mation, index) in mations" :key="mation">
-                      <el-checkbox  v-model="$store.state.config[index + 5]" :key="mation">{{mation}}</el-checkbox>
-                    </div>
-                  </el-col>
-                </el-row>
-              </div>
-            </div>
-            <div class="right-foot">
-              <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
             </div>
           </div>
         </div>
@@ -533,7 +534,7 @@
   .concern{
     position: relative;
     width: 84%;
-    margin-left: 10%;
+    margin-left: 8%;
     display: flex;
     flex-direction: row
   }
@@ -545,7 +546,7 @@
     min-height: 950px;
   }
   .concern-right{
-     width: 25%;
+     width: 300px;
   }
   .right{
     width: 90%;
