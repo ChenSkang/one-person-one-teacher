@@ -29,6 +29,7 @@ export default {
           console.log(response)
           if (response.data.msg === '没有找到题目噢') {
             this.$store.state.history.loading = false
+            this.$store.state.nowSub = []
             this.noQue = true
             this.$alert('没有找到搜索相关的题目', '抱歉', {
               confirmButtonText: '确定'
@@ -39,6 +40,7 @@ export default {
             this.$store.state.history.nowHomePage = page
           }
         }, (response) => {
+          this.$store.state.nowSub = []
           this.noQue = true
           this.$store.state.history.loading = false
           this.$alert('请检查文本内容并确认网络是否正常', '搜索出错', {
