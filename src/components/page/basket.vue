@@ -47,6 +47,9 @@
         </div>
 
         <div class="exam" id="pdfDom">
+          <div class="set-exam">
+            <div></div>
+          </div>
           <div class="exam_something">
             <div v-show="$store.state.config[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="$store.state.examName"></div>
             <div v-show="$store.state.config[5]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="$store.state.examSecondName"></div>
@@ -396,19 +399,6 @@
         }
       },
       downPaper () {
-        /* let pid = this.$route.query.paperId
-        let formData = new FormData()
-        formData.append('pid', pid)
-        let url = this.$store.state.urls.url + 'paper/getDownUrl'
-        this.$axios.get(url, {
-          params: {
-            pid: pid
-          }
-        }).then((response) => {
-          console.log(response)
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        }) */
         let pid = this.$route.query.paperId
         let url = this.$store.state.urls.url + 'paper/downPaper' + '?pid=' + pid
         window.open(url, '_blank')
@@ -544,6 +534,14 @@
     position: relative;
     padding: 40px 50px 0 50px;
     min-height: 950px;
+  }
+  .set-exam{
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: 0;
+    right: -50px;
+    background-color: #409EFF;
   }
   .concern-right{
      width: 300px;
