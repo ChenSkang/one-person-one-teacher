@@ -48,14 +48,10 @@
           cancelButtonText: '取消',
           inputPattern: /\S/,
           inputErrorMessage: '不能为空',
-          inputValue: this.examName
+          inputValue: '初中测试卷'
         }).then(({ value }) => {
           this.createPaper(value)
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          })
         })
       },
       getPapert (pid, title) {
