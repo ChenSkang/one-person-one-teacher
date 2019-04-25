@@ -33,7 +33,7 @@
           this.getPaperList()
         } else {
           let routeData = this.$router.resolve({
-            path: '/testPapers'
+            path: '/basket'
           })
           window.open(routeData.href, '_blank')
         }
