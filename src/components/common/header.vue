@@ -29,7 +29,7 @@
     },
     methods: {
       goPapers () {
-        if (this.$route.path === '/testPapers') {
+        if (this.$route.path === '/basket') {
           this.getPaperList()
         } else {
           let routeData = this.$router.resolve({

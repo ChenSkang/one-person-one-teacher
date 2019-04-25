@@ -30,7 +30,7 @@
     methods: {
       goPapers () {
         this.$router.push({
-          path: '/testPapers'
+          path: '/basket'
         })
       },
       goYourSpace () {

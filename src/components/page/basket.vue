@@ -7,7 +7,7 @@
       title="提示"
       :visible.sync="deleteall"
       width="30vmax" :append-to-body="true">
-      <span>清空后不可恢复，确认清空？</span>
+      <span>删除后不可恢复，是否确认？</span>
       <span slot="footer" class="dialog-footer">
               <el-button @click="deleteall = false" size="small">取 消</el-button>
               <el-button type="primary" @click="deleteAll()" size="small">确 定</el-button>
@@ -15,40 +15,63 @@
     </el-dialog>
     <div class="main">
       <div class="concern">
-        <div class="concern-right">
-          <div class="right">
-            <div class="right_up">
-              <div class="set_title">试卷操作</div>
-              <div><el-button class="btn" @click="downPaper()" type="primary" icon="el-icon-download">下载试题</el-button></div>
-              <div><el-button class="btn" @click="changePaper()" type="primary" icon="el-icon-document">保存修改</el-button></div>
-              <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
-            </div>
-            <div class="right_down">
-              <div class="set_title">试卷信息</div>
-              <div class="set_exam">
-                <el-row>
-                  <el-col :span="12">
-                    <div v-for="(city, index) in cities" :key="city">
-                      <el-checkbox  v-model="$store.state.config[index]" :key="city">{{city}}</el-checkbox>
-                    </div>
-                  </el-col>
-                  <el-col :span="12">
-                    <div v-for="(mation, index) in mations" :key="mation">
-                      <el-checkbox  v-model="$store.state.config[index + 5]" :key="mation">{{mation}}</el-checkbox>
-                    </div>
-                  </el-col>
-                </el-row>
+        <div class="concern-left">
+          <div class="left-set">
+            <div class="paper-list">
+              <div class="left-title">
+                试卷列表
+                <div class="add-paper" title="点击创建试卷" @click="newPaper()">
+                  <i class="el-icon-plus"></i>
+                </div>
               </div>
-            </div>
-            <div class="right-foot">
-              <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
+              <div class="left-main">
+                <ul>
+                  <li class="paper-li"
+                      v-for="(value, index) in $store.state.paperList"
+                      @click="getPapert(value.id, value.title)">
+                    {{value.title}}
+                    <div class="paper-li-set">
+                      <div class="paper-li-icon" title="删除试卷" @click="deletePapert(value.id)"><i class="el-icon-delete"></i></div>
+                      <div class="paper-li-icon" title="试卷重命名" @click="renamePaper(value.title, index)"><i class="el-icon-edit"></i></div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="exam" id="pdfDom">
-          <div class="set-exam">
-            <div></div>
+          <div class="set-exam" @mouseenter="rightShow = true" @mouseleave="rightShow = false">
+            <span>试<br/>卷<br/>设<br/>置</span>
+            <div class="right" v-if="rightShow">
+              <div class="right_up">
+                <div class="set_title">试卷操作</div>
+                <div><el-button class="btn" @click="downPaper()" type="primary" icon="el-icon-download">下载试题</el-button></div>
+                <div><el-button class="btn" @click="changePaper()" type="primary" icon="el-icon-document">保存修改</el-button></div>
+                <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
+              </div>
+              <div class="right_down">
+                <div class="set_title">试卷信息</div>
+                <div class="set_exam">
+                  <el-row>
+                    <el-col :span="12">
+                      <div v-for="(city, index) in cities" :key="city">
+                        <el-checkbox  v-model="$store.state.config[index]" :key="city">{{city}}</el-checkbox>
+                      </div>
+                    </el-col>
+                    <el-col :span="12">
+                      <div v-for="(mation, index) in mations" :key="mation">
+                        <el-checkbox  v-model="$store.state.config[index + 5]" :key="mation">{{mation}}</el-checkbox>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </div>
+              </div>
+              <div class="right-foot">
+                <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
+              </div>
+            </div>
           </div>
           <div class="exam_something">
             <div v-show="$store.state.config[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="$store.state.examName"></div>
@@ -222,6 +245,7 @@
         }
       }
       return {
+        rightShow: false,
         deleteall: false,
         cities: ['主标题', '考生信息', '总分栏', '显示答案', '显示解析'],
         mations: ['副标题', '试卷信息', '注意事项', '答案后置', '解析后置'],
@@ -451,6 +475,49 @@
           this.$message.error('请求服务端失败')
         })
       },
+      newPaper () {
+        this.$prompt('请输入试卷名字', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /\S/,
+          inputErrorMessage: '不能为空'
+        }).then(({ value }) => {
+          this.createPaper(value)
+        }).catch(() => {
+        })
+      },
+      renamePaper (val, index) {
+        this.$prompt('请输入新的试卷名字', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /\S/,
+          inputErrorMessage: '不能为空',
+          inputValue: val
+        }).then(({ value }) => {
+          this.$store.state.examName = value
+          this.$set(this.$store.state.paperList[index], 'title', value)
+          this.changePaper()
+        }).catch(() => {
+        })
+      },
+      getPapert (pid, title) {
+        this.getPaper(pid)
+        this.$router.push({path: '/basket', query: { title: title, paperId: pid }})
+      },
+      deletePapert (val) {
+        this.$confirm('删除后不可以恢复, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.deletePaper(val)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        }).catch(() => {
+        })
+      },
       deleteAll () {
         this.deleteall = false
         let url = this.$store.state.urls.url + 'paper/cleanPaper'
@@ -479,9 +546,10 @@
       }
     },
     created () {
-      if (this.$route.query) {
+      if (this.$route.query.paperId) {
         this.getPaper(this.$route.query.paperId)
       }
+      this.getPaperList()
     },
     watch: {
     },
@@ -523,32 +591,102 @@
   }
   .concern{
     position: relative;
-    width: 84%;
-    margin-left: 8%;
+    width: 88%;
+    margin-left: 6%;
     display: flex;
     flex-direction: row
   }
   .exam{
-    width: 815px;
+    width: 905px;
     background-color: #fff;
     position: relative;
-    padding: 40px 50px 0 50px;
+    padding: 40px 30px 0 30px;
     min-height: 950px;
   }
   .set-exam{
-    height: 50px;
-    width: 50px;
+    text-align: center;
+    padding: 10px 0;
+    width: 40px;
     position: absolute;
     top: 0;
-    right: -50px;
-    background-color: #409EFF;
+    right: -40px;
+    background-color: #dcdfe6;
+    cursor: pointer;
   }
-  .concern-right{
-     width: 300px;
+  .concern-left{
+    width: 300px;
+    min-width: 240px;
+    position: relative;
+  }
+  .left-set{
+    width: 95%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid #DCDFE6;
+  }
+  .left-title{
+    height: 35px;
+    line-height: 35px;
+    color: #333;
+    font-size: 17px;
+    font-family: 黑体;
+    width: 90%;
+    margin: 5px auto;
+    box-sizing: border-box;
+    border-bottom: 1px solid #DCDFE6;
+    position: relative;
+  }
+  .add-paper{
+    position: absolute;
+    right: 10px;
+    top: 0;
+    cursor: pointer;
+  }
+  .left-main{
+    margin-bottom: 10px;
+  }
+  .paper-li{
+    position: relative;
+    background-color: #fff;
+    letter-spacing: 1px;
+    width: 90%;
+    margin: 0 auto;
+    text-indent: 6px;
+    color: #333;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 5px;
+    font-size: 14px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .paper-li:hover{
+    background-color: #EBEEF5;
+    color: #409EFF;
+  }
+  .paper-li:hover .paper-li-icon{
+    background-color: #EBEEF5;
+    color: #409EFF;
+  }
+  .paper-li-set{
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    display: flex;
+    flex-direction: row;
+  }
+  .paper-li-icon{
+    color: #fff;
   }
   .right{
-    width: 90%;
-    margin-left: 5%;
+    z-index: 989;
+    border: 1px solid #dcdfe6;
+    background-color: #EBEEF5;
+    position: absolute;
+    top:0;
+    right: 40px;
+    padding: 20px 10px 0;
     min-width: 240px;
   }
   .right_up{
@@ -580,8 +718,7 @@
     line-height: 45px;
     font-size: 16px;
     text-align: center;
-    background-color: #EBEEF5;
-    border-bottom: 1px solid #E4E7ED;
+    background-color: #F2F6FC;
     margin-bottom: 10px;
   }
   .exam_name{
