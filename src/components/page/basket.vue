@@ -711,6 +711,7 @@
   }
   .set_exam div{
     margin-top: 10px;
+    text-align: left;
   }
   .set_title{
     width: 100%;
