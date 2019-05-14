@@ -1,23 +1,26 @@
 <template>
   <div @click="showSearchLi = false">
-    <!--<div id="mask" :style="{minHeight: minHeight + 'px'}" v-if="popoverFirst || popoverTwo">
-      <div class="popoverOne" v-if="popoverFirst">
-        <div class="popoverOne-arrow"></div>
-        <p class="popover-p">点击可输入图片，搜索题目并且推荐同类型题目</p>
-        <div><el-button type="warning" size="small" plain style="margin-left: 300px" @click="popoverClickOne()">我知道了</el-button></div>
-      </div>
-      <div class="popoverTwo" v-if="popoverTwo">
-        <div class="popoverTwo-arrow"></div>
-        <p class="popover-p">输入需要搜索的内容，在左侧选择搜索类型，在右侧选择题型</p>
-        <div><el-button type="warning" size="small" plain style="margin-left: 500px" @click="popoverClickTwo()">我知道了</el-button></div>
-      </div>
-    </div>-->
     <my-head></my-head>
     <my-space></my-space>
-    <el-dialog title="试题解析" :visible.sync="IFJX" width="70%" :append-to-body="true">
+    <el-dialog title="选择试卷" :visible.sync="paperVisible" width="30%" center :append-to-body="true">
+      <ul class="paperList-ul">
+        <li v-for="(value, index) in $store.state.paperList" class="paperList-li" @click="add(value.id)">
+          {{index + 1 + '.  ' + value.title}}
+        </li>
+      </ul>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="newPaper()">创 建</el-button>
+        <el-button @click="paperVisible = false" type="warning">取 消</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :visible.sync="IFJX" width="70%" center :append-to-body="true">
       <div class="ST TI" v-html="myTest[0].question"></div>
       <div class="JX TI"><span class="jx">解析：</span><span v-html="myTest[0].analysis"></span></div>
       <div class="JX TI"><span class="jx">解答：</span><span v-html="myTest[0].answer"></span></div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="similarSearch(myTest[0].md5)">相似推荐</el-button>
+        <el-button type="primary" @click="addPaper(myTest[0].md5)">添加试题</el-button>
+      </span>
     </el-dialog>
     <el-dialog :visible.sync="visible" width="60%" center :append-to-body="true">
       <vue-cropper ref='cropper'
@@ -140,10 +143,12 @@
         imageSrc: '',
         hotQuestions: [],
         IFJX: false,
+        paperVisible: false,
         myTest: [
           { que: '' },
           { answer: '' },
-          { analysis: '' }
+          { analysis: '' },
+          {md5: ''}
         ],
         minHeight: 0,
         popoverFirst: false,
@@ -267,6 +272,7 @@
         this.myTest[0].question = this.hotQuestions[num].question
         this.myTest[0].answer = this.hotQuestions[num].answer
         this.myTest[0].analysis = this.hotQuestions[num].analysis
+        this.myTest[0].md5 = this.hotQuestions[num].md5
         this.IFJX = true
       },
       getHot () {
@@ -281,6 +287,34 @@
           this.hotQuestions = response.data.data
         }, (res) => {
         })
+      },
+      addPaper (x) {
+        this.nowUnique = x
+        let sessionId = sessionStorage.getItem('sessionId')
+        if (sessionId) {
+          let url = this.$store.state.urls.url + 'paper/getList'
+          let formData = new FormData()
+          formData.append('sessionId', sessionId)
+          this.$axios.post(url, formData, {
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            withCredentials: true
+          }).then((response) => {
+            console.log(response.data)
+            this.$store.state.paperList = response.data.data
+            this.paperVisible = true
+          }, (response) => {
+            this.$message.error('请求服务端失败')
+          })
+        } else {
+          this.signShows()
+        }
+      },
+      add (pid) {
+        let que = this.nowUnique
+        this.addQue(pid, que)
+        this.paperVisible = false
       },
       fireWord () {
         window.setInterval(() => {
@@ -550,6 +584,18 @@
     height: 150px;
     box-sizing: border-box;
     border-top: 1px solid #DCDFE6;
+  }
+  .paperList-ul{
+  }
+  .paperList-li{
+    height: 40px;
+    cursor: pointer;
+    line-height: 40px;
+    border-bottom: 1px solid #909399;
+    overflow: hidden;
+  }
+  .paperList-li:hover {
+    background-color: #F2F6FC;
   }
   .foot-text{
     line-height: 20px;

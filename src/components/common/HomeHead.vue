@@ -9,7 +9,7 @@
     <div class="user">
       <div class="name" v-if="$store.state.userNow">{{$store.state.userNow}}</div>
       <div class="name" v-else><div @click="signShows()">登录</div></div>
-      <div class="port">
+      <div class="port" @click="signShow()">
         <img :src="$store.state.imgSrc" alt="">
       </div>
       <div v-if="$store.state.userNow" class="user-info">
@@ -35,6 +35,13 @@
       },
       goYourSpace () {
         this.$router.push({path: '/userInfo', query: { info: '0' }})
+      },
+      signShow () {
+        if (sessionStorage.getItem('sessionId')) {
+          this.$router.push({path: '/userInfo', query: { info: '0' }})
+        } else {
+          this.signShows()
+        }
       }
     },
     created () {
@@ -100,6 +107,7 @@
     border-radius: 50%;
     background-color: white;
     margin-right: 20px;
+    cursor: pointer;
   }
   .port img{
     width: 28px;

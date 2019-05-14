@@ -792,6 +792,7 @@
     cursor: pointer;
     line-height: 40px;
     border-bottom: 1px solid #909399;
+    overflow: hidden;
   }
   .paperList-li:hover {
     background-color: #F2F6FC;
