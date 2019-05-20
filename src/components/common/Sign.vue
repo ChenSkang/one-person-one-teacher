@@ -70,9 +70,9 @@
           <div class="btn-primary search-btn" @click="searchMsg(0)">
             <i class="el-icon-search">搜题</i>
           </div>
-          <div class="btn-primary search-page" @click="searchMsg(0)">
+          <!--<div class="btn-primary search-page" @click="searchMsg(0)">
             <i class="el-icon-document">组卷</i>
-          </div>
+          </div>-->
         </div>
         <div class="fire" @click="searchHotQue(fireMsg)">
           <img src="../../img/fire.png" width="16px" style="transform: translateY(-3px)" alt="" />&nbsp;&nbsp;<span>{{fireMsg}}</span>
@@ -431,8 +431,8 @@
     background-color: #2d8cf0
   }
   .header-concern {
-    margin-left: 50%;
-    transform: translateX(-50%);
+    width: 685px;
+    margin: 0 auto;
     display: flex;
     flex-direction: row;
     position: relative;
