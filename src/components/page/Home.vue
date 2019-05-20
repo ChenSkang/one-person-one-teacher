@@ -63,36 +63,36 @@
             <div class="btn-primary search-btn" @click="searchMsg(0)">
               <i class="el-icon-search">搜题</i>
             </div>
-            <div class="btn-primary search-page" @click="searchMsg(0)">
+            <!--<div class="btn-primary search-page" @click="searchMsg(0)">
               <i class="el-icon-document">组卷</i>
-            </div>
+            </div>-->
           </div>
           <div class="screen">
-            <div class="screen-title">
+            <!--<div class="screen-title">
               <div class="screen-name" @click="screenShow = !screenShow">筛选</div>
               <div>&nbsp;</div>
               <div class="screen-edition" @click="screenShowTwo = !screenShowTwo">{{$route.query.jiaocai}}</div>
-            </div>
+            </div>-->
             <transition name="el-zoom-in-top">
               <div class="screen-window" v-if="screenShow">
                 <div class="screen-list">
                   <div class="screen-ul">题型</div>
                   <div class="screen-li" v-for="(value, index) in queKind" :class="{choice: value.check}" @click="choiceO(index)">{{value.value}}</div>
                 </div>
-                <div class="screen-list">
+                <!--<div class="screen-list">
                   <div class="screen-ul">年级</div>
                   <div class="screen-li" v-for="(value, index) in classKind" :class="{choice: value.check}" @click="choiceT(index)">{{value.value}}</div>
-                </div>
+                </div>-->
               </div>
             </transition>
-            <transition name="el-zoom-in-top">
+            <!--<transition name="el-zoom-in-top">
               <div class="screen-window" v-if="screenShowTwo">
                 <div class="screen-list-two">
                   <div class="screen-ul-two">教材</div>
                   <div class="screen-li-two" v-for="(value, index) in theTeach" :class="{choice: value.check}" @click="choiceTh(index)">{{value.value}}</div>
                 </div>
               </div>
-            </transition>
+            </transition>-->
           </div>
           <div class="block" v-if="$store.state.nowSub.length !== 0"
                v-loading="$store.state.history.loadingTwo"
@@ -622,6 +622,7 @@
     position: fixed;
   }
   .screen{
+    margin-top: 10px;
   }
   .screen-title{
     display: flex;
