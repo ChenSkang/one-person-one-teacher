@@ -423,9 +423,29 @@
         }
       },
       downPaper () {
+        let arr = []
+        for (let i = 0; i < this.$store.state.XZ.length; i++) {
+          arr.push(this.$store.state.XZ[i].unique)
+        }
+        for (let i = 0; i < this.$store.state.TK.length; i++) {
+          arr.push(this.$store.state.TK[i].unique)
+        }
+        for (let i = 0; i < this.$store.state.JD.length; i++) {
+          arr.push(this.$store.state.JD[i].unique)
+        }
         let pid = this.$route.query.paperId
+        let formData = new FormData()
+        formData.append('questions', arr)
+        formData.append('pid', pid)
+        let url = this.$store.state.urls.url + 'paper/moveQue'
+        this.$axios.post(url, formData).then((response) => {
+          console.log(response)
+        }, (response) => {
+          this.$message.error('请求服务端失败')
+        })
+        /* let pid = this.$route.query.paperId
         let url = this.$store.state.urls.url + 'paper/downPaper' + '?pid=' + pid
-        window.open(url, '_blank')
+        window.open(url, '_blank') */
       },
       changePaper () {
         let arr = []
