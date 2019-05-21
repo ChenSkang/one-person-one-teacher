@@ -477,6 +477,7 @@
     position: absolute;
     width: 100%;
     background-color: #fbfbfb;
+    border-bottom: 1px solid #d4d4d4;
     box-sizing: border-box;
   }
   .search-li{

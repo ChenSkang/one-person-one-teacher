@@ -807,6 +807,8 @@
    width: 100%;
    background-color: #fbfbfb;
    box-sizing: border-box;
+   border-bottom: 1px solid #d4d4d4;
+   z-index: 999;
  }
  .search-li{
    border: 1px solid #d4d4d4;
