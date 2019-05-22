@@ -111,7 +111,7 @@
                 <div class="up">
                   <span class="TH">{{index + 1}}.</span>
                   <span v-html="value.que"></span>
-                  <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
+                  <!--<div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>-->
                   <div v-show="$store.state.config[4]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
@@ -126,8 +126,8 @@
                     <div @click="upX(index)">上移</div>
                     <div @click="downX(index)">下移</div>
                     <div @click="similarSearch(value.unique)">相似推荐</div>
-                    <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
-                    <div @click="value.area += 50">增加答题区</div>
+                    <!--<div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                    <div @click="value.area += 50">增加答题区</div>-->
                   </div>
                 </div>
               </div>
@@ -141,7 +141,7 @@
                 <div class="up">
                   <span class="TH">{{$store.state.XZ.length + index + 1}}.</span>
                   <span v-html="value.que"></span>
-                  <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
+                  <!--<div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>-->
                   <div v-show="$store.state.config[4]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
@@ -156,8 +156,8 @@
                     <div @click="upT(index)">上移</div>
                     <div @click="downT(index)">下移</div>
                     <div @click="similarSearch(value.unique)">相似推荐</div>
-                    <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
-                    <div @click="value.area += 50">增加答题区</div>
+                    <!--<div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                    <div @click="value.area += 50">增加答题区</div>-->
                   </div>
                 </div>
               </div>
@@ -171,7 +171,7 @@
                 <div class="up">
                   <span class="TH">{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>
                   <span v-html="value.que"></span>
-                  <div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>
+                  <!--<div :style="{width: 10 + 'px', height: value.area + 'px'}"></div>-->
                   <div v-show="$store.state.config[4]">
                     <span class="jx">解析：</span><span v-html="value.jx"></span>
                   </div>
@@ -186,8 +186,8 @@
                     <div @click="upJ(index)">上移</div>
                     <div @click="downJ(index)">下移</div>
                     <div @click="similarSearch(value.unique)">相似推荐</div>
-                    <div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
-                    <div @click="value.area += 50">增加答题区</div>
+                    <!--<div v-if="value.area >= 50" @click="value.area -= 50">减少答题区</div>
+                    <div @click="value.area += 50">增加答题区</div>-->
                   </div>
                 </div>
               </div>
@@ -433,34 +433,46 @@
         for (let i = 0; i < this.$store.state.JD.length; i++) {
           arr.push(this.$store.state.JD[i].unique)
         }
+        let sessionId = sessionStorage.getItem('sessionId')
+        let config = this.$store.state.config
         let pid = this.$route.query.paperId
         let formData = new FormData()
+        formData.append('sessionId', sessionId)
         formData.append('questions', arr)
+        formData.append('title', this.$store.state.examName)
+        formData.append('title2', this.$store.state.examSecondName)
+        formData.append('shijuanxinxi', this.$store.state.examThirdName)
+        formData.append('config', config)
         formData.append('pid', pid)
-        let url = this.$store.state.urls.url + 'paper/moveQue'
-        this.$axios.post(url, formData).then((response) => {
+        let url = this.$store.state.urls.url + 'paper/updatePaper'
+        this.$axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          withCredentials: true
+        }).then((response) => {
+          if (response.data.msg === '成功') {
+            let pid = this.$route.query.paperId
+            let urls = this.$store.state.urls.url + 'paper/downPaper' + '?pid=' + pid
+            window.open(urls, '_blank')
+          } else {
+            this.$message.error('错误')
+          }
           console.log(response)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
-        /* let pid = this.$route.query.paperId
-        let url = this.$store.state.urls.url + 'paper/downPaper' + '?pid=' + pid
-        window.open(url, '_blank') */
       },
       changePaper () {
         let arr = []
-        let arrTwo = []
         for (let i = 0; i < this.$store.state.XZ.length; i++) {
           arr.push(this.$store.state.XZ[i].unique)
-          arrTwo.push(this.$store.state.XZ[i].area)
         }
         for (let i = 0; i < this.$store.state.TK.length; i++) {
           arr.push(this.$store.state.TK[i].unique)
-          arrTwo.push(this.$store.state.TK[i].area)
         }
         for (let i = 0; i < this.$store.state.JD.length; i++) {
           arr.push(this.$store.state.JD[i].unique)
-          arrTwo.push(this.$store.state.JD[i].area)
         }
         let sessionId = sessionStorage.getItem('sessionId')
         let config = this.$store.state.config
@@ -472,7 +484,6 @@
         formData.append('title2', this.$store.state.examSecondName)
         formData.append('shijuanxinxi', this.$store.state.examThirdName)
         formData.append('config', config)
-        formData.append('hangju', arrTwo)
         formData.append('pid', pid)
         let url = this.$store.state.urls.url + 'paper/updatePaper'
         this.$axios.post(url, formData, {
