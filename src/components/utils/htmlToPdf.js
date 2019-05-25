@@ -97,8 +97,8 @@ export default{
       }
     }
     Vue.prototype.createPaper = function (value) {
-      if (this.$store.state.paperList.length >= 15) {
-        this.$message('最多创建十五张试卷')
+      if (this.$store.state.paperList.length >= 30) {
+        this.$message('最多创建三十张试卷')
       } else {
         let url = this.$store.state.urls.url + 'paper/create'
         let sessionId = sessionStorage.getItem('sessionId')
