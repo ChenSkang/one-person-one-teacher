@@ -436,10 +436,6 @@
     top: -40px;
     right: 300px;
   }
-  .selectback {
-    background-color: #eee !important;
-    cursor: pointer
-  }
   .first-head{
     width: 100%;
     height: 330px;
@@ -490,23 +486,6 @@
     min-width: 1000px;
     height: 40px;
     line-height: 40px;
-  }
-  .search-ul{
-    position: absolute;
-    width: 100%;
-    background-color: #fbfbfb;
-    border-bottom: 1px solid #d4d4d4;
-    box-sizing: border-box;
-  }
-  .search-li{
-    border: 1px solid #d4d4d4;
-    border-top: none;
-    border-bottom: none;
-    background-color: #fff;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 7px 10px;
-    transition: all .3s;
   }
   .title-line{
     height: 40px;
@@ -603,18 +582,6 @@
     height: 150px;
     box-sizing: border-box;
     border-top: 1px solid #DCDFE6;
-  }
-  .paperList-ul{
-  }
-  .paperList-li{
-    height: 40px;
-    cursor: pointer;
-    line-height: 40px;
-    border-bottom: 1px solid #909399;
-    overflow: hidden;
-  }
-  .paperList-li:hover {
-    background-color: #F2F6FC;
   }
   .foot-text{
     line-height: 20px;
