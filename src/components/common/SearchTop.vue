@@ -100,25 +100,4 @@
     flex-direction: row;
     position: relative;
   }
-  .selectback {
-    background-color: #eee !important;
-    cursor: pointer
-  }
-  .search-ul{
-    position: absolute;
-    width: 100%;
-    background-color: #fbfbfb;
-    box-sizing: border-box;
-    border-bottom: 1px solid #d4d4d4;
-  }
-  .search-li{
-    border: 1px solid #d4d4d4;
-    border-top: none;
-    border-bottom: none;
-    background-color: #fff;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 7px 10px;
-    transition: all .3s;
-  }
 </style>
