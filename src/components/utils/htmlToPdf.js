@@ -193,6 +193,8 @@ export default{
         if (response.data.msg === '登陆超时，请重新登陆') {
           this.$message.error('登录超时')
           this.signOut()
+        } else if (response.data.code === 0) {
+          this.$message('试题已存在')
         } else {
           this.$message.success('添加成功')
         }
