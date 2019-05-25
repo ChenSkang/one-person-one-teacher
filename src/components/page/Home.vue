@@ -6,13 +6,13 @@
     <top-search v-if="topFixed"></top-search>
     <el-dialog title="选择试卷" :visible.sync="paperVisible" width="30%" center :append-to-body="true">
       <ul class="paperList-ul">
-        <li v-for="(value, index) in $store.state.paperList" class="paperList-li" @click="add(value.id)">
+        <li v-for="(value, index) in $store.state.paperList" :class="{selectback: index == nowLii}" @click="nowLii = index" class="paperList-li">
           {{index + 1 + '.  ' + value.title}}
         </li>
       </ul>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="newPaper()">创 建</el-button>
-        <el-button @click="paperVisible = false" type="warning">取 消</el-button>
+        <el-button type="primary" @click="addQ()">添 加</el-button>
       </span>
     </el-dialog>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" center :append-to-body="true">
@@ -169,6 +169,7 @@
     },
     data () {
       return {
+        nowLii: -1,
         nowLi: -1,
         noQue: false,
         showSearchLi: true,
@@ -437,10 +438,11 @@
           this.signShows()
         }
       },
-      add (pid) {
-        let que = this.nowUnique
-        this.addQue(pid, que)
+      addQ () {
         this.paperVisible = false
+        let que = this.nowUnique
+        let pid = this.$store.state.paperList[this.nowLii].id
+        this.addQue(pid, que)
       },
       newPaper () {
         this.$prompt('请输入试卷名字', '提示', {
