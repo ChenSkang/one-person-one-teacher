@@ -4,13 +4,16 @@
     <my-space></my-space>
     <el-dialog title="选择试卷" :visible.sync="paperVisible" width="30%" center :append-to-body="true">
       <ul class="paperList-ul">
-        <li v-for="(value, index) in $store.state.paperList" class="paperList-li" @click="add(value.id)">
+        <li v-for="(value, index) in $store.state.paperList"
+            class="paperList-li"
+            @click="nowLii = index"
+            :class="{selectback: index == nowLii}">
           {{index + 1 + '.  ' + value.title}}
         </li>
       </ul>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="newPaper()">创 建</el-button>
-        <el-button @click="paperVisible = false" type="warning">取 消</el-button>
+        <el-button type="primary" @click="addQ()">添 加</el-button>
       </span>
     </el-dialog>
     <el-dialog :visible.sync="IFJX" width="70%" center :append-to-body="true">
@@ -136,6 +139,7 @@
   export default {
     data () {
       return {
+        nowLii: -1,
         nowLi: -1,
         showSearchLi: true,
         zsdShow: false,
@@ -166,7 +170,8 @@
           '全等三角形培优经典题目'
         ],
         fireMsg: '三角形辅助线做法',
-        nowFire: 0
+        nowFire: 0,
+        nowUnique: ''
       }
     },
     methods: {
@@ -311,10 +316,23 @@
           this.signShows()
         }
       },
-      add (pid) {
-        let que = this.nowUnique
-        this.addQue(pid, que)
+      newPaper () {
+        this.$prompt('请输入试卷名字', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /\S/,
+          inputErrorMessage: '不能为空',
+          inputValue: this.examName
+        }).then(({ value }) => {
+          this.createPaper(value)
+        }).catch(() => {
+        })
+      },
+      addQ () {
         this.paperVisible = false
+        let que = this.nowUnique
+        let pid = this.$store.state.paperList[this.nowLii].id
+        this.addQue(pid, que)
       },
       fireWord () {
         window.setInterval(() => {
