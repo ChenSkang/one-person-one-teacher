@@ -5,13 +5,16 @@
     <top-search v-if="topFixed"></top-search>
     <el-dialog title="选择试卷" :visible.sync="paperVisible" width="30%" center :append-to-body="true">
       <ul class="paperList-ul">
-        <li v-for="(value, index) in $store.state.paperList" class="paperList-li" @click="add(value.id)">
+        <li v-for="(value, index) in $store.state.paperList"
+            class="paperList-li"
+            @click="nowLii = index"
+            :class="{selectback: index == nowLii}">
           {{index + 1 + '.  ' + value.title}}
         </li>
       </ul>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="newPaper()">创 建</el-button>
-        <el-button @click="paperVisible = false" type="warning">取 消</el-button>
+        <el-button type="primary" @click="addQ()">添 加</el-button>
       </span>
     </el-dialog>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" center :append-to-body="true">
@@ -69,33 +72,6 @@
               <i class="el-icon-document">组卷</i>
             </div>
           </div>
-          <!--<div class="screen">
-            <div class="screen-title">
-              <div class="screen-name" @click="screenShow = !screenShow">筛选</div>
-              &lt;!&ndash;<div class="screen-menu"><img src="../../img/menu.png" alt="" /></div>
-              <div class="screen-edition">人教版：七年级上</div>&ndash;&gt;
-            </div>
-            <transition name="el-zoom-in-top">
-              <div class="screen-window" v-if="screenShow">
-                <div class="screen-list">
-                  <div class="screen-ul">题型</div>
-                  <div class="screen-li" :class="{choice: screenChoiceOne[0]}" @click="choiceOne(0)">全部</div>
-                  <div class="screen-li" :class="{choice: screenChoiceOne[1]}" @click="choiceOne(1)">选择题</div>
-                  <div class="screen-li" :class="{choice: screenChoiceOne[2]}" @click="choiceOne(2)">填空题</div>
-                  <div class="screen-li" :class="{choice: screenChoiceOne[3]}" @click="choiceOne(3)">解答题</div>
-                </div>
-                <div class="screen-list">
-                  <div class="screen-ul">难度</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[0]}" @click="choiceTwo(0)">全部</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[1]}" @click="choiceTwo(1)">易</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[2]}" @click="choiceTwo(2)">较易</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[3]}" @click="choiceTwo(3)">中档</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[4]}" @click="choiceTwo(4)">较难</div>
-                  <div class="screen-li" :class="{choice: screenChoiceTwo[5]}" @click="choiceTwo(5)">难</div>
-                </div>
-              </div>
-            </transition>
-          </div>-->
           <div class="block" v-if="$store.state.nowSub.length"
                v-loading="$store.state.history.loadingTwo"
                element-loading-text="拼命加载中"
@@ -193,6 +169,7 @@
           '全等三角形培优经典题目'
         ],
         nowLi: -1,
+        nowLii: -1,
         showSearchLi: true
       }
     },
@@ -322,8 +299,10 @@
           this.signShows()
         }
       },
-      add (pid) {
+      addQ () {
+        this.paperVisible = false
         let que = this.nowUnique
+        let pid = this.$store.state.paperList[this.nowLii].id
         this.addQue(pid, que)
       },
       newPaper () {
@@ -586,10 +565,5 @@
     top: 50px;
     height: 0;
     opacity: 0;
-  }
-  .paperList-ul{
-  }
-  .paperList-li{
-    height: 40px;
   }
 </style>
