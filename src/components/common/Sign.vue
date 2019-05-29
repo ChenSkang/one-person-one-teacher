@@ -2,19 +2,27 @@
   <div @click="showSearchLi = false">
     <my-head></my-head>
     <my-space></my-space>
-    <el-dialog title="选择试卷" :visible.sync="paperVisible" width="30%" center :append-to-body="true">
-      <ul class="paperList-ul">
-        <li v-for="(value, index) in $store.state.paperList"
-            class="paperList-li"
-            @click="nowLii = index"
-            :class="{selectback: index == nowLii}">
-          {{index + 1 + '.  ' + value.title}}
-        </li>
-      </ul>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="newPaper()">创 建</el-button>
-        <el-button type="primary" @click="addQ()">添 加</el-button>
-      </span>
+    <el-dialog :visible.sync="paperVisible" width="30%" :append-to-body="true">
+      <div class="paper-list">
+        <div class="left-title">
+          试卷列表
+          <div class="add-paper" title="点击创建试卷" @click="newPaper()">
+            <i class="el-icon-plus"></i>
+          </div>
+        </div>
+        <div class="left-main">
+          <ul>
+            <li class="paper-li"
+                v-for="(value, index) in $store.state.paperList"
+                @dblclick="addQ(value.id)">
+              {{value.title}}
+              <div class="paper-li-set">
+                <div class="paper-li-icon" title="添加到本试卷" @click="addQ(value.id)"><i class="el-icon-document"></i></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </el-dialog>
     <el-dialog :visible.sync="IFJX" width="70%" :append-to-body="true">
       <div class="ST TI" v-html="myTest[0].question"></div>
@@ -139,7 +147,6 @@
   export default {
     data () {
       return {
-        nowLii: -1,
         nowLi: -1,
         showSearchLi: true,
         zsdShow: false,
@@ -328,10 +335,9 @@
         }).catch(() => {
         })
       },
-      addQ () {
+      addQ (pid) {
         this.paperVisible = false
         let que = this.nowUnique
-        let pid = this.$store.state.paperList[this.nowLii].id
         this.addQue(pid, que)
       },
       fireWord () {
