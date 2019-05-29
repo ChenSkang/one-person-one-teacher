@@ -26,7 +26,7 @@
   text-align: center;
   font-size: 30px;
   position: fixed;
-  bottom: 50px;
-  right: 2%;
+  bottom: 20px;
+  right: 10px;
 }
 </style>
