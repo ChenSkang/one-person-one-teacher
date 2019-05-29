@@ -3,19 +3,27 @@
     <my-head></my-head>
     <mySpace></mySpace>
     <top-search v-if="topFixed"></top-search>
-    <el-dialog title="选择试卷" :visible.sync="paperVisible" width="30%" center :append-to-body="true">
-      <ul class="paperList-ul">
-        <li v-for="(value, index) in $store.state.paperList"
-            class="paperList-li"
-            @click="nowLii = index"
-            :class="{selectback: index == nowLii}">
-          {{index + 1 + '.  ' + value.title}}
-        </li>
-      </ul>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="newPaper()">创 建</el-button>
-        <el-button type="primary" @click="addQ()">添 加</el-button>
-      </span>
+    <el-dialog :visible.sync="paperVisible" width="30%" :append-to-body="true">
+      <div class="paper-list">
+        <div class="left-title">
+          试卷列表
+          <div class="add-paper" title="点击创建试卷" @click="newPaper()">
+            <i class="el-icon-plus"></i>
+          </div>
+        </div>
+        <div class="left-main">
+          <ul>
+            <li class="paper-li"
+                v-for="(value, index) in $store.state.paperList"
+                @dblclick="addQ(value.id)">
+              {{value.title}}
+              <div class="paper-li-set">
+                <div class="paper-li-icon" title="添加到本试卷" @click="addQ(value.id)"><i class="el-icon-document"></i></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </el-dialog>
     <el-dialog title="裁剪图片" :visible.sync="visible" width="60%" center :append-to-body="true">
       <vue-cropper ref='cropper'
@@ -164,7 +172,6 @@
           '全等三角形培优经典题目'
         ],
         nowLi: -1,
-        nowLii: -1,
         showSearchLi: true
       }
     },
@@ -294,10 +301,9 @@
           this.signShows()
         }
       },
-      addQ () {
+      addQ (pid) {
         this.paperVisible = false
         let que = this.nowUnique
-        let pid = this.$store.state.paperList[this.nowLii].id
         this.addQue(pid, que)
       },
       newPaper () {
