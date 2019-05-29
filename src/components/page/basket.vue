@@ -536,9 +536,35 @@
     },
     created () {
       if (this.$route.query.paperId) {
+        this.getPaperList()
         this.getPaper(this.$route.query.paperId)
+      } else {
+        if (sessionStorage.getItem('sessionId')) {
+          let url = this.$store.state.urls.url + 'paper/getList'
+          let sessionId = sessionStorage.getItem('sessionId')
+          let formData = new FormData()
+          formData.append('sessionId', sessionId)
+          this.$axios.post(url, formData).then((response) => {
+            console.log(response.data)
+            if (response.data.msg === '登陆超时，请重新登陆') {
+              this.$message.error('登录超时')
+              this.signOut()
+            }
+            this.$store.state.paperList = response.data.data
+            if (response.data.data.length > 0) {
+              this.getPapert(response.data.data[0].id, response.data.data[0].title)
+            }
+          }, (response) => {
+            this.$message.error('请求服务端失败')
+          })
+        } else {
+          this.signShows()
+          this.$message('请先登录')
+        }
       }
-      this.getPaperList()
+    },
+    mounted () {
+
     },
     watch: {
     },
