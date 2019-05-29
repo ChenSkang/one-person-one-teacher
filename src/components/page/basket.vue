@@ -638,66 +638,6 @@
     margin-left: 5%;
     width: 95%;
   }
-  .left-title{
-    height: 35px;
-    line-height: 35px;
-    color: #333;
-    font-size: 17px;
-    font-family: 黑体;
-    width: 90%;
-    margin: 5px auto;
-    box-sizing: border-box;
-    border-bottom: 1px solid #DCDFE6;
-    position: relative;
-  }
-  .add-paper{
-    position: absolute;
-    right: 10px;
-    top: 0;
-    cursor: pointer;
-  }
-  .left-main{
-    margin-bottom: 10px;
-  }
-  .paper-list{
-    background-color: #fff;
-    border-radius: 5px;
-    box-sizing: border-box;
-    border: 1px solid #DCDFE6;
-  }
-  .paper-li{
-    position: relative;
-    background-color: #fff;
-    letter-spacing: 1px;
-    width: 90%;
-    margin: 0 auto;
-    text-indent: 6px;
-    color: #333;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 5px;
-    font-size: 14px;
-    overflow: hidden;
-    cursor: pointer;
-  }
-  .paper-li:hover{
-    background-color: #EBEEF5;
-    color: #409EFF;
-  }
-  .paper-li:hover .paper-li-icon{
-    background-color: #EBEEF5;
-    color: #409EFF;
-  }
-  .paper-li-set{
-    position: absolute;
-    right: 10px;
-    top: 0px;
-    display: flex;
-    flex-direction: row;
-  }
-  .paper-li-icon{
-    color: #fff;
-  }
   .right_up{
     margin-top: 20px;
     width: 100%;
