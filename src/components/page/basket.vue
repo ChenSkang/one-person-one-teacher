@@ -15,63 +15,8 @@
     </el-dialog>
     <div class="main">
       <div class="concern">
-        <div class="concern-left">
-          <div class="left-set">
-            <div class="paper-list">
-              <div class="left-title">
-                试卷列表
-                <div class="add-paper" title="点击创建试卷" @click="newPaper()">
-                  <i class="el-icon-plus"></i>
-                </div>
-              </div>
-              <div class="left-main">
-                <ul>
-                  <li class="paper-li"
-                      v-for="(value, index) in $store.state.paperList"
-                      @click="getPapert(value.id, value.title)">
-                    {{value.title}}
-                    <div class="paper-li-set">
-                      <div class="paper-li-icon" title="删除试卷" @click="deletePapert(value.id)"><i class="el-icon-delete"></i></div>
-                      <div class="paper-li-icon" title="试卷重命名" @click="renamePaper(value.title, index)"><i class="el-icon-edit"></i></div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <div class="exam" id="pdfDom">
-          <div class="set-exam" @mouseenter="rightShow = true" @mouseleave="rightShow = false">
-            <span>试<br/>卷<br/>设<br/>置</span>
-            <div class="right" v-if="rightShow">
-              <div class="right_up">
-                <div class="set_title">试卷操作</div>
-                <div><el-button class="btn" @click="downPaper()" type="primary" icon="el-icon-download">下载试题</el-button></div>
-                <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
-              </div>
-              <div class="right_down">
-                <div class="set_title">试卷信息</div>
-                <div class="set_exam">
-                  <el-row>
-                    <el-col :span="12">
-                      <div v-for="(city, index) in cities" :key="city">
-                        <el-checkbox  v-model="$store.state.config[index]" :key="city" @change="changePaper()">{{city}}</el-checkbox>
-                      </div>
-                    </el-col>
-                    <el-col :span="12">
-                      <div v-for="(mation, index) in mations" :key="mation">
-                        <el-checkbox  v-model="$store.state.config[index + 5]" :key="mation" @change="changePaper()">{{mation}}</el-checkbox>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </div>
-              </div>
-              <div class="right-foot">
-                <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
-              </div>
-            </div>
-          </div>
           <div class="exam_something">
             <div v-show="$store.state.config[0]" title="点击设置试卷主标题" class="exam_names"><input type="text" class="exam_name exam_name1" v-model="$store.state.examName" @change="changePaper()"></div>
             <div v-show="$store.state.config[5]" title="点击设置试卷副标题" class="exam_names"><input type="text" class="exam_name exam_name2" v-model="$store.state.examSecondName" @change="changePaper()"></div>
@@ -220,6 +165,73 @@
             </div>
           </div>
         </div>
+
+        <div class="concern-left">
+          <div class="left-set">
+            <div class="paper-list">
+              <div class="left-title">
+                试卷列表
+                <div class="add-paper" title="点击创建试卷" @click="newPaper()">
+                  <i class="el-icon-plus"></i>
+                </div>
+              </div>
+              <div class="left-main">
+                <ul>
+                  <li class="paper-li"
+                      v-for="(value, index) in $store.state.paperList"
+                      @click="getPapert(value.id, value.title)">
+                    {{value.title}}
+                    <div class="paper-li-set">
+                      <div class="paper-li-icon" title="删除试卷" @click="deletePapert(value.id)"><i class="el-icon-delete"></i></div>
+                      <div class="paper-li-icon" title="试卷重命名" @click="renamePaper(value.title, index)"><i class="el-icon-edit"></i></div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="right_up">
+              <div class="left-title">
+                试卷下载
+              </div>
+              <div style="display: flex; flex-direction: row;height: 50px">
+                <div style="text-align: right;width: 50%;padding-right: 20px">
+                  <el-tooltip class="item" effect="light" content="点击下载试卷" placement="bottom">
+                    <el-button class="btn" @click="downPaper()" type="primary" icon="el-icon-download" circle></el-button>
+                  </el-tooltip>
+                </div>
+                <div style="text-align: left;width: 50%">
+                  <el-tooltip class="item" effect="light" content="注意！清空试题" placement="bottom">
+                    <el-button class="btn" @click="deleteall = true" type="danger" icon="el-icon-delete" circle></el-button>
+                  </el-tooltip>
+                </div>
+              </div>
+            </div>
+            <div class="right_down">
+              <div class="left-title">
+                试卷信息
+              </div>
+              <div class="set_exam">
+                <el-row>
+                  <el-col :span="12">
+                    <div v-for="(city, index) in cities" :key="city">
+                      <el-checkbox  v-model="$store.state.config[index]" :key="city" @change="changePaper()">{{city}}</el-checkbox>
+                    </div>
+                  </el-col>
+                  <el-col :span="12">
+                    <div v-for="(mation, index) in mations" :key="mation">
+                      <el-checkbox  v-model="$store.state.config[index + 5]" :key="mation" @change="changePaper()">{{mation}}</el-checkbox>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+            <div class="right-foot">
+              <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
     <gotop></gotop>
@@ -244,7 +256,6 @@
         }
       }
       return {
-        rightShow: false,
         deleteall: false,
         cities: ['主标题', '考生信息', '总分栏', '显示答案', '显示解析'],
         mations: ['副标题', '试卷信息', '注意事项', '答案后置', '解析后置'],
@@ -618,27 +629,14 @@
     padding: 40px 30px 0 30px;
     min-height: 950px;
   }
-  .set-exam{
-    text-align: center;
-    padding: 10px 0;
-    width: 40px;
-    position: absolute;
-    top: 0;
-    right: -40px;
-    background-color: #dcdfe6;
-    cursor: pointer;
-  }
   .concern-left{
     width: 300px;
     min-width: 240px;
     position: relative;
   }
   .left-set{
+    margin-left: 5%;
     width: 95%;
-    background-color: #fff;
-    border-radius: 5px;
-    box-sizing: border-box;
-    border: 1px solid #DCDFE6;
   }
   .left-title{
     height: 35px;
@@ -660,6 +658,12 @@
   }
   .left-main{
     margin-bottom: 10px;
+  }
+  .paper-list{
+    background-color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid #DCDFE6;
   }
   .paper-li{
     position: relative;
@@ -694,31 +698,26 @@
   .paper-li-icon{
     color: #fff;
   }
-  .right{
-    z-index: 989;
-    border: 1px solid #dcdfe6;
-    background-color: #EBEEF5;
-    position: absolute;
-    top:0;
-    right: 40px;
-    padding: 20px 10px 0;
-    min-width: 240px;
-  }
   .right_up{
+    margin-top: 20px;
     width: 100%;
-    text-align: center;
     background-color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid #DCDFE6;
   }
   .right_down{
     margin-top: 20px;
     width: 100%;
     background-color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid #DCDFE6;
     padding-bottom: 20px;
   }
   .right-foot{
     margin-top: 20px;
     width: 100%;
-    padding-bottom: 20px;
   }
   .set_exam{
     width: 80%;
@@ -727,15 +726,6 @@
   .set_exam div{
     margin-top: 10px;
     text-align: left;
-  }
-  .set_title{
-    width: 100%;
-    height: 45px;
-    line-height: 45px;
-    font-size: 16px;
-    text-align: center;
-    background-color: #F2F6FC;
-    margin-bottom: 10px;
   }
   .exam_names{
     width: 100%;
@@ -843,9 +833,5 @@
     font-family: 新宋体;
     font-weight: bold;
     font-size: 17px;
-  }
-  .btn {
-    width: 120px;
-    margin: 10px 0 10px 0;
   }
 </style>
