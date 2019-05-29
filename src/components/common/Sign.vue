@@ -16,7 +16,7 @@
         <el-button type="primary" @click="addQ()">添 加</el-button>
       </span>
     </el-dialog>
-    <el-dialog :visible.sync="IFJX" width="70%" center :append-to-body="true">
+    <el-dialog :visible.sync="IFJX" width="70%" :append-to-body="true">
       <div class="ST TI" v-html="myTest[0].question"></div>
       <div class="JX TI"><span class="jx">解析：</span><span v-html="myTest[0].analysis"></span></div>
       <div class="JX TI"><span class="jx">解答：</span><span v-html="myTest[0].answer"></span></div>
