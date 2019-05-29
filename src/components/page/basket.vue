@@ -48,7 +48,6 @@
               <div class="right_up">
                 <div class="set_title">试卷操作</div>
                 <div><el-button class="btn" @click="downPaper()" type="primary" icon="el-icon-download">下载试题</el-button></div>
-                <div><el-button class="btn" @click="changePaper()" type="primary" icon="el-icon-document">保存修改</el-button></div>
                 <div><el-button class="btn" @click="deleteall = true" type="primary" icon="el-icon-delete">清空试题</el-button></div>
               </div>
               <div class="right_down">
@@ -57,12 +56,12 @@
                   <el-row>
                     <el-col :span="12">
                       <div v-for="(city, index) in cities" :key="city">
-                        <el-checkbox  v-model="$store.state.config[index]" :key="city">{{city}}</el-checkbox>
+                        <el-checkbox  v-model="$store.state.config[index]" :key="city" @change="changePaper()">{{city}}</el-checkbox>
                       </div>
                     </el-col>
                     <el-col :span="12">
                       <div v-for="(mation, index) in mations" :key="mation">
-                        <el-checkbox  v-model="$store.state.config[index + 5]" :key="mation">{{mation}}</el-checkbox>
+                        <el-checkbox  v-model="$store.state.config[index + 5]" :key="mation" @change="changePaper()">{{mation}}</el-checkbox>
                       </div>
                     </el-col>
                   </el-row>
@@ -74,10 +73,10 @@
             </div>
           </div>
           <div class="exam_something">
-            <div v-show="$store.state.config[0]" title="点击设置试卷主标题"><input type="text" class="exam_name exam_name1" v-model="$store.state.examName"></div>
-            <div v-show="$store.state.config[5]" title="点击设置试卷副标题"><input type="text" class="exam_name exam_name2" v-model="$store.state.examSecondName"></div>
-            <div v-show="$store.state.config[6]" title="点击设置试卷信息"><input type="text" class="exam_name exam_name3" v-model="$store.state.examThirdName"></div>
-            <div v-show="$store.state.config[1]" title="点击设置考生信息"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
+            <div v-show="$store.state.config[0]" title="点击设置试卷主标题" class="exam_names"><input type="text" class="exam_name exam_name1" v-model="$store.state.examName" @change="changePaper()"></div>
+            <div v-show="$store.state.config[5]" title="点击设置试卷副标题" class="exam_names"><input type="text" class="exam_name exam_name2" v-model="$store.state.examSecondName" @change="changePaper()"></div>
+            <div v-show="$store.state.config[6]" title="点击设置试卷信息" class="exam_names"><input type="text" class="exam_name exam_name3" v-model="$store.state.examThirdName" @change="changePaper()"></div>
+            <div v-show="$store.state.config[1]" title="点击设置考生信息" class="exam_names"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
             <div class="scores" v-show="$store.state.config[2]" title="打分栏">
               <table border="1" cellspacing="0" cellpadding="0" align="center">
                 <tr>
@@ -423,45 +422,9 @@
         }
       },
       downPaper () {
-        let arr = []
-        for (let i = 0; i < this.$store.state.XZ.length; i++) {
-          arr.push(this.$store.state.XZ[i].unique)
-        }
-        for (let i = 0; i < this.$store.state.TK.length; i++) {
-          arr.push(this.$store.state.TK[i].unique)
-        }
-        for (let i = 0; i < this.$store.state.JD.length; i++) {
-          arr.push(this.$store.state.JD[i].unique)
-        }
-        let sessionId = sessionStorage.getItem('sessionId')
-        let config = this.$store.state.config
         let pid = this.$route.query.paperId
-        let formData = new FormData()
-        formData.append('sessionId', sessionId)
-        formData.append('questions', arr)
-        formData.append('title', this.$store.state.examName)
-        formData.append('title2', this.$store.state.examSecondName)
-        formData.append('shijuanxinxi', this.$store.state.examThirdName)
-        formData.append('config', config)
-        formData.append('pid', pid)
-        let url = this.$store.state.urls.url + 'paper/updatePaper'
-        this.$axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          withCredentials: true
-        }).then((response) => {
-          if (response.data.msg === '成功') {
-            let pid = this.$route.query.paperId
-            let urls = this.$store.state.urls.url + 'paper/downPaper' + '?pid=' + pid
-            window.open(urls, '_blank')
-          } else {
-            this.$message.error('错误')
-          }
-          console.log(response)
-        }, (response) => {
-          this.$message.error('请求服务端失败')
-        })
+        let urls = this.$store.state.urls.url + 'paper/downPaper' + '?pid=' + pid
+        window.open(urls, '_blank')
       },
       changePaper () {
         let arr = []
@@ -493,15 +456,10 @@
           withCredentials: true
         }).then((response) => {
           if (response.data.msg === '成功') {
-            this.$notify({
-              title: '提示',
-              message: '保存修改成功',
-              type: 'success'
-            })
+            console.log('sussess')
           } else {
             this.$message.error('错误')
           }
-          console.log(response)
         }, (response) => {
           this.$message.error('请求服务端失败')
         })
@@ -753,35 +711,35 @@
     background-color: #F2F6FC;
     margin-bottom: 10px;
   }
-  .exam_name{
+  .exam_names{
     width: 100%;
     text-align: center;
     border: 1px solid #fff;
+    box-sizing: border-box;
+  }
+  .exam_name{
+    width: 100%;
+    text-align: center;
+    border: none;
+    padding: 8px 0;
   }
   .exam_name:hover{
     background-color: #FEF7D7;
-    border: 1px solid #CCC;
   }
   .exam_name:focus{
     background-color: #FEF7D7;
-    border: 1px solid #fff;
   }
   .exam_name1{
     font: 22px Arial bold;
-    line-height: 40px;
   }
   .exam_name2{
     font: 18px Arial;
-    line-height: 15px;
   }
   .exam_name3{
     font: 14px 微软雅黑;
-    height: 50px;
-    line-height: 50px;
   }
   .exam_name4{
     font: 14px 微软雅黑;
-    line-height: 15px;
   }
   .scores{
     margin: 15px 0;
