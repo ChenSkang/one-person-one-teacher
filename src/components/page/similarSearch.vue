@@ -15,7 +15,7 @@
           <ul>
             <li class="paper-li"
                 v-for="(value, index) in $store.state.paperList"
-                @dblclick="addQ(value.id)">
+                @click="addQ(value.id)">
               {{value.title}}
               <div class="paper-li-set">
                 <div class="paper-li-icon" title="添加到本试卷" @click="addQ(value.id)"><i class="el-icon-document"></i></div>
