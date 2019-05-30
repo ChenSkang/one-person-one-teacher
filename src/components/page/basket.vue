@@ -141,26 +141,20 @@
           <div v-if="$store.state.config[2] || $store.state.config[9]">
             <div v-for="(value, index) in $store.state.XZ" class="ques" :key="value.answer">
               <div class="up">
-                <div>
-                  <span v-show="$store.state.config[9]"><span>{{index + 1}}.</span>解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-show="$store.state.config[8]"><span>{{index + 1}}.</span>解答：<span v-html="value.answer"></span></span>
-                </div>
+                <span v-show="$store.state.config[9]"><span>{{index + 1}}.</span>解析：<span v-html="value.jx"></span></span><br/>
+                <span v-show="$store.state.config[8]"><span>{{index + 1}}.</span>解答：<span v-html="value.answer"></span></span>
               </div>
             </div>
             <div v-for="(value, index) in $store.state.TK" class="ques" :key="value.answer">
               <div class="up">
-                <div>
-                  <span v-show="$store.state.config[9]"><span>{{$store.state.XZ.length + index + 1}}.</span>解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-show="$store.state.config[8]"><span>{{$store.state.XZ.length + index + 1}}.</span>解答：<span v-html="value.answer"></span></span>
-                </div>
+                <span v-show="$store.state.config[9]"><span>{{$store.state.XZ.length + index + 1}}.</span>解析：<span v-html="value.jx"></span></span><br/>
+                <span v-show="$store.state.config[8]"><span>{{$store.state.XZ.length + index + 1}}.</span>解答：<span v-html="value.answer"></span></span>
               </div>
             </div>
             <div v-for="(value, index) in $store.state.JD" class="ques" :key="value.answer">
               <div class="up">
-                <div>
-                  <span v-show="$store.state.config[9]"><span>{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>解析：<span v-html="value.jx"></span></span><br/>
-                  <span v-show="$store.state.config[8]"><span>{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>解答：<span v-html="value.answer"></span></span>
-                </div>
+                <span v-show="$store.state.config[9]"><span>{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>解析：<span v-html="value.jx"></span></span><br/>
+                <span v-show="$store.state.config[8]"><span>{{$store.state.XZ.length + $store.state.TK.length + index + 1}}.</span>解答：<span v-html="value.answer"></span></span>
               </div>
             </div>
           </div>
@@ -625,8 +619,8 @@
   }
   .concern{
     position: relative;
-    width: 88%;
-    margin-left: 6%;
+    width: 1265px;
+    margin: 0 auto;
     display: flex;
     flex-direction: row
   }
@@ -639,7 +633,6 @@
   }
   .concern-left{
     width: 300px;
-    min-width: 240px;
     position: relative;
   }
   .left-set{
