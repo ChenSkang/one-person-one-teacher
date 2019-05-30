@@ -179,7 +179,7 @@
                 <ul>
                   <li class="paper-li"
                       v-for="(value, index) in $store.state.paperList"
-                      @click="getPapert(value.id, value.title)">
+                      @click.self="getPapert(value.id, value.title)">
                     {{value.title}}
                     <div class="paper-li-set">
                       <div class="paper-li-icon" title="删除试卷" @click="deletePapert(value.id)"><i class="el-icon-delete"></i></div>
