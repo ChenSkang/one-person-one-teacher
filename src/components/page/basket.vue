@@ -18,7 +18,7 @@
 
         <div class="exam" id="pdfDom">
           <div class="exam_something">
-            <div v-show="$store.state.config[0]" title="点击设置试卷主标题" class="exam_names"><input type="text" class="exam_name exam_name1" v-model="$store.state.examName" @change="changePaper()"></div>
+            <div v-show="$store.state.config[0]" title="点击设置试卷主标题" class="exam_names"><input type="text" class="exam_name exam_name1" v-model="$store.state.examName" @change="changePapers()"></div>
             <div v-show="$store.state.config[5]" title="点击设置试卷副标题" class="exam_names"><input type="text" class="exam_name exam_name2" v-model="$store.state.examSecondName" @change="changePaper()"></div>
             <div v-show="$store.state.config[6]" title="点击设置试卷信息" class="exam_names"><input type="text" class="exam_name exam_name3" v-model="$store.state.examThirdName" @change="changePaper()"></div>
             <div v-show="$store.state.config[1]" title="点击设置考生信息" class="exam_names"><input type="text" class="exam_name exam_name4" v-model="examFourName"></div>
@@ -436,6 +436,14 @@
         let pid = this.$route.query.paperId
         let urls = this.$store.state.urls.url + 'paper/downPaper' + '?pid=' + pid
         window.open(urls, '_blank')
+      },
+      changePapers () {
+        this.changePaper()
+        for (let i = 0; i < this.$store.state.paperList.length; i++) {
+          if (this.$store.state.paperList[i].id === this.$route.query.paperId) {
+            this.$store.state.paperList[i].title = this.$store.state.examName
+          }
+        }
       },
       changePaper () {
         let arr = []
