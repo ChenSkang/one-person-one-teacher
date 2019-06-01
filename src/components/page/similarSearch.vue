@@ -73,9 +73,9 @@
             <div class="btn-primary search-btn" @click="searchMsg(0)">
               <i class="el-icon-search">搜题</i>
             </div>
-            <div class="btn-primary search-page" @click="searchMsg(0)">
+            <!--<div class="btn-primary search-page" @click="searchMsg(0)">
               <i class="el-icon-document">组卷</i>
-            </div>
+            </div>-->
           </div>
           <div class="block" v-if="$store.state.nowSub.length"
                v-loading="$store.state.history.loadingTwo"
