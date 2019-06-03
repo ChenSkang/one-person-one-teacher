@@ -141,3 +141,16 @@
   padding: 7px 10px;
   transition: all .3s;
 }
+.crop-img{
+  height: 38px;
+  position: absolute;
+  top: 1px;
+  right: 15px;
+  cursor: pointer;
+  line-height: 38px;
+  background-color: #fff;
+}
+.crop-input{
+  height: 38px;
+  cursor: pointer;
+}

@@ -68,7 +68,7 @@
                   </li>
                 </ul>
               </div>
-              <div style="position: absolute; right: 15px; top: 6px; cursor: pointer">
+              <div class="crop-img">
                 <img src="../../img/phone.png" width="28px" />
                 <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage"/>
               </div>
