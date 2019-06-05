@@ -137,7 +137,7 @@
                 :page-size="10"
                 :current-page.sync="$store.state.history.nowHomePage"
                 @current-change="nextPage"
-                :total="500">
+                :total="110">
               </el-pagination>
             </div>
           </div>

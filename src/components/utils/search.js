@@ -34,6 +34,10 @@ export default {
             this.$alert('没有找到搜索相关的题目', '抱歉', {
               confirmButtonText: '确定'
             })
+          } else if (!response.data) {
+            this.$store.state.history.loading = false
+            this.$store.state.nowSub = []
+            this.noQue = true
           } else {
             this.$store.state.nowSub = response.data.data
             this.$store.state.history.loading = false
