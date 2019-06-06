@@ -173,6 +173,7 @@
                 <ul>
                   <li class="paper-li"
                       v-for="(value, index) in $store.state.paperList"
+                      :title="value.title"
                       @click.self="getPapert(value.id, value.title)">
                     {{value.title}}
                     <div class="paper-li-set">
