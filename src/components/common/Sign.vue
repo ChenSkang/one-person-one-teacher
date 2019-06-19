@@ -94,7 +94,7 @@
           <div class="title-line">每日推荐</div>
         </div>
         <div class="note">
-          <img @click="zsdShow = !zsdShow" src="../../img/note.png" alt="" />
+          <img src="../../img/note.png" alt="" />
           <div class="note-zsd" v-if="zsdShow">
             <zsd-tree></zsd-tree>
           </div>
