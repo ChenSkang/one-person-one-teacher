@@ -73,7 +73,9 @@
           <el-input type="text" v-model="signForm.usr" auto-complete="off" placeholder="手机/用户名"></el-input>
         </el-form-item>
         <el-form-item prop="pass">
-          <el-input type="password" v-model="signForm.pass" @keyup.native.enter="submitSignForm('signForm')" auto-complete="off" placeholder="密码"></el-input>
+          <el-input :type="pswd" v-model="signForm.pass" @keyup.native.enter="submitSignForm('signForm')" placeholder="密码">
+            <i slot="suffix" class="el-input__icon el-icon-view" @click="changePs(pswd)"></i>
+          </el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitSignForm('signForm')">登录</el-button>
@@ -128,6 +130,7 @@
         }
       }
       return {
+        pswd: 'password',
         classValue: '',
         teachValue: '',
         theClasses: [{
@@ -306,6 +309,13 @@
         exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays)
         window.document.cookie = 'userName' + '=' + cname + ';path=/;expires=' + exdate.toGMTString()
         window.document.cookie = 'userPwd' + '=' + cpwd + ';path=/;expires=' + exdate.toGMTString()
+      },
+      changePs (str) {
+        if (str === 'password') {
+          this.pswd = ''
+        } else {
+          this.pswd = 'password'
+        }
       },
       getCookie: function () {
         if (document.cookie.length > 0) {
