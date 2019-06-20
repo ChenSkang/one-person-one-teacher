@@ -37,7 +37,7 @@
             label="操作"
             width="180">
             <template slot-scope="scope">
-              <div class="btn-small cell-btn1" @click="showExams(scope.row)">查看</div>
+              <div class="btn-small cell-btn1" @click="searchAga(scope.row)">搜索</div>
               <div class="btn-small cell-btn2" @click="deleteHistory(scope.row)">删除</div>
             </template>
           </el-table-column>
@@ -109,10 +109,23 @@
         this.imgVisible = false
         this.$router.push({path: '/similarSearch', query: {servlet: 'similarSearch', msg: this.mdFive}})
       },
+      searchAga (row) {
+        if (row.pic_address) {
+          this.$router.push({path: '/similarSearch', query: {servlet: 'similarSearch', msg: row.md5}})
+        } else {
+          if (row.kind === '全部题') {
+            this.kind = '全部'
+          } else {
+            this.kind = row.kind
+          }
+          let num = Math.random() * 10000
+          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: row.que, nianji: row.nianji, jiaocai: row.jiaocai, kind: this.kind, page: 1, way: 0, num: num}})
+        }
+      },
       searchAgainWord () {
         this.imgVisibles = false
         let num = Math.random() * 10000
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.searchQue, nianji: this.nianji, jiaocai: this.jiaocai, kind: this.kind, page: 1, num: num}})
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.searchQue, nianji: this.nianji, jiaocai: this.jiaocai, kind: this.kind, page: 1, way: 0, num: num}})
       },
       clearSearched () {
         let url = this.$store.state.urls.url + 'user/cleanHistory'
