@@ -519,6 +519,11 @@
         if (this.$route.path === '/index') {
           this.$store.state.input_message = val.msg
           let page = parseInt(val.page)
+          if (val.msg.indexOf('试卷') > -1 && page === 1) {
+            this.pageShow = false
+          } else {
+            this.pageShow = true
+          }
           let kind = val.kind
           let nianji = val.nianji
           let jiaocai = val.jiaocai
@@ -532,11 +537,6 @@
           this.searchQuestion(val.msg, page, kind, nianji, jiaocai, way)
           document.title = val.msg
         }
-        if (val.msg.indexOf('试卷')) {
-          this.pageShow = false
-        } else {
-          this.pageShow = true
-        }
       }
     },
     /* beforeCreate () {
@@ -549,6 +549,11 @@
       if (this.$route.query) {
         this.$store.state.input_message = this.$route.query.msg
         let page = parseInt(this.$route.query.page)
+        if (this.$route.query.msg.indexOf('试卷') > -1 && page === 1) {
+          this.pageShow = false
+        } else {
+          this.pageShow = true
+        }
         let kind = this.$route.query.kind
         let nianji = this.$route.query.nianji
         let jiaocai = this.$route.query.jiaocai
