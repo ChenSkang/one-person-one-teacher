@@ -132,6 +132,7 @@
               </ul>
               <el-pagination
                 class="que-page"
+                v-if="pageShow"
                 background
                 layout="prev, pager, next"
                 :page-size="10"
@@ -180,6 +181,7 @@
     },
     data () {
       return {
+        pageShow: true,
         nowLi: -1,
         noQue: false,
         showSearchLi: true,
@@ -529,6 +531,11 @@
           this.choiceThree(z)
           this.searchQuestion(val.msg, page, kind, nianji, jiaocai, way)
           document.title = val.msg
+        }
+        if (val.msg.indexOf('试卷')) {
+          this.pageShow = false
+        } else {
+          this.pageShow = true
         }
       }
     },
