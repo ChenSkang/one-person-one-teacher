@@ -55,7 +55,7 @@
                         @keyup.native="getEvent($event)"
                         @keydown.native.up="selectUp"
                         @keydown.native.down="selectDown"
-                        placeholder="题干/知识点/试卷"></el-input>
+                        placeholder="题干/知识点/中考试卷"></el-input>
               <div class="search-ul" v-if="showSearchLi">
                 <ul>
                   <li class="search-li"
