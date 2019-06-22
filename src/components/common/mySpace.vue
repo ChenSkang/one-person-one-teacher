@@ -67,14 +67,14 @@
         <p>已经有账号，马上去<span class="to" @click="gosign()">登录</span></p>
       </el-form>
     </el-dialog>
-    <el-dialog :title="msg" :visible.sync="$store.state.signShow" width="30%" :append-to-body="true">
+    <el-dialog :title="msg" :visible.sync="$store.state.signShow" width="30%" :close-on-click-modal="false" :append-to-body="true">
       <el-form :model="signForm" :rules="signRule" ref="signForm" class="demo-ruleForm">
         <el-form-item prop="usr">
           <el-input type="text" v-model="signForm.usr" auto-complete="off" placeholder="手机/用户名"></el-input>
         </el-form-item>
         <el-form-item prop="pass">
           <el-input :type="pswd" v-model="signForm.pass" @keyup.native.enter="submitSignForm('signForm')" placeholder="密码">
-            <i slot="suffix" class="el-input__icon el-icon-view" @click="changePs(pswd)"></i>
+            <i slot="suffix" style="cursor: pointer" class="el-input__icon el-icon-view" @click="changePs(pswd)"></i>
           </el-input>
         </el-form-item>
         <el-form-item>
