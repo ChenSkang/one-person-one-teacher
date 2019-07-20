@@ -147,15 +147,9 @@
           <p style="position: absolute; top: 400px; left: 30%; transform: translateX(-50%)">暂没有与搜索内容相关的题目</p>
         </div>
         <div class="main-right">
+
           <div class="right-fix">
-            <div class="hot-search">热门搜索</div>
-            <div class="hot-list">
-              <ul>
-                <li class="list" v-for="(value, index) in searchHot" @click="searchHotMsg(value)">
-                  <img v-if="index < 3" src="../../img/fire.png" width="16px" style="transform: translateY(-3px);margin-right: 3px" alt="" />{{index + 1}}. {{value}}
-                </li>
-              </ul>
-            </div>
+            <zsd-tree></zsd-tree>
           </div>
         </div>
       </div>
@@ -170,6 +164,7 @@
   import myHead from '../common/header.vue'
   import answer from '../common/anwer.vue'
   import topSearch from '../common/SearchTop.vue'
+  import zsdTree from '../common/zsdTree.vue'
   import lrz from 'lrz'
   export default {
     components: {
@@ -177,7 +172,8 @@
       myHead,
       answer,
       mySpace,
-      topSearch
+      topSearch,
+      zsdTree
     },
     data () {
       return {
@@ -636,13 +632,11 @@
     margin-top: 20px;
   }
   .right-fix{
+    position: absolute;
     width: 23%;
-    height: 350px;
     background-color: #fff;
     border-radius: 5px;
     box-sizing: border-box;
-    border: 1px solid #DCDFE6;
-    position: fixed;
   }
   .screen{
     margin-top: 10px;

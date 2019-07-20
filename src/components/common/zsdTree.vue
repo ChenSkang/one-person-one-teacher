@@ -3,7 +3,7 @@
     <div id="zsd">
       <div class="tree">
         <el-input
-          placeholder="搜索知识点"
+          placeholder="建议不要输入三个以上的知识点"
           v-model="zsdText">
         </el-input>
         <el-tree
@@ -1229,6 +1229,12 @@
         return data.label.indexOf(value) !== -1
       },
       handleNodeClick (data) {
+        if (this.$store.state.input_message.indexOf('、') < 0) {
+          this.$store.state.input_message = ''
+        }
+        if (!data.children) {
+          this.$store.state.input_message += data.label + '、'
+        }
       }
     },
     computed: {
@@ -1243,9 +1249,7 @@
 
 <style scoped>
   #zsd{
-    width: 300px;
-    height: 500px;
-    max-height: 500px;
+    min-width: 280px;
     border: 1px solid #dcdfe6;
     border-radius: 5px;
     z-index: 999;
@@ -1253,10 +1257,10 @@
     overflow-x: visible;
   }
   .tree{
-    height: 500px;
-    max-height: 500px;
+    max-height: 2000px;
     overflow: scroll;
-    box-sizing: border-box
+    box-sizing: border-box;
+    margin-bottom: 20px;
   }
   .tree::-webkit-scrollbar{
     width: 6px;

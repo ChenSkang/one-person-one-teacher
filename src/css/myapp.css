@@ -155,3 +155,27 @@
   height: 38px;
   cursor: pointer;
 }
+.tree .el-tree-node__expand-icon.expanded {
+  -webkit-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+.tree .el-icon-caret-right:before{
+  content: "\e7a0";
+  font-size: 18px;
+}
+.tree .el-tree-node__expand-icon{
+  color: #409EFF;
+}
+.tree .el-tree-node__content{
+  height: 30px;
+}
+.tree .el-tree-node__expand-icon.expanded.el-icon-caret-right:before {
+  content: "\e7a2";
+  font-size: 18px;
+  color: #409eff;
+}
+.tree .el-tree-node__expand-icon.is-leaf {
+  color: transparent;
+  cursor: default;
+}
+
