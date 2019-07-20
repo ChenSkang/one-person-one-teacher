@@ -105,9 +105,9 @@
               <img src="../../img/book.png" alt="" />
             </div>
             <div class="que-down">
-              <div v-for="item in 6">
-                <div class="que-show" @click="showMore(item - 1)">
-                  <span>{{item}}.</span><span v-html="hotQuestions[item-1].question"></span>
+              <div v-for="(value, index) in hotQuestions">
+                <div class="que-show" @click="showMore(index)">
+                  <span>{{index + 1}}.</span><span v-html="value.question"></span>
                 </div>
               </div>
             </div>
