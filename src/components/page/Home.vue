@@ -618,11 +618,12 @@
     background-color: #fbfbfb;
   }
   .main-middle{
-    width: 86%;
+    width: 90%;
     min-width: 1000px;
     margin: 0 auto;
     display: flex;
     flex-direction: row;
+    position: relative;
   }
   .main-left{
     width: 75%;
@@ -632,7 +633,7 @@
     margin-top: 20px;
   }
   .right-fix{
-    position: absolute;
+    position: relative;
     width: 23%;
     background-color: #fff;
     border-radius: 5px;

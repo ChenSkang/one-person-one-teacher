@@ -51,8 +51,8 @@ module.exports = {
           resolve('test'),
           resolve('/node_modules/element-ui/src'),
           resolve('/node_modules/element-ui/packages'),
-          resolve('/node_modules/_element-ui@2.4.5@element-ui/src'),
-          resolve('/node_modules/_element-ui@2.4.5@element-ui/packages')
+          resolve('/node_modules/_element-ui@2.10.1@element-ui/src'),
+          resolve('/node_modules/_element-ui@2.10.1@element-ui/packages')
         ]
       },
       {
