@@ -18,7 +18,11 @@ export default {
         formData.append('kind', kind)
         formData.append('nianji', nianji)
         formData.append('jiaocai', jiaocai)
-        formData.append('sLocal', way)
+        if (msg.indexOf('、') < 0) {
+          formData.append('sLocal', way)
+        } else {
+          formData.append('sLocal', 2)
+        }
         /* formData.append('way', way) */
         let url = this.$store.state.urls.url + 'search/wordSearch'
         this.$axios.post(url, formData, {

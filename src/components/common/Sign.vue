@@ -138,7 +138,6 @@
   import VueCropper from 'vue-cropperjs'
   import mySpace from './mySpace.vue'
   import myHead from './HomeHead.vue'
-  import zsdTree from './zsdTree.vue'
   import myFoot from './footer.vue'
   import ElRow from 'element-ui/packages/row/src/row'
   import ElCol from 'element-ui/packages/col/src/col'
@@ -380,8 +379,7 @@
       mySpace,
       VueCropper,
       myHead,
-      myFoot,
-      zsdTree
+      myFoot
     }
   }
 </script>
