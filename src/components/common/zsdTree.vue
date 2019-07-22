@@ -3,7 +3,7 @@
     <div id="zsd">
       <div class="tree">
         <el-input
-          placeholder="建议不要输入三个以上的知识点"
+          placeholder="建议不要选择三个以上的知识点"
           v-model="zsdText">
         </el-input>
         <el-tree
@@ -12,6 +12,7 @@
           :props="defaultProps"
           :filter-node-method="filterNode"
           @node-click="handleNodeClick"
+          @node-contextmenu="handRight"
           ref="zsdTree">
         </el-tree>
       </div>
@@ -43,11 +44,13 @@
             }, {
               label: '倒数'
             }, {
-              label: '有理数的大小比较'
+              label: '有理数大小比较'
             }, {
               label: '有理数的加法'
             }, {
               label: '有理数的减法'
+            }, {
+              label: '有理数的乘方'
             }, {
               label: '有理数的加减混合运算'
             }, {
@@ -121,7 +124,7 @@
             }, {
               label: '合并同类项'
             }, {
-              label: '去括号和添括号'
+              label: '去括号与添括号'
             }, {
               label: '规律型：数字的变化类'
             }, {
@@ -142,7 +145,7 @@
             }, {
               label: '同底数幂的乘法'
             }, {
-              label: '幂的乘方和积的乘方'
+              label: '幂的乘方与积的乘方'
             }, {
               label: '同底数幂的除法'
             }, {
@@ -179,7 +182,7 @@
             }, {
               label: '因式分解-运用公式法'
             }, {
-              label: '提公因式法和运用公式法的综合运用'
+              label: '提公因式法与运用公式法的综合运用'
             }, {
               label: '因式分解-分组分解法'
             }, {
@@ -192,7 +195,7 @@
           }, {
             label: '分式',
             children: [{
-              label: '分式的意义'
+              label: '分式的定义'
             }, {
               label: '分式有意义的条件'
             }, {
@@ -315,7 +318,7 @@
             }, {
               label: '估算一元二次方程的近似解'
             }, {
-              label: '解一元二次方程-直接开方法'
+              label: '解一元二次方程-直接开平方法'
             }, {
               label: '解一元二次方程-配方法'
             }, {
@@ -649,7 +652,7 @@
             }, {
               label: '等边三角形的判定'
             }, {
-              label: '等边三角形的判定和性质'
+              label: '等边三角形的判定与性质'
             }, {
               label: '直角三角形的性质'
             }, {
@@ -1235,6 +1238,10 @@
         if (!data.children) {
           this.$store.state.input_message += data.label + '、'
         }
+      },
+      handRight (event, data) {
+        let num = Math.random() * 10000
+        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: data.label, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: 2, num: num}})
       }
     },
     computed: {
