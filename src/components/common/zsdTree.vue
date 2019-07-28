@@ -10,6 +10,7 @@
           class="zsd-tree"
           :data="zsdTree"
           :props="defaultProps"
+          :expand-on-click-node="false"
           :filter-node-method="filterNode"
           @node-click="handleNodeClick"
           @node-contextmenu="handRight"
@@ -28,7 +29,7 @@
         zsdTree: [{
           label: '数与式',
           children: [{
-            label: '有理数',
+            label: '有理数（总）',
             children: [{
               label: '正数和负数'
             }, {
@@ -112,7 +113,7 @@
               label: '分数指数幂'
             }]
           }, {
-            label: '代数式',
+            label: '代数式（总）',
             children: [{
               label: '代数式'
             }, {
@@ -131,7 +132,7 @@
               label: '规律性：图形的变化类'
             }]
           }, {
-            label: '整式',
+            label: '整式（总）',
             children: [{
               label: '整式'
             }, {
@@ -172,7 +173,7 @@
               label: '整式的混合运算—化简求值'
             }]
           }, {
-            label: '因式分解',
+            label: '因式分解（总）',
             children: [{
               label: '因式分解的意义'
             }, {
@@ -608,7 +609,7 @@
               label: '平行线之间的距离'
             }]
           }, {
-            label: '三角形',
+            label: '三角形（总）',
             children: [{
               label: '三角形'
             }, {
@@ -770,7 +771,7 @@
             }, {
               label: '切割线定理'
             }, {
-              label: '三角形的内切圆与外心'
+              label: '三角形的内切圆与内心'
             }, {
               label: '圆与圆的位置关系'
             }, {
@@ -1093,7 +1094,7 @@
               label: '整数问题的综合运用'
             }]
           }, {
-            label: '数与式',
+            label: '数与式（竞赛）',
             children: [{
               label: '有理数无理数的概念与运算'
             }, {
@@ -1120,7 +1121,7 @@
               label: '因式分解'
             }]
           }, {
-            label: '方程与不等式',
+            label: '方程与不等式（竞赛）',
             children: [{
               label: '含字母系数的一元一次方程'
             }, {
@@ -1159,7 +1160,7 @@
               label: '应用类问题'
             }]
           }, {
-            label: '函数',
+            label: '函数（竞赛）',
             children: [{
               label: 'y=|ax+b|的图象与性质'
             }, {
@@ -1235,9 +1236,7 @@
         if (this.$store.state.input_message.indexOf('、') < 0) {
           this.$store.state.input_message = ''
         }
-        if (!data.children) {
-          this.$store.state.input_message += data.label + '、'
-        }
+        this.$store.state.input_message += data.label + '、'
       },
       handRight (event, data) {
         let num = Math.random() * 10000
