@@ -68,9 +68,12 @@
                   </li>
                 </ul>
               </div>
-              <div class="crop-img">
+              <div v-if="!$store.state.input_message" class="crop-img">
                 <img src="../../img/phone.png" width="28px" />
                 <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage"/>
+              </div>
+              <div v-if="$store.state.input_message" class="crop-img">
+                <i class="el-icon-close" @click="$store.state.input_message = ''"></i>
               </div>
             </div>
             <div class="btn-primary search-btn" @click="searchMsg(0)">
