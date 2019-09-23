@@ -162,7 +162,11 @@ export default {
       if (msg.length > 0 && msg.split(' ').join('').length > 0) {
         this.$axios.post(url, formData).then((res) => {
           if (res.data.code === 1) {
-            this.$store.state.myData = res.data.data
+            if (res.data.data.length > 0) {
+              this.$store.state.myData = res.data.data
+            } else {
+              this.$store.state.myData = []
+            }
           }
           console.log(res)
         }, (res) => {

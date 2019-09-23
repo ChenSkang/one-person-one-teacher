@@ -1,5 +1,5 @@
 <template>
-  <div @click="showSearchLi = false">
+  <div>
     <my-head></my-head>
     <my-space></my-space>
     <el-dialog :visible.sync="paperVisible" width="30%" :append-to-body="true">
@@ -54,12 +54,14 @@
       <div class="first-head">
         <div class="search-logo">OPOT</div>
         <div class="header-concern">
-          <div style="width: 584px; min-width: 584px; position: relative" @click.stop="showSearchLi = true">
+          <div style="width: 584px; min-width: 584px; position: relative">
             <el-input v-model="$store.state.input_message"
                       @keyup.native.enter="searchMsg(0)"
                       @keyup.native="getEvent($event)"
                       @keydown.native.up="selectUp"
                       @keydown.native.down="selectDown"
+                      @focus="showSearchLi = true"
+                      @blur="showSearchLi = false"
                       placeholder="题干/知识点/中考试卷"></el-input>
             <div class="search-ul" v-if="showSearchLi">
               <ul>

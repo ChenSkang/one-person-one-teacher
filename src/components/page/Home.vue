@@ -1,5 +1,5 @@
 <template>
-  <div @click="showSearchLi = false">
+  <div>
     <!--<div id="mask" :style="{minHeights: minHeights + 'px'}" v-if="popoverFirst && $store.state.nowSub.length"></div>-->
     <my-head></my-head>
     <mySpace></mySpace>
@@ -47,12 +47,14 @@
       <div class="main-middle">
         <div class="main-left">
           <div class="header-concern">
-            <div style="width: 100%; position: relative" @click.stop="showSearchLi = true">
+            <div style="width: 100%; position: relative">
               <el-input v-model="$store.state.input_message"
                         @keyup.native.enter="searchMsg(0)"
                         @keyup.native="getEvent($event)"
                         @keydown.native.up="selectUp"
                         @keydown.native.down="selectDown"
+                        @focus="showSearchLi = true"
+                        @blur="showSearchLi = false"
                         placeholder="题干/知识点/中考试卷"></el-input>
               <div class="search-ul" v-if="showSearchLi">
                 <ul>

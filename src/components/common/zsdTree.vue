@@ -27,6 +27,7 @@
       return {
         zsdText: '',
         zsdTree: [{
+          id: 1000,
           label: '数与式',
           children: [{
             label: '有理数（总）',
@@ -255,6 +256,7 @@
             }]
           }]
         }, {
+          id: 1001,
           label: '方程与不等式',
           children: [{
             label: '一元一次方程',
@@ -393,6 +395,7 @@
             }]
           }]
         }, {
+          id: 1002,
           label: '函数',
           children: [{
             label: '平面直角坐标系',
@@ -527,6 +530,7 @@
             }]
           }]
         }, {
+          id: 1002,
           label: '图形的性质',
           children: [{
             label: '图形认识初步',
@@ -817,6 +821,7 @@
             }]
           }]
         }, {
+          id: 1003,
           label: '图形的变化',
           children: [{
             label: '图形的对称',
@@ -966,6 +971,7 @@
             }]
           }]
         }, {
+          id: 1005,
           label: '统计与概率',
           children: [{
             label: '数据收集与处理',
@@ -1048,6 +1054,7 @@
             }]
           }]
         }, {
+          id: 1009,
           label: '数学竞赛',
           children: [{
             label: '逻辑推理问题',
@@ -1233,10 +1240,14 @@
         return data.label.indexOf(value) !== -1
       },
       handleNodeClick (data) {
-        if (this.$store.state.input_message.indexOf('、') < 0) {
-          this.$store.state.input_message = ''
+        console.log(data)
+        if (data.id > 0) {
+        } else {
+          if (this.$store.state.input_message.indexOf('、') < 0) {
+            this.$store.state.input_message = ''
+          }
+          this.$store.state.input_message += data.label + '、'
         }
-        this.$store.state.input_message += data.label + '、'
       },
       handRight (event, data) {
         let num = Math.random() * 10000
