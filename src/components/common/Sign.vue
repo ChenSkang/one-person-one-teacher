@@ -1,5 +1,18 @@
 <template>
   <div>
+    <div id="mask" v-show="popoverFirst">
+      <div class="new-title">
+        <div class="new-title-close"><el-button type="danger" @click="newClose()">关闭</el-button></div>
+        <el-carousel height="330px">
+          <el-carousel-item>
+            <img src="../../img/newo.jpg" alt="">
+          </el-carousel-item>
+          <el-carousel-item>
+            <img src="../../img/newt.jpg" alt="">
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+    </div>
     <my-head></my-head>
     <my-space></my-space>
     <el-dialog :visible.sync="paperVisible" width="30%" :append-to-body="true">
@@ -159,6 +172,7 @@
         hotQuestions: [],
         IFJX: false,
         paperVisible: false,
+        popoverFirst: false,
         myTest: [
           { que: '' },
           { answer: '' },
@@ -166,8 +180,6 @@
           {md5: ''}
         ],
         minHeight: 0,
-        popoverFirst: false,
-        popoverTwo: false,
         searchHot: [
           '锐角三角函数',
           '二次函数综合题',
@@ -284,6 +296,10 @@
           }
         })
       },
+      newClose () {
+        localStorage.setItem('ifFirst', 'false')
+        this.popoverFirst = false
+      },
       showMore (num) {
         this.myTest[0].question = this.hotQuestions[num].question
         this.myTest[0].answer = this.hotQuestions[num].answer
@@ -350,33 +366,22 @@
           this.fireMsg = this.searchHot[this.nowFire]
         }, 3000)
       }
-     /* popoverClickOne () {
-        this.popoverFirst = false
-        this.popoverTwo = true
-      },
-      popoverClickTwo () {
-        this.popoverTwo = false
-        localStorage.setItem('ifFirst', 'false')
-        const mo = function (e) { e.preventDefault() }
-        document.body.style.overflow = ''
-        document.addEventListener('touchmove', mo, false)
-      } */
     },
-    /* beforeCreate () {
+    beforeCreate () {
       if (!localStorage.getItem('ifFirst')) {
         localStorage.setItem('ifFirst', 'true')
       }
-    }, */
+    },
     created () {
       this.getHot()
       this.fireWord()
       this.minHeight = document.documentElement.clientHeight
-      /* if (localStorage.getItem('ifFirst') === 'true') {
+      if (localStorage.getItem('ifFirst') === 'true') {
         this.popoverFirst = true
         const mo = function (e) { e.preventDefault() }
         document.body.style.overflow = 'hidden'
         document.addEventListener('touchmove', mo, false)
-      } */
+      }
     },
     components: {
       ElCol,
@@ -394,56 +399,25 @@
     width: 100%;
     height: 100%;
     min-width: 1200px;
-    background-color: rgba(0, 0, 0, .5);
+    background-color: rgba(0, 0, 0, .7);
     top: 0;
     left: 0;
     position: absolute;
-    z-index: 998;
+    z-index: 9999;
   }
-  .popoverOne{
-    border-radius: 10px;
-    width: 400px;
-    height: 120px;
-    background-color: rgba(0, 0, 0, .5);
+  .new-title{
+    width: 800px;
+    height: 330px;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  .new-title-close{
     position: absolute;
-    top: 160px;
-    right: 16%;
-  }
-  .popoverOne-arrow{
-    width: 0;
-    height: 0;
-    border: 20px solid;
-    border-color: transparent transparent black transparent;
-    opacity: .5;
-    position: absolute;
-    top: -40px;
-    right: 50px;
-  }
-  .popover-p{
-    line-height: 80px;
-    color: #fff;
-    letter-spacing: 1px;
-    text-indent: 20px;
-  }
-  .popoverTwo{
-    border-radius: 10px;
-    width: 600px;
-    height: 120px;
-    background-color: rgba(0, 0, 0, .5);
-    position: absolute;
-    top: 160px;
-    right: 16%;
-    transform: translateX(-250px);
-  }
-  .popoverTwo-arrow{
-    width: 0;
-    height: 0;
-    border: 20px solid;
-    border-color: transparent transparent black transparent;
-    opacity: .5;
-    position: absolute;
-    top: -40px;
-    right: 300px;
+    bottom: 10px;
+    right: 10px;
+    z-index: 10000;
   }
   .first-head{
     width: 100%;

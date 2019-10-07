@@ -193,7 +193,6 @@
         minHeight: 0,
         minHeights: 0,
         topFixed: false,
-        // popoverFirst: false,
         screenShow: true,
         screenShowTwo: true,
         queKind: [{
@@ -498,14 +497,7 @@
         } else {
           this.topFixed = false
         }
-      }/* ,
-      popoverClickOne () {
-        this.popoverFirst = false
-        localStorage.setItem('ifFirsts', 'false')
-        const mo = function (e) { e.preventDefault() }
-        document.body.style.overflow = ''
-        document.addEventListener('touchmove', mo, false)
-      } */
+      }
     },
     mounted () {
       window.addEventListener('scroll', this.handleScroll)
@@ -540,11 +532,6 @@
         }
       }
     },
-    /* beforeCreate () {
-      if (!localStorage.getItem('ifFirsts')) {
-        localStorage.setItem('ifFirsts', 'true')
-      }
-    }, */
     created () {
       this.minHeight = document.documentElement.clientHeight - 251
       if (this.$route.query) {
@@ -568,12 +555,6 @@
         this.searchQuestion(this.$route.query.msg, page, kind, nianji, jiaocai, way)
         document.title = this.$route.query.msg
       }
-      /* if (localStorage.getItem('ifFirsts') === 'true') {
-        this.popoverFirst = true
-        const mo = function (e) { e.preventDefault() }
-        document.body.style.overflow = 'hidden'
-        document.addEventListener('touchmove', mo, false)
-      } */
     }
   }
 </script>
