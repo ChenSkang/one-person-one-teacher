@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div id="mask" v-show="popoverFirst">
+    <div id="mask" v-show="popoverFirst" @click.prevent="newClose()">
       <div class="new-title">
         <div class="new-title-close"><el-button type="danger" @click="newClose()">关闭</el-button></div>
-        <el-carousel height="330px">
+        <el-carousel height="413px">
           <el-carousel-item>
-            <img src="../../img/newo.jpg" alt="">
+            <img src="../../img/newo.jpg" width="1000" alt="">
           </el-carousel-item>
           <el-carousel-item>
-            <img src="../../img/newt.jpg" alt="">
+            <img src="../../img/newt.jpg" width="1000" alt="">
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -406,8 +406,8 @@
     z-index: 9999;
   }
   .new-title{
-    width: 800px;
-    height: 330px;
+    width: 1000px;
+    height: 413px;
     position: relative;
     left: 50%;
     top: 50%;
