@@ -514,10 +514,7 @@
           type: 'warning'
         }).then(() => {
           this.deletePaper(val)
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
+          location.reload()
         }).catch(() => {
         })
       },

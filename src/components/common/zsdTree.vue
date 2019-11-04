@@ -2,10 +2,7 @@
   <div>
     <div id="zsd">
       <div class="tree">
-        <el-input
-          placeholder="建议不要选择三个以上的知识点"
-          v-model="zsdText">
-        </el-input>
+        <div class="tree-title">知识点列表</div>
         <el-tree
           class="zsd-tree"
           :data="zsdTree"
@@ -25,7 +22,6 @@
   export default {
     data () {
       return {
-        zsdText: '',
         zsdTree: [{
           id: 1000,
           label: '数与式',
@@ -1255,9 +1251,18 @@
       }
     },
     computed: {
+      zsdText () {
+        if (this.$store.state.input_message.lastIndexOf('、') > 0) {
+          let x = this.$store.state.input_message.lastIndexOf('、')
+          return this.$store.state.input_message.slice(x + 1)
+        } else {
+          return this.$store.state.input_message
+        }
+      }
     },
     watch: {
       zsdText (val) {
+        console.log(val)
         this.$refs.zsdTree.filter(val)
       }
     }
@@ -1278,6 +1283,17 @@
     overflow: scroll;
     box-sizing: border-box;
     margin-bottom: 20px;
+  }
+  .tree-title {
+    height: 35px;
+    line-height: 35px;
+    color: #333;
+    font-size: 16px;
+    font-family: 黑体;
+    width: 90%;
+    margin: 0 auto 5px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #DCDFE6;
   }
   .tree::-webkit-scrollbar{
     width: 6px;
