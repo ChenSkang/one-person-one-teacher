@@ -37,7 +37,7 @@
     list-style: none;
   }
   #app {
-    font-family: 微软雅黑, Arial, sans-serif;
+    font-family: JyeMath, JyeMathLetters, Times New Roman, 微软雅黑, Arial, 宋体;
     width: 100%;
     height: 100%;
     min-width: 1200px;

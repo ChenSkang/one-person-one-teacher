@@ -389,18 +389,16 @@
     background-color: #fbfbfb;
   }
   .main-middle{
-    width: 86%;
-    min-width: 1000px;
-    margin: 0 auto;
+    min-width: 1200px;
     display: flex;
     flex-direction: row;
+    position: relative;
+    margin-left: 50%;
+    transform: translateX(-50%);
   }
   .main-left{
-    width: 75%;
-    margin: 20px 2% 20px 0;
-  }
-  .main-right{
-    margin-top: 20px;
+    width: 848px;
+    margin: 20px 20px 20px 0;
   }
   .right-fix{
     width: 23%;
