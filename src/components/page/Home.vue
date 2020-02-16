@@ -95,20 +95,20 @@
                   <div class="screen-ul">题型</div>
                   <div class="screen-li" v-for="(value, index) in queKind" :class="{choice: value.check}" @click="choiceO(index)">{{value.value}}</div>
                 </div>
-                <!--<div class="screen-list">
+                <div class="screen-list">
                   <div class="screen-ul">年级</div>
                   <div class="screen-li" v-for="(value, index) in classKind" :class="{choice: value.check}" @click="choiceT(index)">{{value.value}}</div>
-                </div>-->
+                </div>
               </div>
             </transition>
-            <!--<transition name="el-zoom-in-top">
+            <transition name="el-zoom-in-top">
               <div class="screen-window" v-if="screenShowTwo">
                 <div class="screen-list-two">
                   <div class="screen-ul-two">教材</div>
                   <div class="screen-li-two" v-for="(value, index) in theTeach" :class="{choice: value.check}" @click="choiceTh(index)">{{value.value}}</div>
                 </div>
               </div>
-            </transition>-->
+            </transition>
           </div>
           <div class="block" v-if="$store.state.nowSub.length !== 0"
                v-loading="$store.state.history.loadingTwo"
@@ -143,7 +143,7 @@
                 :page-size="10"
                 :current-page.sync="$store.state.history.nowHomePage"
                 @current-change="nextPage"
-                :total="400">
+                :total="1000">
               </el-pagination>
             </div>
           </div>
