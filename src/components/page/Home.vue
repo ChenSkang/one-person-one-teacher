@@ -390,7 +390,12 @@
       },
       searchMsg (m) {
         let num = Math.random() * 10000
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: m, num: num}})
+        if (this.$route.query.way === 2) {
+          let msgg = this.$store.state.input_message + '，' + this.$route.query.msg
+          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: msgg, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: m, num: num}})
+        } else {
+          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: this.$store.state.input_message, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: m, num: num}})
+        }
       },
       choiceOne (num) {
         for (let i = 0; i < this.queKind.length; i++) {
@@ -510,7 +515,7 @@
     watch: {
       nowQuery: function (val) {
         if (this.$route.path === '/index') {
-          this.$store.state.input_message = val.msg
+          /* this.$store.state.input_message = val.msg */
           let page = parseInt(val.page)
           if (val.msg.indexOf('试卷') > -1 && page === 1) {
             this.pageShow = false
@@ -535,7 +540,7 @@
     created () {
       this.minHeight = document.documentElement.clientHeight - 251
       if (this.$route.query) {
-        this.$store.state.input_message = this.$route.query.msg
+        /* this.$store.state.input_message = this.$route.query.msg */
         let page = parseInt(this.$route.query.page)
         if (this.$route.query.msg.indexOf('试卷') > -1 && page === 1) {
           this.pageShow = false

@@ -5,6 +5,7 @@
         <div class="tree-title">知识点列表</div>
         <el-tree
           class="zsd-tree"
+          :highlight-current="true"
           :data="zsdTree"
           :props="defaultProps"
           :expand-on-click-node="false"
@@ -1231,12 +1232,20 @@
       }
     },
     methods: {
-      filterNode (value, data) {
+     /*  filterNode (value, data) {
         if (!value) return true
         return data.label.indexOf(value) !== -1
-      },
+      }, */
       handleNodeClick (data) {
         console.log(data)
+        if (data.id > 0) {
+        } else {
+          this.$store.state.input_message = ''
+          let num = Math.random() * 10000
+          this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: data.label, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: 2, num: num}})
+        }
+      },
+      handRight (event, data) {
         if (data.id > 0) {
         } else {
           if (this.$store.state.input_message.indexOf('、') < 0) {
@@ -1244,10 +1253,6 @@
           }
           this.$store.state.input_message += data.label + '、'
         }
-      },
-      handRight (event, data) {
-        let num = Math.random() * 10000
-        this.$router.push({path: '/index', query: {servlet: 'wordSearch', msg: data.label, page: 1, kind: this.$route.query.kind, nianji: this.$route.query.nianji, jiaocai: this.$route.query.jiaocai, way: 2, num: num}})
       }
     },
     computed: {
